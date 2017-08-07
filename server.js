@@ -1,3 +1,4 @@
+/*eslint-env node*/
 var server = require("./server/server");
 
 var port = process.env.PORT || 8080;

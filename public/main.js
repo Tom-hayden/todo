@@ -1,3 +1,4 @@
+/*eslint-env browser*/
 var todoList = document.getElementById("todo-list");
 var todoListPlaceholder = document.getElementById("todo-list-placeholder");
 var form = document.getElementById("todo-form");
