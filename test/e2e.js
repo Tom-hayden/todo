@@ -1,4 +1,3 @@
-/*eslint-env node*/
 var testing = require("selenium-webdriver/testing");
 var assert = require("chai").assert;
 var helpers = require("./e2eHelpers");

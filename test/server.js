@@ -1,5 +1,3 @@
-/*eslint-env node*/
-/*global it, describe, beforeEach, afterEach*/
 var server = require("../server/server");
 var request = require("request");
 var assert = require("chai").assert;

@@ -72,5 +72,10 @@
             "never"
         ],
         "no-multiple-empty-lines": 2
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "mocha": true
     }
 }

@@ -1,4 +1,3 @@
-/*eslint-env node*/
 var express = require("express");
 var createServer = require("../server/server");
 var webdriver = require("selenium-webdriver");
