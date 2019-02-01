@@ -1,0 +1,27 @@
+version: 2.1
+orbs:
+    heroku: circleci/heroku@0.0.4
+jobs:
+    test:
+        docker:
+          - image: circleci/node:10-browsers
+        steps:
+          - checkout
+          - run:
+              name: Setup Dependencies
+              command: npm ci
+          - run:
+              name: Run Server Tests
+              command: npm test
+workflows:
+    version: 2
+    test-deploy:
+        jobs:
+          - test
+          - heroku/deploy-via-git:
+              requires:
+                - test
+              filters:
+                branches:
+                    only: circle-ci-heroku-integration
+

@@ -23,16 +23,19 @@ gulp.task("test:istanbul:pre", function () {
         .pipe(istanbul.hookRequire());
 });
 
-gulp.task("test:istanbul", ["test:istanbul:pre"], function () {
-    return gulp.src("test/**/*.js")
-        .pipe(mocha({ reporter: "spec" }))
-        .pipe(istanbul.writeReports({
-            dir: "./build_artifacts",
-            reporters: ["lcov", "text", "text-summary"],
-            reportOpts: { dir: "./build_artifacts" }
-        }))
-        .pipe(istanbul.enforceThresholds({ thresholds: { each: 95 } }));
-});
+gulp.task("test:istanbul", gulp.series(
+    "test:istanbul:pre",
+    function () {
+        return gulp.src("test/**/*.js")
+            .pipe(mocha({ reporter: "spec" }))
+            .pipe(istanbul.writeReports({
+                dir: "./build_artifacts",
+                reporters: ["lcov", "text", "text-summary"],
+                reportOpts: { dir: "./build_artifacts" }
+            }))
+            .pipe(istanbul.enforceThresholds({ thresholds: { each: 95 } }));
+    }
+));
 
-gulp.task("test", ["lint", "test:istanbul"])
-gulp.task("default", ["test"]);
+gulp.task("test", gulp.series("lint", "test:istanbul"));
+gulp.task("default", gulp.series("test"));
