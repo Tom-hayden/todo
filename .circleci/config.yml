@@ -23,5 +23,5 @@ workflows:
                 - test
               filters:
                 branches:
-                    only: circle-ci-heroku-integration
+                    only: master
 
