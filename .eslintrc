@@ -1,4 +1,8 @@
 {
+    "env": {
+        "node": true
+    },
+    "extends": "eslint:recommended",
     "rules": {
         "eqeqeq": 2,
         "wrap-iife": [
@@ -73,9 +77,25 @@
         ],
         "no-multiple-empty-lines": 2
     },
-    "env": {
-        "browser": true,
-        "node": true,
-        "mocha": true
-    }
+    "overrides": [
+        {
+            "files": "scripts/**/*.js",
+            "rules": {
+                "no-console": "off"
+            }
+        },
+        {
+            "files": "public/**/*.js",
+            "env": {
+                "browser": true
+            }
+        },
+        {
+            "files": "test/**/*.js",
+            "env": {
+                "node": true,
+                "mocha": true
+            }
+        }
+    ]
 }
