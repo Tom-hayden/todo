@@ -24,6 +24,7 @@
     "homepage": "https://github.com/ScottLogic/todo-grad-project",
     "devDependencies": {
         "chai": "^4.2.0",
+        "eslint": "^5.12.1",
         "gulp": "^4.0.0",
         "gulp-eslint": "^5.0.0",
         "gulp-istanbul": "^1.1.3",

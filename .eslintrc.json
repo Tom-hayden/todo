@@ -1,4 +1,10 @@
 {
+    "env": {
+        "browser": true,
+        "node": true,
+        "mocha": true
+    },
+    "extends": "eslint:recommended",
     "rules": {
         "eqeqeq": 2,
         "wrap-iife": [
@@ -72,10 +78,5 @@
             "never"
         ],
         "no-multiple-empty-lines": 2
-    },
-    "env": {
-        "browser": true,
-        "node": true,
-        "mocha": true
     }
 }
