@@ -15,7 +15,8 @@
     },
     "author": "Joe Bandenburg <joe@bandenburg.com>",
     "contributors": [
-        "Steven Hillcox <shillcox@scottlogic.co.uk>"
+        "Steven Hillcox <shillcox@scottlogic.co.uk>",
+        "Josh Bickley-Wallace <jbickley@scottlogic.co.uk>"
     ],
     "license": "MIT",
     "bugs": {
