@@ -1,8 +1,6 @@
 {
     "env": {
-        "browser": true,
-        "node": true,
-        "mocha": true
+        "node": true
     },
     "extends": "eslint:recommended",
     "rules": {
@@ -78,5 +76,26 @@
             "never"
         ],
         "no-multiple-empty-lines": 2
-    }
+    },
+    "overrides": [
+        {
+            "files": "scripts/**/*.js",
+            "rules": {
+                "no-console": "off"
+            }
+        },
+        {
+            "files": "public/**/*.js",
+            "env": {
+                "browser": true
+            }
+        },
+        {
+            "files": "test/**/*.js",
+            "env": {
+                "node": true,
+                "mocha": true
+            }
+        }
+    ]
 }
