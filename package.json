@@ -9,7 +9,8 @@
     "scripts": {
         "lint": "eslint . --format codeframe",
         "test": "nyc mocha",
-        "start": "node scripts/start.js"
+        "start": "node scripts/start.js",
+        "watch": "nodemon scripts/start.js"
     },
     "repository": {
         "type": "git",
