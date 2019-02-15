@@ -51,10 +51,30 @@ function reloadTodoList() {
         todoListPlaceholder.style.display = "none";
         todos.forEach(function(todo) {
             var listItem = document.createElement("li");
+            var btn = document.createElement("BUTTON");
+            var t = document.createTextNode(todo.id);
+            btn.appendChild(t);
+            btn.id = todo.id;
+            btn.onclick = deleteItem;
             listItem.textContent = todo.title;
+            listItem.appendChild(btn);
             todoList.appendChild(listItem);
         });
     });
+}
+
+function deleteItem() {
+    var createRequest = new XMLHttpRequest();
+    createRequest.open("DELETE", "/api/todo/" + this.id);
+    createRequest.setRequestHeader("Content-type", "application/json");
+    createRequest.send();
+    createRequest.onload = function() {
+        if (this.status === 200) {
+            reloadTodoList();
+        } else {
+            error.textContent = "Failed to delete item. Server returned " + this.status + " - " + this.responseText;
+        }
+    };
 }
 
 reloadTodoList();
