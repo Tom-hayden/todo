@@ -9,7 +9,8 @@
     "scripts": {
         "lint": "eslint . --format codeframe",
         "test": "nyc mocha",
-        "start": "node scripts/start.js"
+        "start": "node scripts/start.js",
+        "watch": "nodemon scripts/start.js"
     },
     "repository": {
         "type": "git",
@@ -30,7 +31,8 @@
         "eslint": "^5.12.1",
         "istanbul": "^0.4.5",
         "mocha": "^5.2.0",
-        "nyc": "^13.1.0",
+        "nodemon": "^1.18.10",
+        "nyc": "^13.3.0",
         "request": "^2.88.0",
         "selenium-webdriver": "^3.6.0"
     },
