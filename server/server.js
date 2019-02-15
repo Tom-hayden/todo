@@ -44,8 +44,8 @@ module.exports = function(port, middleware, callback) {
     });
 
     function getTodo(id) {
-        return _.find(todos, function(todo){
-            return true;
+        return _.find(todos, function(todo) {
+            return todo.id === id;
         });
     }
 
