@@ -52,7 +52,7 @@ function reloadTodoList() {
         todos.forEach(function(todo) {
             var listItem = document.createElement("li");
             var btn = document.createElement("BUTTON");
-            var t = document.createTextNode(todo.id);
+            var t = document.createTextNode("Delete");
             btn.appendChild(t);
             btn.id = todo.id;
             btn.onclick = deleteItem;
