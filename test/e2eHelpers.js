@@ -102,7 +102,7 @@ module.exports.removeTodo = function(id) {
 };
 
 module.exports.containsId = function(id) {
-    return driver.findElements(webdriver.By.id("del_" + id)).then(res => {
+    return driver.findElements(webdriver.By.id("del_" + id)).then(function(res) {
         return res.length > 0;
     });
 }

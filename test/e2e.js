@@ -65,7 +65,7 @@ testing.describe("end to end", function() {
             });
         });
     });
-    testing.describe("on delete todo item", function(){
+    testing.describe("on delete todo item", function() {
         testing.it("can an item be removed", function() {
             helpers.navigateToSite();
             helpers.addTodo("New todo item");
@@ -81,10 +81,9 @@ testing.describe("end to end", function() {
             helpers.addTodo("A third todo item");
             helpers.removeTodo(1);
             helpers.getTodoList().then(function() {
-                helpers.containsId(1).then(res => {
+                helpers.containsId(1).then(function(res) {
                     assert.equal(res, false);
                 });
-            
             });
         });
     });
