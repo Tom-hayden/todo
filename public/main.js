@@ -54,7 +54,7 @@ function reloadTodoList() {
             var btn = document.createElement("BUTTON");
             var t = document.createTextNode("Delete");
             btn.appendChild(t);
-            btn.id = todo.id;
+            btn.id = "del_" + todo.id;
             btn.onclick = deleteItem;
             listItem.textContent = todo.title;
             listItem.appendChild(btn);
@@ -65,7 +65,7 @@ function reloadTodoList() {
 
 function deleteItem() {
     var createRequest = new XMLHttpRequest();
-    createRequest.open("DELETE", "/api/todo/" + this.id);
+    createRequest.open("DELETE", "/api/todo/" + getButtonId(this.id));
     createRequest.setRequestHeader("Content-type", "application/json");
     createRequest.send();
     createRequest.onload = function() {
@@ -77,4 +77,7 @@ function deleteItem() {
     };
 }
 
+function getButtonId(id) {
+    return id.substring(4);
+}
 reloadTodoList();
