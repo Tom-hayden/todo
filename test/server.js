@@ -157,21 +157,29 @@ describe("server", function() {
                     title: "This is a TODO item",
                     done: false
                 }
-            }, function() {
-                request.put({
-                    url: todoListUrl + "/0",
+            },  function () {
+                request.post({
+                    url: todoListUrl,
                     json: {
-                        title: "This is an altered TODO item",
+                        title: "This is a second TODO item",
                         done: false
                     }
                 }, function() {
-                    request.get(todoListUrl, function(error, response, body) {
-                        assert.deepEqual(JSON.parse(body), [{
+                    request.put({
+                        url: todoListUrl + "/0",
+                        json: {
                             title: "This is an altered TODO item",
-                            done: false,
-                            id: "0"
-                        }]);
-                        done();
+                            done: false
+                        }
+                    }, function() {
+                        request.get(todoListUrl, function(error, response, body) {
+                            assert.deepEqual(JSON.parse(body)[0], {
+                                title: "This is an altered TODO item",
+                                done: false,
+                                id: "0"
+                            });
+                            done();
+                        });
                     });
                 });
             });
