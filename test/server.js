@@ -167,7 +167,7 @@ describe("server", function() {
                 }, function() {
                     request.get(todoListUrl, function(error, response, body) {
                         assert.deepEqual(JSON.parse(body), [{
-                            title: "This is an altered TODO item ",
+                            title: "This is an altered TODO item",
                             done: false,
                             id: "0"
                         }]);
