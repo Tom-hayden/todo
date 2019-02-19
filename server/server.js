@@ -64,11 +64,11 @@ module.exports = function(port, middleware, callback) {
 
     function replaceTodo(id, text) {
         todos.forEach(function(todo, index, todosArray) {
-            if( todo.id === id) {
+            if (todo.id === id) {
                 var newTodo = text;
                 newTodo.id = id;
                 todosArray[index] = newTodo;
-            };
+            }
         });
         return todos;
     }
