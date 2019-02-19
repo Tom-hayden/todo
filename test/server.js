@@ -121,7 +121,7 @@ describe("server", function() {
             request.put({
                 url: todoListUrl + "/0",
                 json: {
-                    title :"This is a TODO item",
+                    title: "This is a TODO item",
                     done: false
                 }
             }, function(error, response) {
@@ -141,7 +141,7 @@ describe("server", function() {
                 request.put({
                     url: todoListUrl + "/0",
                     json: {
-                        title :"This is an altered TODO item",
+                        title: "This is an altered TODO item",
                         done: false
                     }
                 }, function(error, response) {
@@ -161,13 +161,13 @@ describe("server", function() {
                 request.put({
                     url: todoListUrl + "/0",
                     json: {
-                        title :"This is an altered TODO item",
+                        title: "This is an altered TODO item",
                         done: false
                     }
                 }, function() {
                     request.get(todoListUrl, function(error, response, body) {
                         assert.deepEqual(JSON.parse(body), [{
-                            title: "This is an altered TODO item",
+                            title: "This is an altered TODO item ",
                             done: false,
                             id: "0"
                         }]);
@@ -177,5 +177,4 @@ describe("server", function() {
             });
         });
     });
-        
 });
