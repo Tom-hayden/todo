@@ -50,8 +50,7 @@ module.exports = function(port, middleware, callback) {
         if (todo) {
             replaceTodo(id, req.body);
             res.sendStatus(200);
-        }
-        else {
+        } else {
             res.sendStatus(404);
         }
     });
