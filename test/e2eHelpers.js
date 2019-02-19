@@ -69,8 +69,8 @@ module.exports.getErrorText = function() {
 };
 
 module.exports.getTodoList = function() {
-    var todoListPlaceholder = driver.findElement(webdriver.By.id("todo-list-placeholder"));
-    driver.wait(webdriver.until.elementIsNotVisible(todoListPlaceholder), 5000);
+    var todoListLoading = driver.findElement(webdriver.By.id("todo-list-Loading"));
+    driver.wait(webdriver.until.elementIsNotVisible(todoListLoading), 5000);
     return driver.findElements(webdriver.By.css("#todo-list li"));
 };
 
