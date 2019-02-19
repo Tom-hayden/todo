@@ -43,18 +43,65 @@ function getTodoList(callback) {
 }
 
 function reloadTodoList() {
+    clearToDoList();
+    displayLoadingScreen();
+    populateTodoList();
+}
+
+function clearToDoList() {
     while (todoList.firstChild) {
         todoList.removeChild(todoList.firstChild);
     }
+}
+
+function displayLoadingScreen() {
     todoListPlaceholder.style.display = "block";
+}
+
+function hideLoadingScreen() {
+    todoListPlaceholder.style.display = "none";
+}
+
+function populateTodoList() {
     getTodoList(function(todos) {
-        todoListPlaceholder.style.display = "none";
+        hideLoadingScreen();
         todos.forEach(function(todo) {
-            var listItem = document.createElement("li");
-            listItem.textContent = todo.title;
-            todoList.appendChild(listItem);
+            todoList.appendChild(createListItem(todo));
         });
     });
 }
 
+function createListItem(todo) {
+    var listItem = document.createElement("li");
+    listItem.textContent = todo.title;
+    listItem.appendChild(createDeleteButton(todo.id));
+    return listItem;
+}
+
+function createDeleteButton(id) {
+    var btn = document.createElement("BUTTON");
+    var t = document.createTextNode("Delete");
+    btn.appendChild(t);
+    btn.id = "del_" + id;
+    btn.onclick = deleteItem;
+    return btn;
+}
+
+function deleteItem() {
+    var createRequest = new XMLHttpRequest();
+    createRequest.open("DELETE", "/api/todo/" + getButtonId(this.id));
+    createRequest.setRequestHeader("Content-type", "application/json");
+    createRequest.send();
+    createRequest.onload = function() {
+        if (this.status === 200) {
+            reloadTodoList();
+        } else {
+            error.textContent = "Failed to delete item. Server returned " + this.status + " - " + this.responseText;
+        }
+    };
+}
+
+function getButtonId(id) {
+    return id.substring(4);  // removing 'del_' prefix from id
+}
 reloadTodoList();

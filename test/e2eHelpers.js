@@ -90,4 +90,19 @@ module.exports.setupErrorRoute = function(action, route) {
             res.sendStatus(500);
         });
     }
+    if (action === "delete") {
+        router.delete(route, function(req, res) {
+            res.sendStatus(404);
+        });
+    }
 };
+
+module.exports.removeTodo = function(id) {
+    driver.findElement(webdriver.By.id("del_" + id)).click();
+};
+
+module.exports.containsId = function(id) {
+    return driver.findElements(webdriver.By.id("del_" + id)).then(function(res) {
+        return res.length > 0;
+    });
+}
