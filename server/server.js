@@ -16,11 +16,9 @@ module.exports = function(port, middleware, callback) {
 
     // Create
     app.post("/api/todo", function(req, res) {
-        var todo = req.body;
-        todo.id = latestId.toString();
+        todos.push(createTodo(req.body, latestId.toString()));
+        res.set("Location", "/api/todo/" + latestId.toString());
         latestId++;
-        todos.push(todo);
-        res.set("Location", "/api/todo/" + todo.id);
         res.sendStatus(201);
     });
 
@@ -55,18 +53,21 @@ module.exports = function(port, middleware, callback) {
         }
     });
 
+    function createTodo(todoBody, id) {
+        var todo = Object.assign({}, { id: id}, todoBody);
+        return todo;
+    }
+
     function getTodo(id) {
         return _.find(todos, function(todo) {
             return todo.id === id;
         });
     }
 
-    function replaceTodo(id, text) {
+    function replaceTodo(id, todoBody) {
         todos.forEach(function(todo, index, todosArray) {
             if (todo.id === id) {
-                var newTodo = text;
-                newTodo.id = id;
-                todosArray[index] = newTodo;
+                todosArray[index] = createTodo(todoBody, id);
             }
         });
         return todos;
