@@ -62,7 +62,7 @@ function hideLoadingScreen() {
     todoListPlaceholder.style.display = "none";
 }
 
-function populateTodoList(){
+function populateTodoList() {
     getTodoList(function(todos) {
         hideLoadingScreen();
         todos.forEach(function(todo) {
@@ -71,20 +71,20 @@ function populateTodoList(){
     });
 }
 
-function createListItem(todo){
-            var listItem = document.createElement("li");
-            listItem.textContent = todo.title;
-            listItem.appendChild(createDeleteButton(todo.id));
-            return listItem;
+function createListItem(todo) {
+    var listItem = document.createElement("li");
+    listItem.textContent = todo.title;
+    listItem.appendChild(createDeleteButton(todo.id));
+    return listItem;
 }
 
 function createDeleteButton(id) {
-            var btn = document.createElement("BUTTON");
-            var t = document.createTextNode("Delete");
-            btn.appendChild(t);
-            btn.id = "del_" + id;
-            btn.onclick = deleteItem;
-            return btn;
+    var btn = document.createElement("BUTTON");
+    var t = document.createTextNode("Delete");
+    btn.appendChild(t);
+    btn.id = "del_" + id;
+    btn.onclick = deleteItem;
+    return btn;
 }
 
 function deleteItem() {
