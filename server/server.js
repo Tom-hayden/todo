@@ -63,12 +63,13 @@ module.exports = function(port, middleware, callback) {
     }
 
     function replaceTodo(id, text) {
-        todos = todos.filter(function(todo) {
-            return todo.id !== id;
+        todos.forEach(function(todo, index, todosArray) {
+            if( todo.id === id) {
+                var newTodo = text;
+                newTodo.id = id;
+                todosArray[index] = newTodo;
+            };
         });
-        var todo = text;
-        todo.id = id;
-        todos.push(todo);
         return todos;
     }
 
