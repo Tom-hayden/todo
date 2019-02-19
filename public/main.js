@@ -43,24 +43,48 @@ function getTodoList(callback) {
 }
 
 function reloadTodoList() {
+    clearToDoList();
+    displayLoadingScreen();
+    populateTodoList();
+}
+
+function clearToDoList() {
     while (todoList.firstChild) {
         todoList.removeChild(todoList.firstChild);
     }
+}
+
+function displayLoadingScreen() {
     todoListPlaceholder.style.display = "block";
+}
+
+function hideLoadingScreen() {
+    todoListPlaceholder.style.display = "none";
+}
+
+function populateTodoList(){
     getTodoList(function(todos) {
-        todoListPlaceholder.style.display = "none";
+        hideLoadingScreen();
         todos.forEach(function(todo) {
+            todoList.appendChild(createListItem(todo));
+        });
+    });
+}
+
+function createListItem(todo){
             var listItem = document.createElement("li");
+            listItem.textContent = todo.title;
+            listItem.appendChild(createDeleteButton(todo.id));
+            return listItem;
+}
+
+function createDeleteButton(id) {
             var btn = document.createElement("BUTTON");
             var t = document.createTextNode("Delete");
             btn.appendChild(t);
-            btn.id = "del_" + todo.id;
+            btn.id = "del_" + id;
             btn.onclick = deleteItem;
-            listItem.textContent = todo.title;
-            listItem.appendChild(btn);
-            todoList.appendChild(listItem);
-        });
-    });
+            return btn;
 }
 
 function deleteItem() {
@@ -78,6 +102,6 @@ function deleteItem() {
 }
 
 function getButtonId(id) {
-    return id.substring(4);
+    return id.substring(4);  // removing 'del_' prefix from id
 }
 reloadTodoList();
