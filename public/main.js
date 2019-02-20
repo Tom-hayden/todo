@@ -74,13 +74,13 @@ function populateTodoList() {
 function createListItem(todo) {
     var listItem = document.createElement("li");
     listItem.textContent = todo.title;
-    listItem.appendChild(createDeleteButton(todo));
     if(!todo.isComplete){
         listItem.appendChild(createCompleteButton(todo));
         
     } else {
         listItem.style.textDecoration =  "line-through";
     }
+    listItem.appendChild(createDeleteButton(todo));
     return listItem;
 }
 
