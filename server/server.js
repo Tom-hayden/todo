@@ -16,8 +16,8 @@ module.exports = function(port, middleware, callback) {
 
     // Create
     app.post("/api/todo", function(req, res) {
-        let id = addNewTodo(req.body);
-        res.set("Location", "/api/todo/" +id);
+        var id = addNewTodo(req.body);
+        res.set("Location", "/api/todo/" + id);
         res.sendStatus(201);
     });
 
@@ -35,8 +35,17 @@ module.exports = function(port, middleware, callback) {
         }
     });
 
+    //Update
+    app.put("/api/todo/:id", function(req, res) {
+        if (updateTodo(req.params.id, req.body)) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(404);
+        }
+    });
+
     function deleteTodo(id) {
-        let todo = getTodo(id);
+        var todo = getTodo(id);
         if (todo) {
             todos = todos.filter(function(otherTodo) {
                 return otherTodo !== todo;
@@ -46,16 +55,6 @@ module.exports = function(port, middleware, callback) {
             return false;
         }
     }
-
-    //Update
-    app.put("/api/todo/:id", function(req, res) {
-        var id = req.params.id;
-        if (updateTodo(id, req.body)) {
-            res.sendStatus(200);
-        } else {
-            res.sendStatus(404);
-        }
-    });
 
     function updateTodo(id, todoBody) {
         if (getTodo(id)) {
@@ -86,7 +85,7 @@ module.exports = function(port, middleware, callback) {
     }
 
     function addNewTodo(todoBody) {
-        let id = latestId.toString();
+        var id = latestId.toString();
         todos.push(createTodo(todoBody, id));
         latestId++;
         return id;
