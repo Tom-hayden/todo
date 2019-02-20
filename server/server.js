@@ -28,17 +28,24 @@ module.exports = function(port, middleware, callback) {
 
     // Delete
     app.delete("/api/todo/:id", function(req, res) {
-        var id = req.params.id;
-        var todo = getTodo(id);
-        if (todo) {
-            todos = todos.filter(function(otherTodo) {
-                return otherTodo !== todo;
-            });
+        if (deleteTodo(req.params.id)) {
             res.sendStatus(200);
         } else {
             res.sendStatus(404);
         }
     });
+
+    function deleteTodo(id) {
+        let todo = getTodo(id);
+        if (todo) {
+            todos = todos.filter(function(otherTodo) {
+                return otherTodo !== todo;
+            });
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     //Update
     app.put("/api/todo/:id", function(req, res) {
