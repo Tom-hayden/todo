@@ -77,7 +77,9 @@ function createListItem(todo) {
     listItem.appendChild(createDeleteButton(todo));
     if(!todo.isComplete){
         listItem.appendChild(createCompleteButton(todo));
-        //listItem.style.textDecoration =  "line-through";
+        
+    } else {
+        listItem.style.textDecoration =  "line-through";
     }
     return listItem;
 }
