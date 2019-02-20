@@ -16,9 +16,8 @@ module.exports = function(port, middleware, callback) {
 
     // Create
     app.post("/api/todo", function(req, res) {
-        todos.push(createTodo(req.body, latestId.toString()));
-        res.set("Location", "/api/todo/" + latestId.toString());
-        latestId++;
+        let id = addNewTodo(req.body);
+        res.set("Location", "/api/todo/" +id);
         res.sendStatus(201);
     });
 
@@ -77,6 +76,13 @@ module.exports = function(port, middleware, callback) {
             }
         });
         return todos;
+    }
+
+    function addNewTodo(todoBody) {
+        let id = latestId.toString();
+        todos.push(createTodo(todoBody, id));
+        latestId++;
+        return id;
     }
 
     var server = app.listen(port, callback);
