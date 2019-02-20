@@ -53,8 +53,8 @@ module.exports = function(port, middleware, callback) {
 
     function updateTodo(id, todoBody) {
         if (getTodo(id)) {
-                replaceTodo(id, todoBody);
-                return true;
+            replaceTodo(id, todoBody);
+            return true;
         } else {
             return false;
         }
