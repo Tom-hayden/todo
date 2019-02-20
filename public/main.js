@@ -74,13 +74,13 @@ function populateTodoList() {
 function createListItem(todo) {
     var listItem = document.createElement("li");
     listItem.textContent = todo.title;
+    listItem.appendChild(createDeleteButton(todo));
     if(!todo.isComplete){
         listItem.appendChild(createCompleteButton(todo));
         
     } else {
         listItem.style.textDecoration =  "line-through";
     }
-    listItem.appendChild(createDeleteButton(todo));
     return listItem;
 }
 
@@ -90,6 +90,7 @@ function createDeleteButton(todo) {
     btn.appendChild(t);
     btn.id = "del_" + todo.id;
     btn.onclick = deleteItem
+    btn.style.float = "right";
     return btn;
 }
 
@@ -101,6 +102,7 @@ function createCompleteButton(todo) {
     btn.onclick = function() {
         completeItem(todo);
     }
+    btn.style.float = "right";
     return btn;
 } 
 
