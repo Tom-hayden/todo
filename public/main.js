@@ -74,37 +74,41 @@ function populateTodoList() {
 function createListItem(todo) {
     var listItem = document.createElement("li");
     listItem.textContent = todo.title;
-    listItem.appendChild(createDeleteButton(todo.id));
+    listItem.appendChild(createDeleteButton(todo));
     if(!todo.isComplete){
-        listItem.appendChild(createCompleteButton(todo.id));
+        listItem.appendChild(createCompleteButton(todo));
+        //listItem.style.textDecoration =  "line-through";
     }
     return listItem;
 }
 
-function createDeleteButton(id) {
+function createDeleteButton(todo) {
     var btn = document.createElement("BUTTON");
     var t = document.createTextNode("Delete");
     btn.appendChild(t);
-    btn.id = "del_" + id;
-    btn.onclick = deleteItem;
+    btn.id = "del_" + todo.id;
+    btn.onclick = deleteItem
     return btn;
 }
 
-function createCompleteButton(id) {
+function createCompleteButton(todo) {
     var btn = document.createElement("BUTTON");
     var t = document.createTextNode("Complete");
     btn.appendChild(t);
-    btn.id = "complete_" + id;
-    btn.onclick = completeItem;
+    btn.id = "complete_" + todo.id;
+    btn.onclick = function() {
+        completeItem(todo);
+    }
     return btn;
 } 
 
-function completeItem() {
+function completeItem(todo) {
     var createRequest = new XMLHttpRequest();
-    createRequest.open("PUT", "/api/todo/" + getCompleteButtonId(this.id));
+    createRequest.open("PUT", "/api/todo/" + todo.id);
     createRequest.setRequestHeader("Content-type", "application/json");
     createRequest.send(JSON.stringify({
-        isComplete: true
+        isComplete: true,
+        title: todo.title
     }));
     createRequest.onload = function() {
         if (this.status === 200) {
@@ -128,10 +132,6 @@ function deleteItem() {
             error.textContent = "Failed to delete item. Server returned " + this.status + " - " + this.responseText;
         }
     };
-}
-
-function getCompleteButtonId(id) {
-    return id.substring(9); // removing 'complete_' prefix from id
 }
 
 function getDelButtonId(id) {
