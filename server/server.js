@@ -44,14 +44,21 @@ module.exports = function(port, middleware, callback) {
     //Update
     app.put("/api/todo/:id", function(req, res) {
         var id = req.params.id;
-        var todo = getTodo(id);
-        if (todo) {
-            replaceTodo(id, req.body);
+        if (updateTodo(id, req.body)) {
             res.sendStatus(200);
         } else {
             res.sendStatus(404);
         }
     });
+
+    function updateTodo(id, todoBody) {
+        if (getTodo(id)) {
+                replaceTodo(id, todoBody);
+                return true;
+        } else {
+            return false;
+        }
+    }
 
     function createTodo(todoBody, id) {
         return Object.assign({}, { id: id}, todoBody);
