@@ -16,11 +16,8 @@ module.exports = function(port, middleware, callback) {
 
     // Create
     app.post("/api/todo", function(req, res) {
-        var todo = req.body;
-        todo.id = latestId.toString();
-        latestId++;
-        todos.push(todo);
-        res.set("Location", "/api/todo/" + todo.id);
+        var id = addNewTodo(req.body);
+        res.set("Location", "/api/todo/" + id);
         res.sendStatus(201);
     });
 
@@ -31,12 +28,7 @@ module.exports = function(port, middleware, callback) {
 
     // Delete
     app.delete("/api/todo/:id", function(req, res) {
-        var id = req.params.id;
-        var todo = getTodo(id);
-        if (todo) {
-            todos = todos.filter(function(otherTodo) {
-                return otherTodo !== todo;
-            });
+        if (deleteTodo(req.params.id)) {
             res.sendStatus(200);
         } else {
             res.sendStatus(404);
@@ -45,15 +37,37 @@ module.exports = function(port, middleware, callback) {
 
     //Update
     app.put("/api/todo/:id", function(req, res) {
-        var id = req.params.id;
-        var todo = getTodo(id);
-        if (todo) {
-            replaceTodo(id, req.body);
+        if (updateTodo(req.params.id, req.body)) {
             res.sendStatus(200);
         } else {
             res.sendStatus(404);
         }
     });
+
+    function deleteTodo(id) {
+        var todo = getTodo(id);
+        if (todo) {
+            todos = todos.filter(function(otherTodo) {
+                return otherTodo !== todo;
+            });
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function updateTodo(id, todoBody) {
+        if (getTodo(id)) {
+            replaceTodo(id, todoBody);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function createTodo(todoBody, id) {
+        return Object.assign({}, { id: id}, todoBody);
+    }
 
     function getTodo(id) {
         return _.find(todos, function(todo) {
@@ -61,15 +75,20 @@ module.exports = function(port, middleware, callback) {
         });
     }
 
-    function replaceTodo(id, text) {
+    function replaceTodo(id, todoBody) {
         todos.forEach(function(todo, index, todosArray) {
             if (todo.id === id) {
-                var newTodo = text;
-                newTodo.id = id;
-                todosArray[index] = newTodo;
+                todosArray[index] = createTodo(todoBody, id);
             }
         });
         return todos;
+    }
+
+    function addNewTodo(todoBody) {
+        var id = latestId.toString();
+        todos.push(createTodo(todoBody, id));
+        latestId++;
+        return id;
     }
 
     var server = app.listen(port, callback);

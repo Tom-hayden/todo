@@ -1,5 +1,5 @@
 var todoList = document.getElementById("todo-list");
-var todoListPlaceholder = document.getElementById("todo-list-placeholder");
+var todoListLoading = document.getElementById("todo-list-Loading");
 var form = document.getElementById("todo-form");
 var todoTitle = document.getElementById("new-todo");
 var error = document.getElementById("error");
@@ -55,11 +55,11 @@ function clearToDoList() {
 }
 
 function displayLoadingScreen() {
-    todoListPlaceholder.style.display = "block";
+    todoListLoading.style.display = "block";
 }
 
 function hideLoadingScreen() {
-    todoListPlaceholder.style.display = "none";
+    todoListLoading.style.display = "none";
 }
 
 function populateTodoList() {
