@@ -75,6 +75,9 @@ function createListItem(todo) {
     var listItem = document.createElement("li");
     listItem.textContent = todo.title;
     listItem.appendChild(createDeleteButton(todo.id));
+    if(!todo.isComplete){
+        listItem.appendChild(createCompleteButton(todo.id));
+    }
     return listItem;
 }
 
@@ -87,9 +90,35 @@ function createDeleteButton(id) {
     return btn;
 }
 
+function createCompleteButton(id) {
+    var btn = document.createElement("BUTTON");
+    var t = document.createTextNode("Complete");
+    btn.appendChild(t);
+    btn.id = "complete_" + id;
+    btn.onclick = completeItem;
+    return btn;
+} 
+
+function completeItem() {
+    var createRequest = new XMLHttpRequest();
+    createRequest.open("PUT", "/api/todo/" + getCompleteButtonId(this.id));
+    createRequest.setRequestHeader("Content-type", "application/json");
+    createRequest.send(JSON.stringify({
+        isComplete: true
+    }));
+    createRequest.onload = function() {
+        if (this.status === 200) {
+            reloadTodoList();
+        } else {
+            error.textContent = "Failed to update item. Server returned " + this.status + " - " + this.responseText;
+        }
+    };
+
+}
+
 function deleteItem() {
     var createRequest = new XMLHttpRequest();
-    createRequest.open("DELETE", "/api/todo/" + getButtonId(this.id));
+    createRequest.open("DELETE", "/api/todo/" + getDelButtonId(this.id));
     createRequest.setRequestHeader("Content-type", "application/json");
     createRequest.send();
     createRequest.onload = function() {
@@ -101,7 +130,11 @@ function deleteItem() {
     };
 }
 
-function getButtonId(id) {
+function getCompleteButtonId(id) {
+    return id.substring(9); // removing 'complete_' prefix from id
+}
+
+function getDelButtonId(id) {
     return id.substring(4);  // removing 'del_' prefix from id
 }
 reloadTodoList();
