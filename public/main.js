@@ -76,11 +76,10 @@ function createListItem(todo) {
     listItem.textContent = todo.title;
     listItem.id = "todo_text_" + todo.id;
     listItem.appendChild(createDeleteButton(todo));
-    if(!todo.isComplete){
+    if (!todo.isComplete) {
         listItem.appendChild(createCompleteButton(todo));
-        
     } else {
-        listItem.classList.add('completed');
+        listItem.classList.add("completed");
     }
     return listItem;
 }
@@ -105,7 +104,7 @@ function createCompleteButton(todo) {
     }
     btn.style.float = "right";
     return btn;
-} 
+}
 
 function completeItem(todo) {
     var createRequest = new XMLHttpRequest();
