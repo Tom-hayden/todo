@@ -94,8 +94,9 @@ testing.describe("end to end", function() {
             helpers.addTodo("Second todo item");
             helpers.addTodo("Third todo item");
             helpers.completeTodo(1);
-            helpers.isCompleted(1);
-
+            helpers.isCompleted(1).then(function(res) {
+                assert.equal(res, true);
+            });
         });
         testing.it("is the complete button removed", function() {
             helpers.navigateToSite();

@@ -112,13 +112,19 @@ module.exports.containsId = function(id) {
 }
 
 module.exports.isCompleted = function(id) {
- 
     let ele = driver.findElement(webdriver.By.id("todo_text_" + id));
-    ele.then(function(res) {
-        res.getAttribute("style.text-decoration").then( function(res) {
-            console.log(res);
-            return;
+    return ele.then(function(res) {
+        return elementHasClass(res,"completed").then(function(res) {
+            return res;
         });
-        return true;
+    });
+}
+
+function elementHasClass(element, classString) {
+    return element.getAttribute("class").then( function(res) {
+        let matches = res.split(' ').filter(function(ele) {
+            return ele === classString;
+        });
+        return matches.length === 1;
     });
 }
