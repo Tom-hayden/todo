@@ -49,3 +49,7 @@ button{
     color: rgb(30, 95, 81);
 
 }
+
+.completed{
+    text-decoration : line-through;
+}

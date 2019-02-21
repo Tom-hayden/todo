@@ -80,7 +80,7 @@ function createListItem(todo) {
         listItem.appendChild(createCompleteButton(todo));
         
     } else {
-        listItem.style.textDecoration =  "line-through";
+        listItem.classList.add('completed');
     }
     return listItem;
 }
