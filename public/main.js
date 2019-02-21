@@ -74,6 +74,7 @@ function populateTodoList() {
 function createListItem(todo) {
     var listItem = document.createElement("li");
     listItem.textContent = todo.title;
+    listItem.id = "todo_text_" + todo.id;
     listItem.appendChild(createDeleteButton(todo));
     if(!todo.isComplete){
         listItem.appendChild(createCompleteButton(todo));
