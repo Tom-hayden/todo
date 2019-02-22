@@ -145,7 +145,4 @@ function deleteItem(todo) {
     };
 }
 
-function getDelButtonId(id) {
-    return id.substring(4);  // removing 'del_' prefix from id
-}
 reloadTodoList();
