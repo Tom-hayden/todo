@@ -90,7 +90,6 @@ function createDeleteButton(todo) {
     btn.appendChild(t);
     btn.id = "del_" + todo.id;
     btn.onclick = deleteItem
-    btn.style.float = "right";
     return btn;
 }
 
@@ -108,7 +107,6 @@ function createCompleteButton(todo) {
     btn.onclick = function() {
         completeItem(todo);
     }
-    btn.style.float = "right";
     return btn;
 }
 
