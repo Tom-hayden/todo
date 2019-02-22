@@ -89,7 +89,9 @@ function createDeleteButton(todo) {
     var t = document.createTextNode("Delete");
     btn.appendChild(t);
     btn.id = "del_" + todo.id;
-    btn.onclick = deleteItem
+    btn.onclick = function() {
+        deleteItem(todo);
+    }
     return btn;
 }
 
@@ -128,9 +130,9 @@ function completeItem(todo) {
 
 }
 
-function deleteItem() {
+function deleteItem(todo) {
     var createRequest = new XMLHttpRequest();
-    createRequest.open("DELETE", "/api/todo/" + getDelButtonId(this.id));
+    createRequest.open("DELETE", "/api/todo/" + todo.id);
     createRequest.setRequestHeader("Content-type", "application/json");
     createRequest.send();
     createRequest.onload = function() {
