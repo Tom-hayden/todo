@@ -92,7 +92,7 @@ module.exports.setupErrorRoute = function(action, route) {
     }
     if (action === "delete") {
         router.delete(route, function(req, res) {
-            res.sendStatus(404);
+            res.sendStatus(500);
         });
     }
 };

@@ -66,6 +66,15 @@ testing.describe("end to end", function() {
         });
     });
     testing.describe("on delete todo item", function() {
+        testing.it("displays an error if the request fails", function() {
+            helpers.setupErrorRoute("delete", "/api/todo/0");
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            helpers.removeTodo(0);
+            helpers.getErrorText().then(function(text) {
+                assert.equal(text, "Failed to delete item. Server returned 500 - Internal Server Error");
+            });
+        });
         testing.it("can an item be removed", function() {
             helpers.navigateToSite();
             helpers.addTodo("New todo item");
