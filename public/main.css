@@ -40,15 +40,32 @@ h1 {
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
     cursor: pointer;
-    margin-left: 20px;
+}
+
+.buttonDelete{
     float : right;
+    margin-left: 20px;
+}
+
+.buttonDelete:hover{
+    color: rgb(255, 255, 255);
+}
+
+.buttonComplete{
+    float : right;
+    margin-left: 20px;
+}
+
+.buttonComplete:hover{
+    color: rgb(255, 255, 255);
+}
+
+.buttonSubmit{
 
 }
 
-.button:hover{
-    background-color: rgb(175, 129, 76);
-    color: rgb(30, 95, 81);
-
+.buttonSubmit:hover{
+    color: rgb(255, 255, 255);
 }
 
 .completed{

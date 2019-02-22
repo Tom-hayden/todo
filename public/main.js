@@ -85,7 +85,7 @@ function createListItem(todo) {
 }
 
 function createDeleteButton(todo) {
-    var btn = createButtonElement();
+    var btn = createButtonElement("buttonDelete");
     var t = document.createTextNode("Delete");
     btn.appendChild(t);
     btn.id = "del_" + todo.id;
@@ -95,14 +95,15 @@ function createDeleteButton(todo) {
     return btn;
 }
 
-function createButtonElement() {
+function createButtonElement(buttonType) {
     var btn = document.createElement("BUTTON");
     btn.classList.add("button");
+    btn.classList.add(buttonType);
     return btn;
 }
 
 function createCompleteButton(todo) {
-    var btn = createButtonElement();
+    var btn = createButtonElement("buttonComplete");
     var t = document.createTextNode("Complete");
     btn.appendChild(t);
     btn.id = "complete_" + todo.id;
