@@ -81,12 +81,33 @@ testing.describe("end to end", function() {
             helpers.addTodo("A third todo item");
             helpers.removeTodo(1);
             helpers.getTodoList().then(function() {
-                helpers.containsId(1).then(function(res) {
+                helpers.containsId("del_1").then(function(res) {
                     assert.equal(res, false);
                 });
             });
         });
     });
-
+    testing.describe("on Complete todo item", function() {
+        testing.it("can a specific todo be completed", function() {
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            helpers.addTodo("Second todo item");
+            helpers.addTodo("Third todo item");
+            helpers.completeTodo(1);
+            helpers.isCompleted(1).then(function(res) {
+                assert.equal(res, true);
+            });
+        });
+        testing.it("is the complete button removed", function() {
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            helpers.completeTodo(0);
+            helpers.getTodoList().then(function() {
+                helpers.containsId("complete_0").then(function(res) {
+                    assert.equal(res, false);
+                });
+            });
+        });
+    });
 });
 

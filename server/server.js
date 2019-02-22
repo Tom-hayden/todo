@@ -66,7 +66,7 @@ module.exports = function(port, middleware, callback) {
     }
 
     function createTodo(todoBody, id) {
-        return Object.assign({}, { id: id}, todoBody);
+        return Object.assign({}, { id: id, isComplete: false}, todoBody);
     }
 
     function getTodo(id) {

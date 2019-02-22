@@ -101,8 +101,30 @@ module.exports.removeTodo = function(id) {
     driver.findElement(webdriver.By.id("del_" + id)).click();
 };
 
+module.exports.completeTodo = function(id) {
+    driver.findElement(webdriver.By.id("complete_" + id)).click();
+};
+
 module.exports.containsId = function(id) {
-    return driver.findElements(webdriver.By.id("del_" + id)).then(function(res) {
+    return driver.findElements(webdriver.By.id(id)).then(function(res) {
         return res.length > 0;
+    });
+}
+
+module.exports.isCompleted = function(id) {
+    var ele = driver.findElement(webdriver.By.id("todo_text_" + id));
+    return ele.then(function(res) {
+        return elementHasClass(res,"completed").then(function(res) {
+            return res;
+        });
+    });
+}
+
+function elementHasClass(element, classString) {
+    return element.getAttribute("class").then(function(res) {
+        var matches = res.split(" ").filter(function(ele) {
+            return ele === classString;
+        });
+        return matches.length === 1;
     });
 }

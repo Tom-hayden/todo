@@ -74,22 +74,59 @@ function populateTodoList() {
 function createListItem(todo) {
     var listItem = document.createElement("li");
     listItem.textContent = todo.title;
-    listItem.appendChild(createDeleteButton(todo.id));
+    listItem.id = "todo_text_" + todo.id;
+    listItem.appendChild(createDeleteButton(todo));
+    if (!todo.isComplete) {
+        listItem.appendChild(createCompleteButton(todo));
+    } else {
+        listItem.classList.add("completed");
+    }
     return listItem;
 }
 
-function createDeleteButton(id) {
+function createDeleteButton(todo) {
     var btn = document.createElement("BUTTON");
     var t = document.createTextNode("Delete");
     btn.appendChild(t);
-    btn.id = "del_" + id;
-    btn.onclick = deleteItem;
+    btn.id = "del_" + todo.id;
+    btn.onclick = deleteItem
+    btn.style.float = "right";
     return btn;
+}
+
+function createCompleteButton(todo) {
+    var btn = document.createElement("BUTTON");
+    var t = document.createTextNode("Complete");
+    btn.appendChild(t);
+    btn.id = "complete_" + todo.id;
+    btn.onclick = function() {
+        completeItem(todo);
+    }
+    btn.style.float = "right";
+    return btn;
+}
+
+function completeItem(todo) {
+    var createRequest = new XMLHttpRequest();
+    createRequest.open("PUT", "/api/todo/" + todo.id);
+    createRequest.setRequestHeader("Content-type", "application/json");
+    createRequest.send(JSON.stringify({
+        isComplete: true,
+        title: todo.title
+    }));
+    createRequest.onload = function() {
+        if (this.status === 200) {
+            reloadTodoList();
+        } else {
+            error.textContent = "Failed to update item. Server returned " + this.status + " - " + this.responseText;
+        }
+    };
+
 }
 
 function deleteItem() {
     var createRequest = new XMLHttpRequest();
-    createRequest.open("DELETE", "/api/todo/" + getButtonId(this.id));
+    createRequest.open("DELETE", "/api/todo/" + getDelButtonId(this.id));
     createRequest.setRequestHeader("Content-type", "application/json");
     createRequest.send();
     createRequest.onload = function() {
@@ -101,7 +138,7 @@ function deleteItem() {
     };
 }
 
-function getButtonId(id) {
+function getDelButtonId(id) {
     return id.substring(4);  // removing 'del_' prefix from id
 }
 reloadTodoList();
