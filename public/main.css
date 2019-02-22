@@ -32,7 +32,7 @@ h1 {
     color: rgba(134, 136, 45, 0.87);
 }
 
-button{
+.button{
     background-color: rgb(81, 124, 84);
     font-size: 18px;
     border-radius: 12px;
