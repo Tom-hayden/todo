@@ -118,5 +118,31 @@ testing.describe("end to end", function() {
             });
         });
     });
+    testing.describe("is todo counter working correctly", function() {
+        testing.it("can the number of items to be completed be displayed", function() {
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            helpers.addTodo("Second todo item");
+            helpers.addTodo("Third todo item");
+            helpers.completeTodo(1);
+            helpers.removeTodo(0);
+            helpers.getCount().then(function(res) {
+                assert.equal(res, "1");
+            });
+        });
+        testing.it("does it work for a different number of items", function() {
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            helpers.addTodo("Second todo item");
+            helpers.addTodo("Third todo item");
+            helpers.addTodo("fourth todo item");
+            helpers.addTodo("fifth todo item");
+            helpers.completeTodo(1);
+            helpers.removeTodo(0);
+            helpers.getCount().then(function(res) {
+                assert.equal(res, "3");
+            });
+        });
+    });
 });
 

@@ -3,6 +3,7 @@ var todoListLoading = document.getElementById("todo-list-Loading");
 var form = document.getElementById("todo-form");
 var todoTitle = document.getElementById("new-todo");
 var error = document.getElementById("error");
+var todoUncompleteCount = document.getElementById("count-label");
 
 form.onsubmit = function(event) {
     var title = todoTitle.value;
@@ -43,12 +44,23 @@ function getTodoList(callback) {
 }
 
 function reloadTodoList() {
-    clearToDoList();
+    clearPage();
     displayLoadingScreen();
-    populateTodoList();
+    populatePage();
 }
 
-function clearToDoList() {
+function clearPage() {
+    clearTodo();
+    clearUncompleteCounter();
+}
+
+function clearUncompleteCounter() {
+    while (todoUncompleteCount.firstChild) {
+        todoUncompleteCount.removeChild(todoUncompleteCount.firstChild);
+    }
+}
+
+function clearTodo() {
     while (todoList.firstChild) {
         todoList.removeChild(todoList.firstChild);
     }
@@ -62,13 +74,26 @@ function hideLoadingScreen() {
     todoListLoading.style.display = "none";
 }
 
-function populateTodoList() {
+function populatePage() {
     getTodoList(function(todos) {
-        hideLoadingScreen();
-        todos.forEach(function(todo) {
-            todoList.appendChild(createListItem(todo));
-        });
+        populateTodoList(todos);
+        updateTodoCounter(todos);
     });
+}
+
+function populateTodoList(todos) {
+    hideLoadingScreen();
+    todos.forEach(function(todo) {
+        todoList.appendChild(createListItem(todo));
+    });
+}
+
+function updateTodoCounter(todos) {
+    var uncompleteTodos = todos.filter(function(todo) {
+        return todo.isComplete === false;
+    }).length;
+    var text = document.createTextNode(uncompleteTodos);
+    todoUncompleteCount.appendChild(text);
 }
 
 function createListItem(todo) {
