@@ -3,7 +3,7 @@ var todoListLoading = document.getElementById("todo-list-Loading");
 var form = document.getElementById("todo-form");
 var todoTitle = document.getElementById("new-todo");
 var error = document.getElementById("error");
-var todoUnCompleteCount = document.getElementById("count-label");
+var todoUncompleteCount = document.getElementById("count-label");
 
 form.onsubmit = function(event) {
     var title = todoTitle.value;
@@ -44,14 +44,17 @@ function getTodoList(callback) {
 }
 
 function reloadTodoList() {
-    clearToDoList();
+    clearPage();
     displayLoadingScreen();
-    populateTodoList();
+    populatePage();
 }
 
-function clearToDoList() {
+function clearPage() {
     while (todoList.firstChild) {
         todoList.removeChild(todoList.firstChild);
+    }
+    while (todoUncompleteCount.firstChild) {
+        todoUncompleteCount.removeChild(todoUncompleteCount.firstChild);
     }
 }
 
@@ -63,7 +66,7 @@ function hideLoadingScreen() {
     todoListLoading.style.display = "none";
 }
 
-function populateTodoList() {
+function populatePage() {
     getTodoList(function(todos) {
         hideLoadingScreen();
         todos.forEach(function(todo) {
@@ -79,7 +82,7 @@ function updateTodoCounter(todos) {
         return todo.isComplete === false;
     }).length;
     var text = document.createTextNode(uncompleteTodos);
-    todoUnCompleteCount.appendChild(text);
+    todoUncompleteCount.appendChild(text);
 }
 
 function createListItem(todo) {
