@@ -115,7 +115,7 @@ function createDeleteButton(todo) {
     btn.appendChild(t);
     btn.id = "del_" + todo.id;
     btn.onclick = function() {
-        deleteItem(todo);
+        deleteItem(todo, reloadTodoList);
     }
     return btn;
 }
@@ -133,12 +133,12 @@ function createCompleteButton(todo) {
     btn.appendChild(t);
     btn.id = "complete_" + todo.id;
     btn.onclick = function() {
-        completeItem(todo);
+        completeItem(todo, reloadTodoList);
     }
     return btn;
 }
 
-function completeItem(todo) {
+function completeItem(todo, callback) {
     var createRequest = new XMLHttpRequest();
     createRequest.open("PUT", "/api/todo/" + todo.id);
     createRequest.setRequestHeader("Content-type", "application/json");
@@ -148,7 +148,7 @@ function completeItem(todo) {
     }));
     createRequest.onload = function() {
         if (this.status === 200) {
-            reloadTodoList();
+            callback();
         } else {
             error.textContent = "Failed to update item. Server returned " + this.status + " - " + this.responseText;
         }
@@ -156,14 +156,14 @@ function completeItem(todo) {
 
 }
 
-function deleteItem(todo) {
+function deleteItem(todo, callback) {
     var createRequest = new XMLHttpRequest();
     createRequest.open("DELETE", "/api/todo/" + todo.id);
     createRequest.setRequestHeader("Content-type", "application/json");
     createRequest.send();
     createRequest.onload = function() {
         if (this.status === 200) {
-            reloadTodoList();
+            callback();
         } else {
             error.textContent = "Failed to delete item. Server returned " + this.status + " - " + this.responseText;
         }
