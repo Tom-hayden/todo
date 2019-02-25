@@ -78,8 +78,19 @@ function populatePage() {
     getTodoList(function(todos) {
         populateTodoList(todos);
         updateTodoCounter(todos);
+        if (containsCompleted(todos)){
+            todoList.appendChild(createDeleteAllButton(todos));
+        }
     });
 }
+
+function containsCompleted(todos) {
+    var numberCompleted = todos.filter(function(todo) {
+        return todo.isComplete;
+    });
+    return numberCompleted.length > 0;
+}
+
 
 function populateTodoList(todos) {
     hideLoadingScreen();
@@ -118,6 +129,35 @@ function createDeleteButton(todo) {
         deleteItem(todo, reloadTodoList);
     }
     return btn;
+}
+
+function createDeleteAllButton(todos) {
+    var btn = createButtonElement("buttonDelete");
+    var t = document.createTextNode("Deleted Completed");
+    btn.appendChild(t);
+    btn.id = "del_completed";
+    btn.onclick = function() {
+        deleteAllCompleted(todos);
+    }
+    return btn;
+}
+
+function deleteAllCompleted(todos) {
+    todos.forEach( function(todo) {
+        if (todo.isComplete === true) {
+            deleteItem(todo)
+        }
+    });
+    reloadTodoList();
+}
+
+function elementHasClass(element, classString) {
+    return element.getAttribute("class").then(function(res) {
+        var matches = res.split(" ").filter(function(ele) {
+            return ele === classString;
+        });
+        return matches.length === 1;
+    });
 }
 
 function createButtonElement(buttonType) {
@@ -163,7 +203,7 @@ function deleteItem(todo, callback) {
     createRequest.send();
     createRequest.onload = function() {
         if (this.status === 200) {
-            callback();
+            if (callback) callback();
         } else {
             error.textContent = "Failed to delete item. Server returned " + this.status + " - " + this.responseText;
         }
