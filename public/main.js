@@ -50,11 +50,19 @@ function reloadTodoList() {
 }
 
 function clearPage() {
-    while (todoList.firstChild) {
-        todoList.removeChild(todoList.firstChild);
-    }
+    clearTodo();
+    clearUncompleteCounter();
+}
+
+function clearUncompleteCounter() {
     while (todoUncompleteCount.firstChild) {
         todoUncompleteCount.removeChild(todoUncompleteCount.firstChild);
+    }
+}
+
+function clearTodo() {
+    while (todoList.firstChild) {
+        todoList.removeChild(todoList.firstChild);
     }
 }
 
@@ -68,11 +76,15 @@ function hideLoadingScreen() {
 
 function populatePage() {
     getTodoList(function(todos) {
-        hideLoadingScreen();
-        todos.forEach(function(todo) {
-            todoList.appendChild(createListItem(todo));
-        });
+        populateTodoList(todos);
         updateTodoCounter(todos);
+    });
+}
+
+function populateTodoList(todos) {
+    hideLoadingScreen();
+    todos.forEach(function(todo) {
+        todoList.appendChild(createListItem(todo));
     });
 }
 
