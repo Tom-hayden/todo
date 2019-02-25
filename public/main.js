@@ -85,24 +85,31 @@ function createListItem(todo) {
 }
 
 function createDeleteButton(todo) {
-    var btn = document.createElement("BUTTON");
+    var btn = createButtonElement("buttonDelete");
     var t = document.createTextNode("Delete");
     btn.appendChild(t);
     btn.id = "del_" + todo.id;
-    btn.onclick = deleteItem
-    btn.style.float = "right";
+    btn.onclick = function() {
+        deleteItem(todo);
+    }
+    return btn;
+}
+
+function createButtonElement(buttonType) {
+    var btn = document.createElement("BUTTON");
+    btn.classList.add("button");
+    btn.classList.add(buttonType);
     return btn;
 }
 
 function createCompleteButton(todo) {
-    var btn = document.createElement("BUTTON");
+    var btn = createButtonElement("buttonComplete");
     var t = document.createTextNode("Complete");
     btn.appendChild(t);
     btn.id = "complete_" + todo.id;
     btn.onclick = function() {
         completeItem(todo);
     }
-    btn.style.float = "right";
     return btn;
 }
 
@@ -124,9 +131,9 @@ function completeItem(todo) {
 
 }
 
-function deleteItem() {
+function deleteItem(todo) {
     var createRequest = new XMLHttpRequest();
-    createRequest.open("DELETE", "/api/todo/" + getDelButtonId(this.id));
+    createRequest.open("DELETE", "/api/todo/" + todo.id);
     createRequest.setRequestHeader("Content-type", "application/json");
     createRequest.send();
     createRequest.onload = function() {
@@ -138,7 +145,4 @@ function deleteItem() {
     };
 }
 
-function getDelButtonId(id) {
-    return id.substring(4);  // removing 'del_' prefix from id
-}
 reloadTodoList();
