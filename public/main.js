@@ -77,7 +77,7 @@ function populatePage() {
 }
 
 function updateTodoCounter(todos) {
-    var uncompleteTodos = todos.filter(function(todo){
+    var uncompleteTodos = todos.filter(function(todo) {
         return todo.isComplete === false;
     }).length;
     var text = document.createTextNode(uncompleteTodos);
