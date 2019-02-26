@@ -5,6 +5,15 @@ var todoTitle = document.getElementById("new-todo");
 var error = document.getElementById("error");
 var todoUncompleteCount = document.getElementById("count-label");
 var todos;
+var todoFilter = "all";
+
+document.addEventListener('DOMContentLoaded',function() {
+    document.querySelector('select[name="filter"]').onchange=filterChangeHandler;
+},false);
+
+function filterChangeHandler(event) {
+    todoFilter = event.target.value.toLowerCase();
+}
 
 form.onsubmit = function(event) {
     var title = todoTitle.value;
@@ -85,7 +94,17 @@ function reloadTodoList() {
 }
 
 function filterTodoList(todos) {
-    return todos;
+    if (todoFilter ==="all"){
+        return todos;
+    } else if (todoFilter === "complete") {
+        return todos.filter(function(todo) {
+            return todo.isComplete;
+        });
+    } else if (todoFilter === "active") {
+        return todos.filter(function(todo) {
+            return !todo.isComplete;
+        }); 
+    }
 }
 
 function clearPage() {
