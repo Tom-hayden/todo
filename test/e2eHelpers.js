@@ -109,6 +109,10 @@ module.exports.completeTodo = function(id) {
     driver.findElement(webdriver.By.id("complete_" + id)).click();
 };
 
+module.exports.removeCompleted = function(id) {
+    driver.findElement(webdriver.By.id("del_completed")).click();
+};
+
 module.exports.containsId = function(id) {
     return driver.findElements(webdriver.By.id(id)).then(function(res) {
         return res.length > 0;

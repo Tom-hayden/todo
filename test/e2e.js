@@ -144,5 +144,42 @@ testing.describe("end to end", function() {
             });
         });
     });
+    testing.describe("on delete all completed items", function() {
+        testing.it("does the button appear when there are no completed items", function() {
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            helpers.getTodoList().then(function() {
+                helpers.containsId("del_completed").then(function(res) {
+                    assert.equal(res, false);
+                });
+});
+        });
+        testing.it("can the button delete all completed items", function() {
+            helpers.addTodo("New todo item");
+            helpers.addTodo("Second todo item");
+            helpers.addTodo("Third todo item");
+            helpers.addTodo("fourth todo item");
+            helpers.addTodo("fifth todo item");
+            helpers.completeTodo(1);
+            helpers.completeTodo(0);
+            helpers.completeTodo(3);
+            helpers.removeCompleted();
+            helpers.containsId("todo_text_0").then(function(res) {
+                assert.equal(res, false);
+            });
+            helpers.containsId("todo_text_1").then(function(res) {
+                assert.equal(res, false);
+            });
+            helpers.containsId("todo_text_2").then(function(res) {
+                assert.equal(res, true);
+            });
+            helpers.containsId("todo_text_3").then(function(res) {
+                assert.equal(res, false);
+            });
+            helpers.containsId("todo_text_4").then(function(res) {
+                assert.equal(res, true);
+            });
+        });
+    });
 });
 
