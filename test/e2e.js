@@ -152,7 +152,7 @@ testing.describe("end to end", function() {
                 helpers.containsId("del_completed").then(function(res) {
                     assert.equal(res, false);
                 });
-});
+            });
         });
         testing.it("can the button delete all completed items", function() {
             helpers.addTodo("New todo item");

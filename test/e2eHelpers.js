@@ -109,7 +109,7 @@ module.exports.completeTodo = function(id) {
     driver.findElement(webdriver.By.id("complete_" + id)).click();
 };
 
-module.exports.removeCompleted = function(id) {
+module.exports.removeCompleted = function() {
     driver.findElement(webdriver.By.id("del_completed")).click();
 };
 
