@@ -123,10 +123,9 @@ function hideLoadingScreen() {
 }
 
 function containsCompleted(todos) {
-    var numberCompleted = todos.filter(function(todo) {
+    return todos.some(function(todo) {
         return todo.isComplete;
-    });
-    return numberCompleted.length > 0;
+    })
 }
 
 function createListItem(todo) {
