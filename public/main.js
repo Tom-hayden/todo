@@ -145,7 +145,7 @@ function createDeleteAllButton(todos) {
 function deleteAllCompleted(todos) {
     todos.forEach(function(todo) {
         if (todo.isComplete === true) {
-            deleteItem(todo)
+            deleteItem(todo, function() {});
         }
     });
     reloadTodoList();
@@ -194,9 +194,7 @@ function deleteItem(todo, callback) {
     createRequest.send();
     createRequest.onload = function() {
         if (this.status === 200) {
-            if (callback) {
-                callback();
-            }
+            callback();
         } else {
             error.textContent = "Failed to delete item. Server returned " + this.status + " - " + this.responseText;
         }
