@@ -43,6 +43,37 @@ function getTodoList(callback) {
     createRequest.send();
 }
 
+function completeItem(todo, callback) {
+    var createRequest = new XMLHttpRequest();
+    createRequest.open("PUT", "/api/todo/" + todo.id);
+    createRequest.setRequestHeader("Content-type", "application/json");
+    createRequest.send(JSON.stringify({
+        isComplete: true,
+        title: todo.title
+    }));
+    createRequest.onload = function() {
+        if (this.status === 200) {
+            callback();
+        } else {
+            error.textContent = "Failed to update item. Server returned " + this.status + " - " + this.responseText;
+        }
+    };
+}
+
+function deleteItem(todo, callback) {
+    var createRequest = new XMLHttpRequest();
+    createRequest.open("DELETE", "/api/todo/" + todo.id);
+    createRequest.setRequestHeader("Content-type", "application/json");
+    createRequest.send();
+    createRequest.onload = function() {
+        if (this.status === 200) {
+            callback();
+        } else {
+            error.textContent = "Failed to delete item. Server returned " + this.status + " - " + this.responseText;
+        }
+    };
+}
+
 function reloadTodoList() {
     clearPage();
     displayLoadingScreen();
@@ -54,15 +85,15 @@ function clearPage() {
     clearUncompleteCounter();
 }
 
-function clearUncompleteCounter() {
-    while (todoUncompleteCount.firstChild) {
-        todoUncompleteCount.removeChild(todoUncompleteCount.firstChild);
-    }
-}
-
 function clearTodo() {
     while (todoList.firstChild) {
         todoList.removeChild(todoList.firstChild);
+    }
+}
+
+function clearUncompleteCounter() {
+    while (todoUncompleteCount.firstChild) {
+        todoUncompleteCount.removeChild(todoUncompleteCount.firstChild);
     }
 }
 
@@ -70,14 +101,13 @@ function displayLoadingScreen() {
     todoListLoading.style.display = "block";
 }
 
-function hideLoadingScreen() {
-    todoListLoading.style.display = "none";
-}
-
 function populatePage() {
     getTodoList(function(todos) {
         populateTodoList(todos);
         updateTodoCounter(todos);
+        if (containsCompleted(todos)) {
+            todoList.appendChild(createDeleteAllButton(todos));
+        }
     });
 }
 
@@ -88,12 +118,14 @@ function populateTodoList(todos) {
     });
 }
 
-function updateTodoCounter(todos) {
-    var uncompleteTodos = todos.filter(function(todo) {
-        return todo.isComplete === false;
-    }).length;
-    var text = document.createTextNode(uncompleteTodos);
-    todoUncompleteCount.appendChild(text);
+function hideLoadingScreen() {
+    todoListLoading.style.display = "none";
+}
+
+function containsCompleted(todos) {
+    return todos.some(function(todo) {
+        return todo.isComplete;
+    })
 }
 
 function createListItem(todo) {
@@ -115,15 +147,8 @@ function createDeleteButton(todo) {
     btn.appendChild(t);
     btn.id = "del_" + todo.id;
     btn.onclick = function() {
-        deleteItem(todo);
+        deleteItem(todo, reloadTodoList);
     }
-    return btn;
-}
-
-function createButtonElement(buttonType) {
-    var btn = document.createElement("BUTTON");
-    btn.classList.add("button");
-    btn.classList.add(buttonType);
     return btn;
 }
 
@@ -133,41 +158,44 @@ function createCompleteButton(todo) {
     btn.appendChild(t);
     btn.id = "complete_" + todo.id;
     btn.onclick = function() {
-        completeItem(todo);
+        completeItem(todo, reloadTodoList);
     }
     return btn;
 }
 
-function completeItem(todo) {
-    var createRequest = new XMLHttpRequest();
-    createRequest.open("PUT", "/api/todo/" + todo.id);
-    createRequest.setRequestHeader("Content-type", "application/json");
-    createRequest.send(JSON.stringify({
-        isComplete: true,
-        title: todo.title
-    }));
-    createRequest.onload = function() {
-        if (this.status === 200) {
-            reloadTodoList();
-        } else {
-            error.textContent = "Failed to update item. Server returned " + this.status + " - " + this.responseText;
-        }
-    };
-
+function updateTodoCounter(todos) {
+    var uncompleteTodos = todos.filter(function(todo) {
+        return todo.isComplete === false;
+    }).length;
+    var text = document.createTextNode(uncompleteTodos);
+    todoUncompleteCount.appendChild(text);
 }
 
-function deleteItem(todo) {
-    var createRequest = new XMLHttpRequest();
-    createRequest.open("DELETE", "/api/todo/" + todo.id);
-    createRequest.setRequestHeader("Content-type", "application/json");
-    createRequest.send();
-    createRequest.onload = function() {
-        if (this.status === 200) {
-            reloadTodoList();
-        } else {
-            error.textContent = "Failed to delete item. Server returned " + this.status + " - " + this.responseText;
+function createDeleteAllButton(todos) {
+    var btn = createButtonElement("buttonDelete");
+    var t = document.createTextNode("Deleted Completed");
+    btn.appendChild(t);
+    btn.id = "del_completed";
+    btn.onclick = function() {
+        deleteAllCompleted(todos);
+    }
+    return btn;
+}
+
+function deleteAllCompleted(todos) {
+    todos.forEach(function(todo) {
+        if (todo.isComplete === true) {
+            deleteItem(todo, function() {});
         }
-    };
+    });
+    reloadTodoList();
+}
+
+function createButtonElement(buttonType) {
+    var btn = document.createElement("BUTTON");
+    btn.classList.add("button");
+    btn.classList.add(buttonType);
+    return btn;
 }
 
 reloadTodoList();
