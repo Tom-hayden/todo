@@ -91,7 +91,6 @@ function containsCompleted(todos) {
     return numberCompleted.length > 0;
 }
 
-
 function populateTodoList(todos) {
     hideLoadingScreen();
     todos.forEach(function(todo) {
@@ -184,7 +183,6 @@ function completeItem(todo, callback) {
             error.textContent = "Failed to update item. Server returned " + this.status + " - " + this.responseText;
         }
     };
-
 }
 
 function deleteItem(todo, callback) {
