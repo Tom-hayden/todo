@@ -4,6 +4,7 @@ var form = document.getElementById("todo-form");
 var todoTitle = document.getElementById("new-todo");
 var error = document.getElementById("error");
 var todoUncompleteCount = document.getElementById("count-label");
+var todos;
 
 form.onsubmit = function(event) {
     var title = todoTitle.value;
@@ -77,7 +78,14 @@ function deleteItem(todo, callback) {
 function reloadTodoList() {
     clearPage();
     displayLoadingScreen();
-    populatePage();
+    getTodoList(function(res){
+        todos = res;
+        populatePage(filterTodoList(todos));
+    });
+}
+
+function filterTodoList(todos) {
+    return todos;
 }
 
 function clearPage() {
@@ -101,19 +109,17 @@ function displayLoadingScreen() {
     todoListLoading.style.display = "block";
 }
 
-function populatePage() {
-    getTodoList(function(todos) {
-        populateTodoList(todos);
-        updateTodoCounter(todos);
-        if (containsCompleted(todos)) {
-            todoList.appendChild(createDeleteAllButton(todos));
-        }
-    });
+function populatePage(filteredTodos) {
+    populateTodoList(filteredTodos);
+    updateTodoCounter(filteredTodos);
+    if (containsCompleted(filteredTodos)) {
+        todoList.appendChild(createDeleteAllButton(filteredTodos));
+    }
 }
 
-function populateTodoList(todos) {
+function populateTodoList(filteredTodos) {
     hideLoadingScreen();
-    todos.forEach(function(todo) {
+    filteredTodos.forEach(function(todo) {
         todoList.appendChild(createListItem(todo));
     });
 }
@@ -122,8 +128,8 @@ function hideLoadingScreen() {
     todoListLoading.style.display = "none";
 }
 
-function containsCompleted(todos) {
-    return todos.some(function(todo) {
+function containsCompleted(filteredTodos) {
+    return filteredTodos.some(function(todo) {
         return todo.isComplete;
     })
 }
@@ -163,27 +169,27 @@ function createCompleteButton(todo) {
     return btn;
 }
 
-function updateTodoCounter(todos) {
-    var uncompleteTodos = todos.filter(function(todo) {
+function updateTodoCounter(filteredTodos) {
+    var uncompleteTodos = filteredTodos.filter(function(todo) {
         return todo.isComplete === false;
     }).length;
     var text = document.createTextNode(uncompleteTodos);
     todoUncompleteCount.appendChild(text);
 }
 
-function createDeleteAllButton(todos) {
+function createDeleteAllButton(filteredTodos) {
     var btn = createButtonElement("buttonDelete");
     var t = document.createTextNode("Deleted Completed");
     btn.appendChild(t);
     btn.id = "del_completed";
     btn.onclick = function() {
-        deleteAllCompleted(todos);
+        deleteAllCompleted(filteredTodos);
     }
     return btn;
 }
 
-function deleteAllCompleted(todos) {
-    todos.forEach(function(todo) {
+function deleteAllCompleted(filteredTodos) {
+    filteredTodos.forEach(function(todo) {
         if (todo.isComplete === true) {
             deleteItem(todo, function() {});
         }
