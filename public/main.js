@@ -15,63 +15,64 @@ form.onsubmit = function(event) {
 };
 
 function createTodo(title, callback) {
-    var createRequest = new XMLHttpRequest();
-    createRequest.open("POST", "/api/todo");
-    createRequest.setRequestHeader("Content-type", "application/json");
-    createRequest.send(JSON.stringify({
-        title: title
-    }));
-    createRequest.onload = function() {
-        if (this.status === 201) {
+    fetch("/api/todo", {
+        method: "post",
+        headers: {
+            "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+            title: title
+        })
+    }).then(function(res) {
+        if (res.ok) {
             callback();
         } else {
-            error.textContent = "Failed to create item. Server returned " + this.status + " - " + this.responseText;
+            error.textContent = "Failed to create item. Server returned " + res.status + " - " + res.statusText;
         }
-    };
+    });
 }
 
 function getTodoList(callback) {
-    var createRequest = new XMLHttpRequest();
-    createRequest.open("GET", "/api/todo");
-    createRequest.onload = function() {
-        if (this.status === 200) {
-            callback(JSON.parse(this.responseText));
+    fetch("/api/todo").then(function(res) {
+        if (res.ok) {
+            res.json().then(function (res) {
+                callback(res);
+            });
         } else {
-            error.textContent = "Failed to get list. Server returned " + this.status + " - " + this.responseText;
+            error.textContent = "Failed to get list. Server returned " + res.status + " - " + res.statusText;
         }
-    };
-    createRequest.send();
+    });
 }
 
 function completeItem(todo, callback) {
-    var createRequest = new XMLHttpRequest();
-    createRequest.open("PUT", "/api/todo/" + todo.id);
-    createRequest.setRequestHeader("Content-type", "application/json");
-    createRequest.send(JSON.stringify({
-        isComplete: true,
-        title: todo.title
-    }));
-    createRequest.onload = function() {
-        if (this.status === 200) {
+    fetch("/api/todo/" + todo.id, {
+        method: "put",
+        headers: {
+            "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+            title: todo.title,
+            isComplete: true
+        })
+    }).then(function(res) {
+        if (res.ok) {
             callback();
         } else {
-            error.textContent = "Failed to update item. Server returned " + this.status + " - " + this.responseText;
+            error.textContent = "Failed to update item. Server returned " + res.status + " - " + res.statusText;
         }
-    };
+    });
 }
 
 function deleteItem(todo, callback) {
-    var createRequest = new XMLHttpRequest();
-    createRequest.open("DELETE", "/api/todo/" + todo.id);
-    createRequest.setRequestHeader("Content-type", "application/json");
-    createRequest.send();
-    createRequest.onload = function() {
-        if (this.status === 200) {
+    fetch("/api/todo/" + todo.id, {
+        method: "delete"
+    }).then(function(res) {
+        if (res.ok) {
             callback();
         } else {
-            error.textContent = "Failed to delete item. Server returned " + this.status + " - " + this.responseText;
+            error.textContent = "Failed to delete item. Server returned " + res.status + " - " + res.statusText;
         }
-    };
+    });
 }
 
 function reloadTodoList() {
