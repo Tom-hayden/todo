@@ -95,7 +95,7 @@ function reloadTodoList(withGet = true) {
             populatePage(todosLocal);
         });
     } else {
-        populatePage();
+        populatePage(todosLocal);
     }
 }
 
