@@ -136,3 +136,8 @@ function elementHasClass(element, classString) {
         return matches.length === 1;
     });
 }
+
+module.exports.selectFilter = function(filter) {
+    driver.findElement(webdriver.By.id("dropdown-" + filter)).click();
+}
+
