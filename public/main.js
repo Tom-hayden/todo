@@ -137,7 +137,7 @@ function displayLoadingScreen() {
 function populatePage(todos) {
     todos = filterTodoList(todos)
     populateTodoList(todos);
-    updateTodoCounter(todos);
+    updateTodoCounter();
     if (containsCompleted(todos)) {
         todoList.appendChild(createDeleteAllButton(todos));
     }
@@ -195,8 +195,8 @@ function createCompleteButton(todo) {
     return btn;
 }
 
-function updateTodoCounter(todos) {
-    var uncompleteTodos = todos.filter(function(todo) {
+function updateTodoCounter() {
+    var uncompleteTodos = todosLocal.filter(function(todo) {
         return todo.isComplete === false;
     }).length;
     var text = document.createTextNode(uncompleteTodos);
