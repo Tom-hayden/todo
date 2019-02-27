@@ -24,8 +24,7 @@ function createTodo(title, callback) {
             title: title
         })
     }).then(function(res) {
-        
-        if(res.ok) {
+        if (res.ok) {
             callback();
         } else {
             error.textContent = "Failed to create item. Server returned " + res.status + " - " + res.statusText;
@@ -35,8 +34,8 @@ function createTodo(title, callback) {
 
 function getTodoList(callback) {
     fetch("/api/todo").then(function(res) {
-        if(res.ok) {
-            res.json().then(function (res){
+        if (res.ok) {
+            res.json().then(function (res) {
                 callback(res);
             });
         } else {
@@ -56,8 +55,7 @@ function completeItem(todo, callback) {
             isComplete: true
         })
     }).then(function(res) {
-        
-        if(res.ok) {
+        if (res.ok) {
             callback();
         } else {
             error.textContent = "Failed to update item. Server returned " + res.status + " - " + res.statusText;
@@ -69,7 +67,7 @@ function deleteItem(todo, callback) {
     fetch("/api/todo/" + todo.id, {
         method: "delete"
     }).then(function(res) {
-        if(res.ok) {
+        if (res.ok) {
             callback();
         } else {
             error.textContent = "Failed to delete item. Server returned " + res.status + " - " + res.statusText;
