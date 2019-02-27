@@ -155,6 +155,7 @@ testing.describe("end to end", function() {
             });
         });
         testing.it("can the button delete all completed items", function() {
+            helpers.navigateToSite();
             helpers.addTodo("New todo item");
             helpers.addTodo("Second todo item");
             helpers.addTodo("Third todo item");
@@ -178,6 +179,88 @@ testing.describe("end to end", function() {
             });
             helpers.containsId("todo_text_4").then(function(res) {
                 assert.equal(res, true);
+            });
+        });
+    });
+    testing.describe("is the filter working correctly", function() {
+        testing.it("does the active filter work correctly", function() {
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            helpers.addTodo("Second todo item");
+            helpers.addTodo("Third todo item");
+            helpers.addTodo("fourth todo item");
+            helpers.addTodo("fifth todo item");
+            helpers.completeTodo(1);
+            helpers.completeTodo(0);
+            helpers.completeTodo(3);
+            helpers.selectFilter("active")
+            helpers.containsId("todo_text_0").then(function(res) {
+                assert.equal(res, false);
+            });
+            helpers.containsId("todo_text_1").then(function(res) {
+                assert.equal(res, false);
+            });
+            helpers.containsId("todo_text_2").then(function(res) {
+                assert.equal(res, true);
+            });
+            helpers.containsId("todo_text_3").then(function(res) {
+                assert.equal(res, false);
+            });
+            helpers.containsId("todo_text_4").then(function(res) {
+                assert.equal(res, true);
+            });
+        })
+        testing.it("does the completed filter work correctly", function() {
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            helpers.addTodo("Second todo item");
+            helpers.completeTodo(1);
+            helpers.selectFilter("complete")
+            helpers.containsId("todo_text_0").then(function(res) {
+                assert.equal(res, false);
+            });
+            helpers.containsId("todo_text_1").then(function(res) {
+                assert.equal(res, true);
+            });
+        });
+        testing.it("does the completed filter work correctly", function() {
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            helpers.addTodo("Second todo item");
+            helpers.completeTodo(1);
+            helpers.selectFilter("complete")
+            helpers.containsId("todo_text_0").then(function(res) {
+                assert.equal(res, false);
+            });
+            helpers.containsId("todo_text_1").then(function(res) {
+                assert.equal(res, true);
+            });
+        });
+        testing.it("can the filter be changed between settings", function() {
+            helpers.navigateToSite();
+            helpers.addTodo("New todo item");
+            helpers.addTodo("Second todo item");
+            helpers.completeTodo(1);
+            helpers.selectFilter("complete")
+            helpers.containsId("todo_text_0").then(function(res) {
+                assert.equal(res, false);
+            });
+            helpers.containsId("todo_text_1").then(function(res) {
+                assert.equal(res, true);
+            });
+            helpers.selectFilter("all")
+            helpers.containsId("todo_text_0").then(function(res) {
+                assert.equal(res, true);
+            });
+            helpers.containsId("todo_text_1").then(function(res) {
+                assert.equal(res, true);
+            });
+            helpers.selectFilter("active")
+            helpers.containsId("todo_text_0").then(function(res) {
+                assert.equal(res, true);
+            });
+            helpers.containsId("todo_text_1").then(function(res) {
+                assert.equal(res, false);
             });
         });
     });
