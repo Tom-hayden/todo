@@ -51,7 +51,7 @@ module.exports.reportCoverage = function() {
 };
 
 module.exports.navigateToSite = function() {
-    driver.get(baseUrl);
+    return driver.get(baseUrl);
 };
 
 module.exports.getTitleText = function() {
@@ -79,8 +79,9 @@ module.exports.getTodoList = function() {
 };
 
 module.exports.addTodo = function(text) {
-    driver.findElement(webdriver.By.id("new-todo")).sendKeys(text);
-    driver.findElement(webdriver.By.id("submit-todo")).click();
+    return driver.findElement(webdriver.By.id("new-todo")).sendKeys(text).then(function() {
+        return driver.findElement(webdriver.By.id("submit-todo")).click();
+    });
 };
 
 module.exports.setupErrorRoute = function(action, route) {
@@ -102,15 +103,15 @@ module.exports.setupErrorRoute = function(action, route) {
 };
 
 module.exports.removeTodo = function(id) {
-    driver.findElement(webdriver.By.id("del_" + id)).click();
+    return driver.findElement(webdriver.By.id("del_" + id)).click();
 };
 
 module.exports.completeTodo = function(id) {
-    driver.findElement(webdriver.By.id("complete_" + id)).click();
+    return driver.findElement(webdriver.By.id("complete_" + id)).click();
 };
 
 module.exports.removeCompleted = function() {
-    driver.findElement(webdriver.By.id("del_completed")).click();
+    return driver.findElement(webdriver.By.id("del_completed")).click();
 };
 
 module.exports.containsId = function(id) {
@@ -138,6 +139,6 @@ function elementHasClass(element, classString) {
 }
 
 module.exports.selectFilter = function(filter) {
-    driver.findElement(webdriver.By.id("dropdown-" + filter)).click();
+    return driver.findElement(webdriver.By.id("dropdown-" + filter)).click();
 }
 

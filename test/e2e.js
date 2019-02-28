@@ -13,83 +13,87 @@ testing.describe("end to end", function() {
     });
 
     testing.describe("on page load", function() {
-        testing.it("displays TODO title", function() {
+        testing.it("displays TODO title", async function() {
             helpers.navigateToSite();
-            helpers.getTitleText().then(function(text) {
+            await helpers.getTitleText().then(function(text) {
                 assert.equal(text, "TODO List");
             });
         });
-        testing.it("displays empty TODO list", function() {
+        testing.it("displays empty TODO list", async function() {
             helpers.navigateToSite();
-            helpers.getTodoList().then(function(elements) {
+            await helpers.getTodoList().then(function(elements) {
                 assert.equal(elements.length, 0);
             });
         });
-        testing.it("displays an error if the request fails", function() {
+        testing.it("displays an error if the request fails", async function() {
             helpers.setupErrorRoute("get", "/api/todo");
             helpers.navigateToSite();
-            helpers.getErrorText().then(function(text) {
+            await helpers.getErrorText().then(function(text) {
                 assert.equal(text, "Failed to get list. Server returned 500 - Internal Server Error");
             });
         });
     });
     testing.describe("on create todo item", function() {
-        testing.it("clears the input field", function() {
+        testing.it("clears the input field", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.getInputText().then(function(value) {
+            await helpers.addTodo("New todo item");
+            await helpers.getInputText().then(function(value) {
                 assert.equal(value, "");
             });
         });
-        testing.it("adds the todo item to the list", function() {
+        testing.it("adds the todo item to the list", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.getTodoList().then(function(elements) {
+            await helpers.addTodo("New todo item");
+            await helpers.getTodoList().then(function(elements) {
                 assert.equal(elements.length, 1);
             });
         });
-        testing.it("displays an error if the request fails", function() {
+        testing.it("displays an error if the request fails", async function() {
             helpers.setupErrorRoute("post", "/api/todo");
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.getErrorText().then(function(text) {
+            await helpers.addTodo("New todo item");
+            await helpers.getErrorText().then(function(text) {
                 assert.equal(text, "Failed to create item. Server returned 500 - Internal Server Error");
             });
         });
-        testing.it("can be done multiple times", function() {
+        testing.it("can be done multiple times", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.addTodo("Another new todo item");
-            helpers.getTodoList().then(function(elements) {
+            await Promise.all([
+                helpers.addTodo("New todo item"),
+                helpers.addTodo("Another new todo item")
+            ]);
+            await helpers.getTodoList().then(function(elements) {
                 assert.equal(elements.length, 2);
             });
         });
     });
     testing.describe("on delete todo item", function() {
-        testing.it("displays an error if the request fails", function() {
+        testing.it("displays an error if the request fails", async function() {
             helpers.setupErrorRoute("delete", "/api/todo/0");
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.removeTodo(0);
-            helpers.getErrorText().then(function(text) {
+            await helpers.addTodo("New todo item");
+            await helpers.removeTodo(0);
+            await helpers.getErrorText().then(function(text) {
                 assert.equal(text, "Failed to delete item. Server returned 500 - Internal Server Error");
             });
         });
-        testing.it("can an item be removed", function() {
+        testing.it("can an item be removed", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.removeTodo(0);
-            helpers.getTodoList().then(function(elements) {
+            await helpers.addTodo("New todo item");
+            await helpers.removeTodo(0);
+            await helpers.getTodoList().then(function(elements) {
                 assert.equal(elements.length, 0);
             });
         });
-        testing.it("can remove specific todo item", function() {
+        testing.it("can remove specific todo item", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.addTodo("Another todo item");
-            helpers.addTodo("A third todo item");
-            helpers.removeTodo(1);
-            helpers.getTodoList().then(function() {
+            await Promise.all([
+                helpers.addTodo("New todo item"),
+                helpers.addTodo("Another todo item"),
+                helpers.addTodo("A third todo item")
+            ]);
+            await helpers.removeTodo(1);
+            await helpers.getTodoList().then(function() {
                 helpers.containsId("del_1").then(function(res) {
                     assert.equal(res, false);
                 });
@@ -97,21 +101,23 @@ testing.describe("end to end", function() {
         });
     });
     testing.describe("on Complete todo item", function() {
-        testing.it("can a specific todo be completed", function() {
+        testing.it("can a specific todo be completed", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.addTodo("Second todo item");
-            helpers.addTodo("Third todo item");
-            helpers.completeTodo(1);
-            helpers.isCompleted(1).then(function(res) {
+            await Promise.all([
+                helpers.addTodo("New todo item"),
+                helpers.addTodo("Second todo item"),
+                helpers.addTodo("Third todo item")
+            ]);
+            await helpers.completeTodo(1);
+            await helpers.isCompleted(1).then(function(res) {
                 assert.equal(res, true);
             });
         });
-        testing.it("is the complete button removed", function() {
+        testing.it("is the complete button removed", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.completeTodo(0);
-            helpers.getTodoList().then(function() {
+            await helpers.addTodo("New todo item");
+            await helpers.completeTodo(0);
+            await helpers.getTodoList().then(function() {
                 helpers.containsId("complete_0").then(function(res) {
                     assert.equal(res, false);
                 });
@@ -119,149 +125,168 @@ testing.describe("end to end", function() {
         });
     });
     testing.describe("is todo counter working correctly", function() {
-        testing.it("can the number of items to be completed be displayed", function() {
+        testing.it("can the number of items to be completed be displayed", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.addTodo("Second todo item");
-            helpers.addTodo("Third todo item");
-            helpers.completeTodo(1);
-            helpers.removeTodo(0);
-            helpers.getCount().then(function(res) {
+            await Promise.all([
+                helpers.addTodo("New todo item"),
+                helpers.addTodo("Second todo item"),
+                helpers.addTodo("Third todo item")
+            ]);
+            await Promise.all([
+                helpers.completeTodo(1),
+                helpers.removeTodo(0),
+            ]);
+            await helpers.getCount().then(function(res) {
                 assert.equal(res, "1");
             });
         });
-        testing.it("does it work for a different number of items", function() {
+        testing.it("does it work for a different number of items", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.addTodo("Second todo item");
-            helpers.addTodo("Third todo item");
-            helpers.addTodo("fourth todo item");
-            helpers.addTodo("fifth todo item");
-            helpers.completeTodo(1);
-            helpers.removeTodo(0);
-            helpers.getCount().then(function(res) {
+            await Promise.all([
+                helpers.addTodo("New todo item"),
+                helpers.addTodo("Second todo item"),
+                helpers.addTodo("Third todo item"),
+                helpers.addTodo("fourth todo item"),
+                helpers.addTodo("fifth todo item")
+            ]);
+            await Promise.all([
+                helpers.completeTodo(1),
+                helpers.removeTodo(0)
+            ]);
+            await helpers.getCount().then(function(res) {
                 assert.equal(res, "3");
             });
         });
     });
     testing.describe("on delete all completed items", function() {
-        testing.it("does the button appear when there are no completed items", function() {
+        testing.it("does the button appear when there are no completed items", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.getTodoList().then(function() {
+            await helpers.addTodo("New todo item");
+            await helpers.getTodoList().then(function() {
                 helpers.containsId("del_completed").then(function(res) {
                     assert.equal(res, false);
                 });
             });
         });
-        testing.it("can the button delete all completed items", function() {
+        testing.it("can the button delete all completed items", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.addTodo("Second todo item");
-            helpers.addTodo("Third todo item");
-            helpers.addTodo("fourth todo item");
-            helpers.addTodo("fifth todo item");
-            helpers.completeTodo(1);
-            helpers.completeTodo(0);
-            helpers.completeTodo(3);
-            helpers.removeCompleted();
-            helpers.containsId("todo_text_0").then(function(res) {
-                assert.equal(res, false);
-            });
-            helpers.containsId("todo_text_1").then(function(res) {
-                assert.equal(res, false);
-            });
-            helpers.containsId("todo_text_2").then(function(res) {
-                assert.equal(res, true);
-            });
-            helpers.containsId("todo_text_3").then(function(res) {
-                assert.equal(res, false);
-            });
-            helpers.containsId("todo_text_4").then(function(res) {
-                assert.equal(res, true);
-            });
+            await Promise.all([
+                helpers.addTodo("New todo item"),
+                helpers.addTodo("Second todo item"),
+                helpers.addTodo("Third todo item"),
+                helpers.addTodo("fourth todo item"),
+                helpers.addTodo("fifth todo item")
+            ]);
+            await Promise.all([
+                helpers.completeTodo(1),
+                helpers.completeTodo(0),
+                helpers.completeTodo(3)
+            ]);
+            await helpers.removeCompleted();
+            await Promise.all([
+                helpers.containsId("todo_text_0").then(function(res) {
+                    assert.equal(res, false);
+                }),
+                helpers.containsId("todo_text_1").then(function(res) {
+                    assert.equal(res, false);
+                }),
+                helpers.containsId("todo_text_2").then(function(res) {
+                    assert.equal(res, true);
+                }),
+                helpers.containsId("todo_text_3").then(function(res) {
+                    assert.equal(res, false);
+                }),
+                helpers.containsId("todo_text_4").then(function(res) {
+                    assert.equal(res, true);
+                })
+            ]);
         });
     });
     testing.describe("is the filter working correctly", function() {
-        testing.it("does the active filter work correctly", function() {
+        testing.it("does the active filter work correctly", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.addTodo("Second todo item");
-            helpers.addTodo("Third todo item");
-            helpers.addTodo("fourth todo item");
-            helpers.addTodo("fifth todo item");
-            helpers.completeTodo(1);
-            helpers.completeTodo(0);
-            helpers.completeTodo(3);
-            helpers.selectFilter("active")
-            helpers.containsId("todo_text_0").then(function(res) {
-                assert.equal(res, false);
-            });
-            helpers.containsId("todo_text_1").then(function(res) {
-                assert.equal(res, false);
-            });
-            helpers.containsId("todo_text_2").then(function(res) {
-                assert.equal(res, true);
-            });
-            helpers.containsId("todo_text_3").then(function(res) {
-                assert.equal(res, false);
-            });
-            helpers.containsId("todo_text_4").then(function(res) {
-                assert.equal(res, true);
-            });
-        })
-        testing.it("does the completed filter work correctly", function() {
-            helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.addTodo("Second todo item");
-            helpers.completeTodo(1);
-            helpers.selectFilter("complete")
-            helpers.containsId("todo_text_0").then(function(res) {
-                assert.equal(res, false);
-            });
-            helpers.containsId("todo_text_1").then(function(res) {
-                assert.equal(res, true);
-            });
+            await Promise.all([
+                helpers.addTodo("New todo item"),
+                helpers.addTodo("Second todo item"),
+                helpers.addTodo("Third todo item"),
+                helpers.addTodo("fourth todo item"),
+                helpers.addTodo("fifth todo item")
+            ]);
+            await Promise.all([
+                helpers.completeTodo(1),
+                helpers.completeTodo(0),
+                helpers.completeTodo(3)
+            ]);
+            await helpers.selectFilter("active");
+            await Promise.all([
+                helpers.containsId("todo_text_0").then(function(res) {
+                    assert.equal(res, false);
+                }),
+                helpers.containsId("todo_text_1").then(function(res) {
+                    assert.equal(res, false);
+                }),
+                helpers.containsId("todo_text_2").then(function(res) {
+                    assert.equal(res, true);
+                }),
+                helpers.containsId("todo_text_3").then(function(res) {
+                    assert.equal(res, false);
+                }),
+                helpers.containsId("todo_text_4").then(function(res) {
+                    assert.equal(res, true);
+                })
+            ]);
         });
-        testing.it("does the completed filter work correctly", function() {
-            helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.addTodo("Second todo item");
-            helpers.completeTodo(1);
-            helpers.selectFilter("complete")
-            helpers.containsId("todo_text_0").then(function(res) {
-                assert.equal(res, false);
-            });
-            helpers.containsId("todo_text_1").then(function(res) {
-                assert.equal(res, true);
-            });
+        testing.it("does the completed filter work correctly", async function() {
+            await helpers.navigateToSite();
+            await Promise.all([
+                helpers.addTodo("New todo item"),
+                helpers.addTodo("Second todo item")
+            ]);
+            await helpers.completeTodo(1);
+            await helpers.selectFilter("complete");
+            await Promise.all([
+                helpers.containsId("todo_text_0").then(function(res) {
+                    assert.equal(res, false, "Expected unaltered todo to be removed");
+                }),
+                helpers.containsId("todo_text_1").then(function(res) {
+                    assert.equal(res, true, "Expected completed todo to be shown");
+                })
+            ]);
         });
-        testing.it("can the filter be changed between settings", function() {
+        testing.it("can the filter be changed between settings", async function() {
             helpers.navigateToSite();
-            helpers.addTodo("New todo item");
-            helpers.addTodo("Second todo item");
-            helpers.completeTodo(1);
-            helpers.selectFilter("complete")
-            helpers.containsId("todo_text_0").then(function(res) {
-                assert.equal(res, false);
-            });
-            helpers.containsId("todo_text_1").then(function(res) {
-                assert.equal(res, true);
-            });
-            helpers.selectFilter("all")
-            helpers.containsId("todo_text_0").then(function(res) {
-                assert.equal(res, true);
-            });
-            helpers.containsId("todo_text_1").then(function(res) {
-                assert.equal(res, true);
-            });
-            helpers.selectFilter("active")
-            helpers.containsId("todo_text_0").then(function(res) {
-                assert.equal(res, true);
-            });
-            helpers.containsId("todo_text_1").then(function(res) {
-                assert.equal(res, false);
-            });
+            await Promise.all([
+                helpers.addTodo("New todo item"),
+                helpers.addTodo("Second todo item")
+            ]);
+            await helpers.completeTodo(1);
+            await helpers.selectFilter("complete")
+            await Promise.all([
+                helpers.containsId("todo_text_0").then(function(res) {
+                    assert.equal(res, false);
+                }),
+                helpers.containsId("todo_text_1").then(function(res) {
+                    assert.equal(res, true);
+                })
+            ]);
+            await helpers.selectFilter("all")
+            await Promise.all([
+                helpers.containsId("todo_text_0").then(function(res) {
+                    assert.equal(res, true);
+                }),
+                helpers.containsId("todo_text_1").then(function(res) {
+                    assert.equal(res, true);
+                })
+            ]);
+            await helpers.selectFilter("active")
+            await Promise.all([
+                helpers.containsId("todo_text_0").then(function(res) {
+                    assert.equal(res, true);
+                }),
+                helpers.containsId("todo_text_1").then(function(res) {
+                    assert.equal(res, false);
+                })
+            ]);
         });
     });
 });
