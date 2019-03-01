@@ -143,7 +143,7 @@ module.exports.selectFilter = function(filter) {
 
 module.exports.simulateChange = function() {
     router.use(function (req, res, next) {
-        var oldSend = res.send;
+        const oldSend = res.send;
         res.send = function() {
             arguments[0] = JSON.stringify([
                 {
