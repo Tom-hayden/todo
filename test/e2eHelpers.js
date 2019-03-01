@@ -141,3 +141,27 @@ module.exports.selectFilter = function(filter) {
     driver.findElement(webdriver.By.id("dropdown-" + filter)).click();
 }
 
+module.exports.simulateChange = function() {
+    router.use(function (req, res, next) {
+        var oldSend = res.send;
+        res.send = function() {
+            arguments[0] = JSON.stringify([
+                {
+                    "id": "0",
+                    "isComplete": false,
+                    "title": "New Item"
+                }
+            ]);
+            oldSend.apply(res, arguments);
+        }
+        next();
+    });
+}
+
+module.exports.sleep = function(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+module.exports.waitUntilLoaded = function() {
+    return driver.wait(webdriver.until.elementLocated(webdriver.By.id("todo-form")), 5000);
+};
