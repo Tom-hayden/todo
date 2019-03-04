@@ -124,7 +124,7 @@ module.exports.isCompleted = async function(id) {
 
 async function elementHasClass(element, classToFind) {
     const elementClasses = await element.getAttribute("class");
-    var matches = elementClasses.split(" ").filter(function(element) {
+    const matches = elementClasses.split(" ").filter(function(element) {
         return element === classToFind;
     });
     return matches.length === 1;
