@@ -122,13 +122,12 @@ module.exports.isCompleted = async function(id) {
     return await elementHasClass(element,"completed")
 }
 
-async function elementHasClass(element, classString) {
+async function elementHasClass(element, classToFind) {
     const elementClasses = await element.getAttribute("class");
-        var matches = elementClasses.split(" ").filter(function(ele) {
-            return ele === classString;
-        });
-        return matches.length === 1;
+    var matches = elementClasses.split(" ").filter(function(element) {
+        return element === classToFind;
     });
+    return matches.length === 1;
 }
 
 module.exports.selectFilter = function(filter) {
