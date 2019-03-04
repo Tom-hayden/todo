@@ -242,7 +242,7 @@ testing.describe("end to end", function() {
         });
     });
     testing.describe("can the page poll for changes", function() {
-        testing.it("does the page refresh to reflect server side changes", async function(){    
+        testing.it("does the page refresh to reflect server side changes", async function() {
             helpers.navigateToSite();
             await helpers.waitUntilLoaded();
             helpers.simulateChange();
