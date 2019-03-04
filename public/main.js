@@ -39,8 +39,8 @@ async function createTodo(title, callback) {
     if (response.ok) {
         callback();
     } else {
-        error.textContent = "Failed to create item. Server returned " + response.status
-            + " - " + response.statusText;
+        error.textContent = "Failed to create item. Server returned " + response.status +
+            " - " + response.statusText;
     }
 }
 
@@ -50,8 +50,8 @@ async function getTodoList(callback) {
         const responseBody = await response.json();
         callback(responseBody);
     } else {
-        error.textContent = "Failed to get list. Server returned "
-            + response.status + " - " + response.statusText;
+        error.textContent = "Failed to get list. Server returned " +
+            response.status + " - " + response.statusText;
     }
 }
 
@@ -69,8 +69,8 @@ async function completeItem(todo, callback) {
     if (response.ok) {
         callback();
     } else {
-        error.textContent = "Failed to update item. Server returned "
-            + response.status + " - " + response.statusText;
+        error.textContent = "Failed to update item. Server returned " +
+            response.status + " - " + response.statusText;
     }
 }
 
@@ -81,8 +81,8 @@ async function deleteItem(todo, callback) {
     if (response.ok) {
         callback();
     } else {
-        error.textContent = "Failed to delete item. Server returned "
-            + response.status + " - " + response.statusText;
+        error.textContent = "Failed to delete item. Server returned " +
+            response.status + " - " + response.statusText;
     }
 }
 
