@@ -230,4 +230,15 @@ function createButtonElement(buttonType) {
     return btn;
 }
 
-reloadTodoList();
+function poll() {
+    getTodoList(function (res) {
+        if (res !== todosLocal) {
+            todosLocal = res;
+            var withGet = false;
+            reloadTodoList(withGet);
+        }
+        window.setTimeout(poll,5000);
+    });
+}
+
+poll();

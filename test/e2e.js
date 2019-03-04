@@ -241,5 +241,17 @@ testing.describe("end to end", function() {
             assert.equal(todo1Exists, false);
         });
     });
+    testing.describe("can the page poll for changes", function() {
+        testing.it("does the page refresh to reflect server side changes", async function() {
+            helpers.navigateToSite();
+            await helpers.waitUntilLoaded();
+            helpers.simulateChange();
+            let pollingRate = 6000;
+            await helpers.sleep(pollingRate);
+            helpers.containsId("todo_text_0").then(function(res) {
+                assert.equal(res, true, "Expected 'New item'");
+            });
+        });
+    });
 });
 
