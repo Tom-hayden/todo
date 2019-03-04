@@ -26,8 +26,8 @@ form.onsubmit = function(event) {
     event.preventDefault();
 };
 
-function createTodo(title, callback) {
-    fetch("/api/todo", {
+async function createTodo(title, callback) {
+    const response = await fetch("/api/todo", {
         method: "post",
         headers: {
             "Content-type": "application/json"
@@ -35,29 +35,28 @@ function createTodo(title, callback) {
         body: JSON.stringify({
             title: title
         })
-    }).then(function(res) {
-        if (res.ok) {
-            callback();
-        } else {
-            error.textContent = "Failed to create item. Server returned " + res.status + " - " + res.statusText;
-        }
     });
+    if (response.ok) {
+        callback();
+    } else {
+        error.textContent = "Failed to create item. Server returned " + response.status
+            + " - " + response.statusText;
+    }
 }
 
-function getTodoList(callback) {
-    fetch("/api/todo").then(function(res) {
-        if (res.ok) {
-            res.json().then(function (res) {
-                callback(res);
-            });
-        } else {
-            error.textContent = "Failed to get list. Server returned " + res.status + " - " + res.statusText;
-        }
-    });
+async function getTodoList(callback) {
+    const response = await fetch("/api/todo");
+    if (response.ok) {
+        responseBody = await response.json();
+        callback(responseBody);
+    } else {
+        error.textContent = "Failed to get list. Server returned "
+            + response.status + " - " + response.statusText;
+    }
 }
 
-function completeItem(todo, callback) {
-    fetch("/api/todo/" + todo.id, {
+async function completeItem(todo, callback) {
+    const response = await fetch("/api/todo/" + todo.id, {
         method: "put",
         headers: {
             "Content-type": "application/json"
@@ -66,25 +65,25 @@ function completeItem(todo, callback) {
             title: todo.title,
             isComplete: true
         })
-    }).then(function(res) {
-        if (res.ok) {
-            callback();
-        } else {
-            error.textContent = "Failed to update item. Server returned " + res.status + " - " + res.statusText;
-        }
     });
+    if (response.ok) {
+        callback();
+    } else {
+        error.textContent = "Failed to update item. Server returned "
+            + response.status + " - " + response.statusText;
+    }
 }
 
-function deleteItem(todo, callback) {
-    fetch("/api/todo/" + todo.id, {
+async function deleteItem(todo, callback) {
+    const response = await fetch("/api/todo/" + todo.id, {
         method: "delete"
-    }).then(function(res) {
-        if (res.ok) {
-            callback();
-        } else {
-            error.textContent = "Failed to delete item. Server returned " + res.status + " - " + res.statusText;
-        }
     });
+    if (response.ok) {
+        callback();
+    } else {
+        error.textContent = "Failed to delete item. Server returned "
+            + response.status + " - " + response.statusText;
+    }
 }
 
 function reloadTodoList(withGet = true) {
