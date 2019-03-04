@@ -1,20 +1,20 @@
-var express = require("express");
-var createServer = require("../server/server");
-var webdriver = require("selenium-webdriver");
-var istanbul = require("istanbul");
-var path = require("path");
-var fs = require("fs");
+const express = require("express");
+const createServer = require("../server/server");
+const webdriver = require("selenium-webdriver");
+const istanbul = require("istanbul");
+const path = require("path");
+const fs = require("fs");
 
-var testPort = 52684;
-var baseUrl = "http://localhost:" + testPort;
-var instrumenter = new istanbul.Instrumenter();
-var collector = new istanbul.Collector();
-var gatheringCoverage = process.env.running_under_istanbul;
-var coverageFilename = "build_artifacts/coverage-e2e.json";
+const testPort = 52684;
+const baseUrl = "http://localhost:" + testPort;
+const instrumenter = new istanbul.Instrumenter();
+const collector = new istanbul.Collector();
+const gatheringCoverage = process.env.running_under_istanbul;
+const coverageFilename = "build_artifacts/coverage-e2e.json";
 
-var driver;
-var router;
-var server;
+let driver;
+let router;
+let server;
 
 module.exports.setupDriver = function() {
     driver = new webdriver.Builder().forBrowser("chrome").build();
@@ -24,7 +24,7 @@ module.exports.setupServer = function(done) {
     router = express.Router();
     if (gatheringCoverage) {
         router.get("/main.js", function(req, res) {
-            var absPath = path.join(__dirname, "..", "public", "main.js");
+            const absPath = path.join(__dirname, "..", "public", "main.js");
             res.send(instrumenter.instrumentSync(fs.readFileSync("public/main.js", "utf8"), absPath));
         });
     }
@@ -67,13 +67,13 @@ module.exports.getInputText = function() {
 };
 
 module.exports.getErrorText = function() {
-    var errorElement = driver.findElement(webdriver.By.id("error"));
+    const errorElement = driver.findElement(webdriver.By.id("error"));
     driver.wait(webdriver.until.elementTextContains(errorElement, "Failed"), 5000);
     return errorElement.getText();
 };
 
 module.exports.getTodoList = function() {
-    var todoListLoading = driver.findElement(webdriver.By.id("todo-list-Loading"));
+    const todoListLoading = driver.findElement(webdriver.By.id("todo-list-Loading"));
     driver.wait(webdriver.until.elementIsNotVisible(todoListLoading), 5000);
     return driver.findElements(webdriver.By.css("#todo-list li"));
 };
@@ -120,7 +120,7 @@ module.exports.containsId = function(id) {
 }
 
 module.exports.isCompleted = function(id) {
-    var ele = driver.findElement(webdriver.By.id("todo_text_" + id));
+    const ele = driver.findElement(webdriver.By.id("todo_text_" + id));
     return ele.then(function(res) {
         return elementHasClass(res,"completed").then(function(res) {
             return res;
@@ -130,7 +130,7 @@ module.exports.isCompleted = function(id) {
 
 function elementHasClass(element, classString) {
     return element.getAttribute("class").then(function(res) {
-        var matches = res.split(" ").filter(function(ele) {
+        let matches = res.split(" ").filter(function(ele) {
             return ele === classString;
         });
         return matches.length === 1;

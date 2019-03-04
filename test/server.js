@@ -1,13 +1,13 @@
-var server = require("../server/server");
-var request = require("request");
-var assert = require("chai").assert;
+const server = require("../server/server");
+const request = require("request");
+const assert = require("chai").assert;
 
-var testPort = 52684;
-var baseUrl = "http://localhost:" + testPort;
-var todoListUrl = baseUrl + "/api/todo";
+const testPort = 52684;
+const baseUrl = "http://localhost:" + testPort;
+const todoListUrl = baseUrl + "/api/todo";
 
 describe("server", function() {
-    var serverInstance;
+    let serverInstance;
     beforeEach(function() {
         serverInstance = server(testPort);
     });

@@ -1,9 +1,9 @@
-var express = require("express");
-var bodyParser = require("body-parser");
-var _ = require("underscore");
+const express = require("express");
+const bodyParser = require("body-parser");
+const _ = require("underscore");
 
 module.exports = function(port, middleware, callback) {
-    var app = express();
+    const app = express();
 
     if (middleware) {
         app.use(middleware);
@@ -11,12 +11,12 @@ module.exports = function(port, middleware, callback) {
     app.use(express.static("public"));
     app.use(bodyParser.json());
 
-    var latestId = 0;
-    var todos = [];
+    let latestId = 0;
+    let todos = [];
 
     // Create
     app.post("/api/todo", function(req, res) {
-        var id = addNewTodo(req.body);
+        const id = addNewTodo(req.body);
         res.set("Location", "/api/todo/" + id);
         res.sendStatus(201);
     });
@@ -45,7 +45,7 @@ module.exports = function(port, middleware, callback) {
     });
 
     function deleteTodo(id) {
-        var todo = getTodo(id);
+        const todo = getTodo(id);
         if (todo) {
             todos = todos.filter(function(otherTodo) {
                 return otherTodo !== todo;
@@ -85,16 +85,16 @@ module.exports = function(port, middleware, callback) {
     }
 
     function addNewTodo(todoBody) {
-        var id = latestId.toString();
+        const id = latestId.toString();
         todos.push(createTodo(todoBody, id));
         latestId++;
         return id;
     }
 
-    var server = app.listen(port, callback);
+    const server = app.listen(port, callback);
 
     // We manually manage the connections to ensure that they're closed when calling close().
-    var connections = [];
+    let connections = [];
     server.on("connection", function(connection) {
         connections.push(connection);
     });
