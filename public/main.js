@@ -47,7 +47,7 @@ async function createTodo(title, callback) {
 async function getTodoList(callback) {
     const response = await fetch("/api/todo");
     if (response.ok) {
-        responseBody = await response.json();
+        const responseBody = await response.json();
         callback(responseBody);
     } else {
         error.textContent = "Failed to get list. Server returned "
