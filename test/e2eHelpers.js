@@ -35,11 +35,10 @@ module.exports.teardownServer = function(done) {
     server.close(done);
 };
 
-module.exports.teardownDriver = function() {
+module.exports.teardownDriver = async function() {
     if (gatheringCoverage) {
-        driver.executeScript("return __coverage__;").then(function (coverage) {
-            collector.add(coverage);
-        });
+        const coverage = await driver.executeScript("return __coverage__;")
+        collector.add(coverage);
     }
     driver.quit();
 };
@@ -78,10 +77,9 @@ module.exports.getTodoList = function() {
     return driver.findElements(webdriver.By.css("#todo-list li"));
 };
 
-module.exports.addTodo = function(text) {
-    return driver.findElement(webdriver.By.id("new-todo")).sendKeys(text).then(function() {
-        return driver.findElement(webdriver.By.id("submit-todo")).click();
-    });
+module.exports.addTodo = async function(text) {
+    await driver.findElement(webdriver.By.id("new-todo")).sendKeys(text);
+    return driver.findElement(webdriver.By.id("submit-todo")).click();
 };
 
 module.exports.setupErrorRoute = function(action, route) {
@@ -114,24 +112,19 @@ module.exports.removeCompleted = function() {
     return driver.findElement(webdriver.By.id("del_completed")).click();
 };
 
-module.exports.containsId = function(id) {
-    return driver.findElements(webdriver.By.id(id)).then(function(res) {
-        return res.length > 0;
-    });
+module.exports.containsId = async function(id) {
+    const elements = await driver.findElements(webdriver.By.id(id));
+    return elements.length > 0;
 }
 
-module.exports.isCompleted = function(id) {
-    var ele = driver.findElement(webdriver.By.id("todo_text_" + id));
-    return ele.then(function(res) {
-        return elementHasClass(res,"completed").then(function(res) {
-            return res;
-        });
-    });
+module.exports.isCompleted = async function(id) {
+    const element = await driver.findElement(webdriver.By.id("todo_text_" + id));
+    return await elementHasClass(element,"completed")
 }
 
-function elementHasClass(element, classString) {
-    return element.getAttribute("class").then(function(res) {
-        var matches = res.split(" ").filter(function(ele) {
+async function elementHasClass(element, classString) {
+    const elementClasses = await element.getAttribute("class");
+        var matches = elementClasses.split(" ").filter(function(ele) {
             return ele === classString;
         });
         return matches.length === 1;
