@@ -14,44 +14,44 @@ testing.describe("end to end", function() {
 
     testing.describe("on page load", function() {
         testing.it("displays TODO title", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             const text = await  helpers.getTitleText()
             assert.equal(text, "TODO List");
         });
         testing.it("displays empty TODO list", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             const elements = await helpers.getTodoList();
             assert.equal(elements.length, 0);
         });
         testing.it("displays an error if the request fails", async function() {
             helpers.setupErrorRoute("get", "/api/todo");
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             const text = await helpers.getErrorText()
             assert.equal(text, "Failed to get list. Server returned 500 - Internal Server Error");
         });
     });
     testing.describe("on create todo item", function() {
         testing.it("clears the input field", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await helpers.addTodo("New todo item");
             const text = await helpers.getInputText();
             assert.equal(text, "");
         });
         testing.it("adds the todo item to the list", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await helpers.addTodo("New todo item");
             const elements = await helpers.getTodoList();
             assert.equal(elements.length, 1);
         });
         testing.it("displays an error if the request fails", async function() {
             helpers.setupErrorRoute("post", "/api/todo");
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await helpers.addTodo("New todo item");
             const text = await helpers.getErrorText();
             assert.equal(text, "Failed to create item. Server returned 500 - Internal Server Error");
         });
         testing.it("can be done multiple times", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await Promise.all([
                 helpers.addTodo("New todo item"),
                 helpers.addTodo("Another new todo item")
@@ -63,21 +63,21 @@ testing.describe("end to end", function() {
     testing.describe("on delete todo item", function() {
         testing.it("displays an error if the request fails", async function() {
             helpers.setupErrorRoute("delete", "/api/todo/0");
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await helpers.addTodo("New todo item");
             await helpers.removeTodo(0);
             const text = await helpers.getErrorText();
             assert.equal(text, "Failed to delete item. Server returned 500 - Internal Server Error");
         });
         testing.it("can an item be removed", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await helpers.addTodo("New todo item");
             await helpers.removeTodo(0);
             const elements = await helpers.getTodoList();
             assert.equal(elements.length, 0);
         });
         testing.it("can remove specific todo item", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await Promise.all([
                 helpers.addTodo("New todo item"),
                 helpers.addTodo("Another todo item"),
@@ -91,7 +91,7 @@ testing.describe("end to end", function() {
     });
     testing.describe("on Complete todo item", function() {
         testing.it("can a specific todo be completed", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await Promise.all([
                 helpers.addTodo("New todo item"),
                 helpers.addTodo("Second todo item"),
@@ -102,7 +102,7 @@ testing.describe("end to end", function() {
             assert.equal(res, true);
         });
         testing.it("is the complete button removed", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await helpers.addTodo("New todo item");
             await helpers.completeTodo(0);
             await helpers.getTodoList();
@@ -112,7 +112,7 @@ testing.describe("end to end", function() {
     });
     testing.describe("is todo counter working correctly", function() {
         testing.it("can the number of items to be completed be displayed", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await Promise.all([
                 helpers.addTodo("New todo item"),
                 helpers.addTodo("Second todo item"),
@@ -126,7 +126,7 @@ testing.describe("end to end", function() {
             assert.equal(count, "1");
         });
         testing.it("does it work for a different number of items", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await Promise.all([
                 helpers.addTodo("New todo item"),
                 helpers.addTodo("Second todo item"),
@@ -144,14 +144,14 @@ testing.describe("end to end", function() {
     });
     testing.describe("on delete all completed items", function() {
         testing.it("does the button appear when there are no completed items", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await helpers.addTodo("New todo item");
             await helpers.getTodoList();
             const res = await helpers.containsId("del_completed");
             assert.equal(res, false);
         });
         testing.it("can the button delete all completed items", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await Promise.all([
                 helpers.addTodo("New todo item"),
                 helpers.addTodo("Second todo item"),
@@ -179,7 +179,7 @@ testing.describe("end to end", function() {
     });
     testing.describe("is the filter working correctly", function() {
         testing.it("does the active filter work correctly", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await Promise.all([
                 helpers.addTodo("New todo item"),
                 helpers.addTodo("Second todo item"),
@@ -218,7 +218,7 @@ testing.describe("end to end", function() {
             assert.equal(todo1Exists, true, "Expected completed todo to be shown");
         });
         testing.it("can the filter be changed between settings", async function() {
-            helpers.navigateToSite();
+            await helpers.navigateToSite();
             await Promise.all([
                 helpers.addTodo("New todo item"),
                 helpers.addTodo("Second todo item")
