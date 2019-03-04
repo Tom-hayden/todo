@@ -1,9 +1,9 @@
-var todoList = document.getElementById("todo-list");
-var todoListLoading = document.getElementById("todo-list-Loading");
-var form = document.getElementById("todo-form");
-var todoTitle = document.getElementById("new-todo");
-var error = document.getElementById("error");
-var todoUncompleteCount = document.getElementById("count-label");
+const todoList = document.getElementById("todo-list");
+const todoListLoading = document.getElementById("todo-list-Loading");
+const form = document.getElementById("todo-form");
+const todoTitle = document.getElementById("new-todo");
+const error = document.getElementById("error");
+const todoUncompleteCount = document.getElementById("count-label");
 var todosLocal;
 var todoFilter = "all";
 
@@ -13,12 +13,12 @@ document.addEventListener("DOMContentLoaded",function() {
 
 function filterChangeHandler(event) {
     todoFilter = event.target.value.toLowerCase();
-    var withGet = false
+    const withGet = false
     reloadTodoList(withGet);
 }
 
 form.onsubmit = function(event) {
-    var title = todoTitle.value;
+    const title = todoTitle.value;
     createTodo(title, function() {
         reloadTodoList();
     });
@@ -162,7 +162,7 @@ function containsCompleted(todos) {
 }
 
 function createListItem(todo) {
-    var listItem = document.createElement("li");
+    let listItem = document.createElement("li");
     listItem.textContent = todo.title;
     listItem.id = "todo_text_" + todo.id;
     listItem.appendChild(createDeleteButton(todo));
@@ -175,8 +175,8 @@ function createListItem(todo) {
 }
 
 function createDeleteButton(todo) {
-    var btn = createButtonElement("buttonDelete");
-    var t = document.createTextNode("Delete");
+    let btn = createButtonElement("buttonDelete");
+    const t = document.createTextNode("Delete");
     btn.appendChild(t);
     btn.id = "del_" + todo.id;
     btn.onclick = function() {
@@ -186,8 +186,8 @@ function createDeleteButton(todo) {
 }
 
 function createCompleteButton(todo) {
-    var btn = createButtonElement("buttonComplete");
-    var t = document.createTextNode("Complete");
+    let btn = createButtonElement("buttonComplete");
+    const t = document.createTextNode("Complete");
     btn.appendChild(t);
     btn.id = "complete_" + todo.id;
     btn.onclick = function() {
@@ -197,16 +197,16 @@ function createCompleteButton(todo) {
 }
 
 function updateTodoCounter() {
-    var uncompleteTodos = todosLocal.filter(function(todo) {
+    const uncompleteTodos = todosLocal.filter(function(todo) {
         return todo.isComplete === false;
     }).length;
-    var text = document.createTextNode(uncompleteTodos);
+    const text = document.createTextNode(uncompleteTodos);
     todoUncompleteCount.appendChild(text);
 }
 
 function createDeleteAllButton(todos) {
-    var btn = createButtonElement("buttonDelete");
-    var t = document.createTextNode("Deleted Completed");
+    let btn = createButtonElement("buttonDelete");
+    const t = document.createTextNode("Deleted Completed");
     btn.appendChild(t);
     btn.id = "del_completed";
     btn.onclick = function() {
@@ -225,7 +225,7 @@ function deleteAllCompleted(todos) {
 }
 
 function createButtonElement(buttonType) {
-    var btn = document.createElement("BUTTON");
+    let btn = document.createElement("BUTTON");
     btn.classList.add("button");
     btn.classList.add(buttonType);
     return btn;

@@ -1,6 +1,6 @@
-var testing = require("selenium-webdriver/testing");
-var assert = require("chai").assert;
-var helpers = require("./e2eHelpers");
+const testing = require("selenium-webdriver/testing");
+const assert = require("chai").assert;
+const helpers = require("./e2eHelpers");
 
 testing.describe("end to end", function() {
     this.timeout(20000);
