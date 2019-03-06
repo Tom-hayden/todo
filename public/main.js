@@ -223,12 +223,18 @@ function createDeleteAllButton(todos) {
 }
 
 async function deleteAllCompleted(todos) {
-    todos.forEach(function(todo) {
+    const todoPromises = todos.reduce(function(todoPromises, todo) {
         if (todo.isComplete === true) {
-            await deleteItem(todo)
+            todoPromises.push(deleteItem(todo));
         }
-    });
-    await reloadTodoList();
+        return todoPromises;
+    },[]);
+    await Promise.all(todoPromises)
+    if (todoPromises.every(function(currentValue) {
+        return currentValue;
+    })) {
+        await reloadTodoList();
+    }
 }
 
 function createButtonElement(buttonType) {
