@@ -7,26 +7,30 @@ const todoUncompleteCount = document.getElementById("count-label");
 var todosLocal;
 var todoFilter = "all";
 
-document.addEventListener("DOMContentLoaded",function() {
-    document.querySelector("select[name='filter']").onchange = filterChangeHandler;
-},false);
+document.addEventListener("DOMContentLoaded", async function() {
+    document.querySelector("select[name='filter']").onchange = await filterChangeHandler;
+}, false);
 
-function filterChangeHandler(event) {
+async function filterChangeHandler(event) {
     todoFilter = event.target.value.toLowerCase();
     const withGet = false
-    reloadTodoList(withGet);
+    await reloadTodoList(withGet);
 }
 
 form.onsubmit = function(event) {
     const title = todoTitle.value;
-    createTodo(title, function() {
-        reloadTodoList();
-    });
+    createTodoWrapper(title);
     todoTitle.value = "";
     event.preventDefault();
 };
 
-async function createTodo(title, callback) {
+async function createTodoWrapper(title) {
+    if (await createTodo(title)) {
+        await reloadTodoList();
+    }
+}
+
+async function createTodo(title) {
     const response = await fetch("/api/todo", {
         method: "post",
         headers: {
@@ -37,25 +41,26 @@ async function createTodo(title, callback) {
         })
     });
     if (response.ok) {
-        callback();
+        return true;
     } else {
         error.textContent = "Failed to create item. Server returned " + response.status +
             " - " + response.statusText;
+        return false;
     }
 }
 
-async function getTodoList(callback) {
+async function getTodoList() {
     const response = await fetch("/api/todo");
     if (response.ok) {
         const responseBody = await response.json();
-        callback(responseBody);
+        return responseBody;
     } else {
         error.textContent = "Failed to get list. Server returned " +
             response.status + " - " + response.statusText;
     }
 }
 
-async function completeItem(todo, callback) {
+async function completeItem(todo) {
     const response = await fetch("/api/todo/" + todo.id, {
         method: "put",
         headers: {
@@ -67,33 +72,36 @@ async function completeItem(todo, callback) {
         })
     });
     if (response.ok) {
-        callback();
+        return true;
     } else {
         error.textContent = "Failed to update item. Server returned " +
             response.status + " - " + response.statusText;
+        return false;
     }
 }
 
-async function deleteItem(todo, callback) {
+async function deleteItem(todo) {
     const response = await fetch("/api/todo/" + todo.id, {
         method: "delete"
     });
     if (response.ok) {
-        callback();
+        return true;
     } else {
         error.textContent = "Failed to delete item. Server returned " +
             response.status + " - " + response.statusText;
+        return false;
     }
 }
 
-function reloadTodoList(withGet = true) {
+async function reloadTodoList(withGet = true) {
     clearPage();
     displayLoadingScreen();
     if (withGet) {
-        getTodoList(function(res) {
-            todosLocal = res;
+        const newTodos = await getTodoList()
+        if (newTodos) {
+            todosLocal = newTodos;
             populatePage(todosLocal);
-        });
+        }
     } else {
         populatePage(todosLocal);
     }
@@ -178,8 +186,10 @@ function createDeleteButton(todo) {
     const t = document.createTextNode("Delete");
     btn.appendChild(t);
     btn.id = "del_" + todo.id;
-    btn.onclick = function() {
-        deleteItem(todo, reloadTodoList);
+    btn.onclick = async function() {
+        if (await deleteItem(todo)) {
+            await reloadTodoList();
+        }
     }
     return btn;
 }
@@ -189,8 +199,10 @@ function createCompleteButton(todo) {
     const t = document.createTextNode("Complete");
     btn.appendChild(t);
     btn.id = "complete_" + todo.id;
-    btn.onclick = function() {
-        completeItem(todo, reloadTodoList);
+    btn.onclick = async function() {
+        if (await completeItem(todo)) {
+            await reloadTodoList();
+        }
     }
     return btn;
 }
@@ -208,19 +220,25 @@ function createDeleteAllButton(todos) {
     const t = document.createTextNode("Deleted Completed");
     btn.appendChild(t);
     btn.id = "del_completed";
-    btn.onclick = function() {
-        deleteAllCompleted(todos);
+    btn.onclick = async function() {
+        await deleteAllCompleted(todos);
     }
     return btn;
 }
 
-function deleteAllCompleted(todos) {
-    todos.forEach(function(todo) {
+async function deleteAllCompleted(todos) {
+    const todoPromises = todos.reduce(function(todoPromises, todo) {
         if (todo.isComplete === true) {
-            deleteItem(todo, function() {});
+            todoPromises.push(deleteItem(todo));
         }
-    });
-    reloadTodoList();
+        return todoPromises;
+    },[]);
+    await Promise.all(todoPromises)
+    if (todoPromises.every(function(currentValue) {
+        return currentValue;
+    })) {
+        await reloadTodoList();
+    }
 }
 
 function createButtonElement(buttonType) {
@@ -230,15 +248,15 @@ function createButtonElement(buttonType) {
     return btn;
 }
 
-function poll() {
-    getTodoList(function (res) {
-        if (res !== todosLocal) {
-            todosLocal = res;
-            var withGet = false;
-            reloadTodoList(withGet);
-        }
-        window.setTimeout(poll,5000);
-    });
+async function poll() {
+    const newTodos = await getTodoList()
+    if (newTodos !== todosLocal) {
+        todosLocal = newTodos;
+        var withGet = false;
+        await reloadTodoList(withGet);
+    }
+    window.setTimeout(poll,5000);
+
 }
 
 poll();
