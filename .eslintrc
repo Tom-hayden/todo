@@ -8,6 +8,7 @@
     },
     "extends": "eslint:recommended",
     "rules": {
+        "require-await": 2,
         "eqeqeq": 2,
         "wrap-iife": [
             2,
