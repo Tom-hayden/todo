@@ -17,16 +17,16 @@ async function filterChangeHandler(event) {
     await reloadTodoList(withGet);
 }
 
-form.onsubmit = function(event) {
+form.onsubmit = async function(event) {
     const title = todoTitle.value;
-    createTodo(title, function() {
-        reloadTodoList();
-    });
+    if (await createTodo(title)) {
+        await reloadTodoList();
+    }
     todoTitle.value = "";
     event.preventDefault();
 };
 
-async function createTodo(title, callback) {
+async function createTodo(title) {
     const response = await fetch("/api/todo", {
         method: "post",
         headers: {
@@ -37,10 +37,11 @@ async function createTodo(title, callback) {
         })
     });
     if (response.ok) {
-        callback();
+        return true;
     } else {
         error.textContent = "Failed to create item. Server returned " + response.status +
             " - " + response.statusText;
+        return false;
     }
 }
 
@@ -55,7 +56,7 @@ async function getTodoList() {
     }
 }
 
-async function completeItem(todo, callback) {
+async function completeItem(todo) {
     const response = await fetch("/api/todo/" + todo.id, {
         method: "put",
         headers: {
@@ -67,22 +68,24 @@ async function completeItem(todo, callback) {
         })
     });
     if (response.ok) {
-        callback();
+        return true;
     } else {
         error.textContent = "Failed to update item. Server returned " +
             response.status + " - " + response.statusText;
+        return false;
     }
 }
 
-async function deleteItem(todo, callback) {
+async function deleteItem(todo) {
     const response = await fetch("/api/todo/" + todo.id, {
         method: "delete"
     });
     if (response.ok) {
-        callback();
+        return true;
     } else {
         error.textContent = "Failed to delete item. Server returned " +
             response.status + " - " + response.statusText;
+        return false;
     }
 }
 
@@ -180,7 +183,9 @@ function createDeleteButton(todo) {
     btn.appendChild(t);
     btn.id = "del_" + todo.id;
     btn.onclick = async function() {
-        await deleteItem(todo, reloadTodoList);
+        if (await deleteItem(todo)) {
+            await reloadTodoList();
+        }
     }
     return btn;
 }
@@ -191,7 +196,9 @@ function createCompleteButton(todo) {
     btn.appendChild(t);
     btn.id = "complete_" + todo.id;
     btn.onclick = async function() {
-        await completeItem(todo, reloadTodoList);
+        if (await completeItem(todo)) {
+            await reloadTodoList();
+        }
     }
     return btn;
 }
@@ -218,7 +225,7 @@ function createDeleteAllButton(todos) {
 async function deleteAllCompleted(todos) {
     todos.forEach(function(todo) {
         if (todo.isComplete === true) {
-            deleteItem(todo, function() {});
+            await deleteItem(todo)
         }
     });
     await reloadTodoList();
