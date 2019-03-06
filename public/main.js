@@ -17,14 +17,18 @@ async function filterChangeHandler(event) {
     await reloadTodoList(withGet);
 }
 
-form.onsubmit = async function(event) {
+form.onsubmit = function(event) {
     const title = todoTitle.value;
-    if (await createTodo(title)) {
-        await reloadTodoList();
-    }
+    createTodoWrapper(title);
     todoTitle.value = "";
     event.preventDefault();
 };
+
+async function createTodoWrapper(title) {
+    if (await createTodo(title)) {
+        await reloadTodoList();
+    }
+}
 
 async function createTodo(title) {
     const response = await fetch("/api/todo", {
