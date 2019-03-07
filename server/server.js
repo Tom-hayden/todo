@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const _ = require("underscore");
+const socketio = require('socket.io');
 
 module.exports = function(port, middleware, callback) {
     const app = express();
@@ -91,12 +92,46 @@ module.exports = function(port, middleware, callback) {
         return id;
     }
 
-    const server = app.listen(port, callback);
+    function completeTodo(id) {
+        todo = getTodo(id);
+        if (todo) { 
+            if (todo.isComplete === false) {
+                todo.isComplete = true;
+                replaceTodo(id, todo);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
+    const server = app.listen(port, callback);
+    const io = socketio.listen(server);
     // We manually manage the connections to ensure that they're closed when calling close().
     let connections = [];
     server.on("connection", function(connection) {
         connections.push(connection);
+    });
+
+    io.on('connection', function(socket){
+        console.log('a user connected');
+        socket.emit("todos", todos);
+        socket.on('create', function(todo) {
+            addNewTodo(todo);
+            io.emit("todos", todos);
+        });
+        socket.on("deleteTodo", function(id) {
+            if (deleteTodo(id)) {
+                io.emit("todos", todos);
+            }
+        });
+        socket.on("completeTodo", function(id) {
+            if (completeTodo(id)){
+                io.emit("todos", todos);
+            }
+        });
     });
 
     return {
