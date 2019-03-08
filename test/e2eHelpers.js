@@ -77,10 +77,6 @@ module.exports.getTodoList = function() {
     return driver.findElements(webdriver.By.css("#todo-list li"));
 };
 
-module.exports.getTodoText = async function(id) {
-    return await driver.findElements(webdriver.By.id(id)).getAttribute("value");
-}
-
 module.exports.addTodo = async function(text) {
     await driver.findElement(webdriver.By.id("new-todo")).sendKeys(text);
     return driver.findElement(webdriver.By.id("submit-todo")).click();
@@ -162,4 +158,3 @@ module.exports.sleep = function(ms) {
 module.exports.waitUntilLoaded = function() {
     return driver.wait(webdriver.until.elementLocated(webdriver.By.id("todo-form")), 5000);
 };
-

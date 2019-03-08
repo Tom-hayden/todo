@@ -24,7 +24,7 @@ form.onsubmit = function(event) {
 };
 
 function createTodo(todo) {
-    socket.emit("create", {title: todo});
+    socket.emit("create", todo);
 }
 
 function completeItem(todo) {
