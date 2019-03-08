@@ -177,3 +177,7 @@ socket.on("todos", function(serverTodos) {
     todosLocal = serverTodos;
     reloadTodoList();
 })
+
+socket.on("serverError", function(errorMessage) {
+    error.textContent = "Server Error: " + errorMessage;
+})

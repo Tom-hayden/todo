@@ -48,12 +48,18 @@ module.exports = function (port, middleware, callback) {
     function deleteTodo(id) {
         const todo = getTodo(id);
         if (!todo) {
-            // throw error
+            return false;
         }
-        todos = todos.filter(function (otherTodo) {
-            return otherTodo !== todo;
+        todos = todos.filter(function (todoToDelete) {
+            return todoToDelete !== todo;
         });
+        return true;
+    }
 
+    function deleteTodoSocketIOWrapper(id) {
+        if (!deleteTodo(id)) {
+            throw "Todo ID does not refer to an existing todo item";
+        }
     }
 
     function updateTodo(id, todoBody) {
@@ -97,12 +103,11 @@ module.exports = function (port, middleware, callback) {
             if (todo.isComplete === false) {
                 todo.isComplete = true;
                 replaceTodo(id, todo);
-                return true;
             } else {
-                return false;
+                throw "Todo item is already complete";
             }
         } else {
-            return false;
+            throw "Todo ID does not refer to an existing todo item";
         }
     }
 
@@ -117,19 +122,39 @@ module.exports = function (port, middleware, callback) {
     io.on("connection", function (socket) {
         socket.emit("todos", todos);
         socket.on("create", function (todo) {
-            addNewTodo(todo);
+            socketErrorHandler(socket, function() {
+                addNewTodo(todo);
+            });
             io.emit("todos", todos);
         });
         socket.on("deleteTodo", function (id) {
-            deleteTodo(id)
+            socketErrorHandler(socket, function() {
+                deleteTodoSocketIOWrapper(id);
+            });
             io.emit("todos", todos);
         });
         socket.on("completeTodo", function (id) {
-            if (completeTodo(id)) {
+            socketErrorHandler(socket, function() {
+                completeTodo(id)
+            });
                 io.emit("todos", todos);
-            }
         });
+        socket.on("error", (error) => {
+            socket.emit("serverError", generateErrorMessage(error));
+        })
     });
+
+    function generateErrorMessage(error){
+        return error.toString();
+    }
+
+    function socketErrorHandler(socket, fn) {
+        try {
+            fn();
+        } catch (e) {
+            socket.emit("error", e);
+        }
+    }
 
     return {
         close: function (callback) {
