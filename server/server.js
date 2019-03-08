@@ -1,9 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const _ = require("underscore");
-const socketio = require('socket.io');
+const socketio = require("socket.io");
 
-module.exports = function(port, middleware, callback) {
+module.exports = function (port, middleware, callback) {
     const app = express();
 
     if (middleware) {
@@ -16,19 +16,19 @@ module.exports = function(port, middleware, callback) {
     let todos = [];
 
     // Create
-    app.post("/api/todo", function(req, res) {
+    app.post("/api/todo", function (req, res) {
         const id = addNewTodo(req.body);
         res.set("Location", "/api/todo/" + id);
         res.sendStatus(201);
     });
 
     // Read
-    app.get("/api/todo", function(req, res) {
+    app.get("/api/todo", function (req, res) {
         res.json(todos);
     });
 
     // Delete
-    app.delete("/api/todo/:id", function(req, res) {
+    app.delete("/api/todo/:id", function (req, res) {
         if (deleteTodo(req.params.id)) {
             res.sendStatus(200);
         } else {
@@ -37,7 +37,7 @@ module.exports = function(port, middleware, callback) {
     });
 
     //Update
-    app.put("/api/todo/:id", function(req, res) {
+    app.put("/api/todo/:id", function (req, res) {
         if (updateTodo(req.params.id, req.body)) {
             res.sendStatus(200);
         } else {
@@ -47,14 +47,13 @@ module.exports = function(port, middleware, callback) {
 
     function deleteTodo(id) {
         const todo = getTodo(id);
-        if (todo) {
-            todos = todos.filter(function(otherTodo) {
-                return otherTodo !== todo;
-            });
-            return true;
-        } else {
-            return false;
+        if (!todo) {
+            // throw error
         }
+        todos = todos.filter(function (otherTodo) {
+            return otherTodo !== todo;
+        });
+
     }
 
     function updateTodo(id, todoBody) {
@@ -67,17 +66,17 @@ module.exports = function(port, middleware, callback) {
     }
 
     function createTodo(todoBody, id) {
-        return Object.assign({}, { id: id, isComplete: false}, todoBody);
+        return Object.assign({}, { id: id, isComplete: false }, todoBody);
     }
 
     function getTodo(id) {
-        return _.find(todos, function(todo) {
+        return _.find(todos, function (todo) {
             return todo.id === id;
         });
     }
 
     function replaceTodo(id, todoBody) {
-        todos.forEach(function(todo, index, todosArray) {
+        todos.forEach(function (todo, index, todosArray) {
             if (todo.id === id) {
                 todosArray[index] = createTodo(todoBody, id);
             }
@@ -93,8 +92,8 @@ module.exports = function(port, middleware, callback) {
     }
 
     function completeTodo(id) {
-        todo = getTodo(id);
-        if (todo) { 
+        let todo = getTodo(id);
+        if (todo) {
             if (todo.isComplete === false) {
                 todo.isComplete = true;
                 replaceTodo(id, todo);
@@ -111,32 +110,30 @@ module.exports = function(port, middleware, callback) {
     const io = socketio.listen(server);
     // We manually manage the connections to ensure that they're closed when calling close().
     let connections = [];
-    server.on("connection", function(connection) {
+    server.on("connection", function (connection) {
         connections.push(connection);
     });
 
-    io.on('connection', function(socket){
-        console.log('a user connected');
+    io.on("connection", function (socket) {
         socket.emit("todos", todos);
-        socket.on('create', function(todo) {
+        socket.on("create", function (todo) {
             addNewTodo(todo);
             io.emit("todos", todos);
         });
-        socket.on("deleteTodo", function(id) {
-            if (deleteTodo(id)) {
-                io.emit("todos", todos);
-            }
+        socket.on("deleteTodo", function (id) {
+            deleteTodo(id)
+            io.emit("todos", todos);
         });
-        socket.on("completeTodo", function(id) {
-            if (completeTodo(id)){
+        socket.on("completeTodo", function (id) {
+            if (completeTodo(id)) {
                 io.emit("todos", todos);
             }
         });
     });
 
     return {
-        close: function(callback) {
-            connections.forEach(function(connection) {
+        close: function (callback) {
+            connections.forEach(function (connection) {
                 connection.destroy();
             });
             server.close(callback);
