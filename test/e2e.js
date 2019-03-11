@@ -40,8 +40,10 @@ testing.describe("end to end", function() {
         testing.it("adds the todo item to the list", async function() {
             await helpers.navigateToSite();
             await helpers.addTodo("New todo item");
-            const elements = await helpers.getTodoList();
-            assert.equal(elements.length, 1);
+            const todoExists = await helpers.containsId("todo_text_0");
+            assert.equal(todoExists, true);
+            const todoText = await helpers.getTodoText("todo_text_0");
+            assert.equal(todoText, "New todo item");
         });
         testing.it("displays an error if the request fails", async function() {
             helpers.setupErrorRoute("post", "/api/todo");

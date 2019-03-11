@@ -77,6 +77,17 @@ module.exports.getTodoList = function() {
     return driver.findElements(webdriver.By.css("#todo-list li"));
 };
 
+module.exports.getTodoText = async function(id) {
+    let todoElement = await driver.findElement(webdriver.By.id(id));
+    return await getFirstElementText(todoElement);
+}
+
+async function getFirstElementText(element) {
+    elementText = await element.getText();
+    return elementText.split("\n")[0];
+
+}
+
 module.exports.addTodo = async function(text) {
     await driver.findElement(webdriver.By.id("new-todo")).sendKeys(text);
     return driver.findElement(webdriver.By.id("submit-todo")).click();
