@@ -2,9 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const _ = require("underscore");
 const socketio = require("socket.io");
+const onFinished = require("on-finished");
 
 module.exports = function (port, middleware, callback) {
     const app = express();
+    const router = express.Router();
+    app.use(router)
 
     if (middleware) {
         app.use(middleware);
@@ -44,6 +47,18 @@ module.exports = function (port, middleware, callback) {
             res.sendStatus(404);
         }
     });
+    router.use("/api/*", function(req, res, next) {
+        onFinished(res, function(err, res) {
+            const reqMethod = req.method;
+            if (reqMethod === "PUT" || reqMethod === "DELETE" || reqMethod === "POST") {
+                if(res.statusCode === 200 || res.statusCode == 201) {
+                    emitChanges();
+                }
+            }
+        });
+        next();
+    });
+    
 
     function deleteTodo(id) {
         const todo = getTodo(id);
@@ -111,6 +126,10 @@ module.exports = function (port, middleware, callback) {
         }
     }
 
+    function emitChanges() {
+        io.emit("todos", todos);
+    }
+
     const server = app.listen(port, callback);
     const io = socketio.listen(server);
     // We manually manage the connections to ensure that they're closed when calling close().
@@ -125,19 +144,19 @@ module.exports = function (port, middleware, callback) {
             socketErrorHandler(socket, function() {
                 addNewTodo(todo);
             });
-            io.emit("todos", todos);
+            emitChanges();
         });
         socket.on("deleteTodo", function (id) {
             socketErrorHandler(socket, function() {
                 deleteTodoSocketIOWrapper(id);
             });
-            io.emit("todos", todos);
+            emitChanges();
         });
         socket.on("completeTodo", function (id) {
             socketErrorHandler(socket, function() {
                 completeTodo(id)
             });
-                io.emit("todos", todos);
+                emitChanges();
         });
         socket.on("error", (error) => {
             socket.emit("serverError", generateErrorMessage(error));
