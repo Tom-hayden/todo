@@ -82,12 +82,12 @@ module.exports.getTodoList = function() {
 };
 
 module.exports.getTodoText = async function(id) {
-    let todoElement = await driver.findElement(webdriver.By.id(id));
+    const todoElement = await driver.findElement(webdriver.By.id(id));
     return await getFirstElementText(todoElement);
 }
 
 async function getFirstElementText(element) {
-    elementText = await element.getText();
+    const elementText = await element.getText();
     return elementText.split("\n")[0];
 
 }

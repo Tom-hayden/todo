@@ -47,18 +47,18 @@ module.exports = function (port, middleware, callback) {
             res.sendStatus(404);
         }
     });
-    router.use("/api/*", function(req, res, next) {
-        onFinished(res, function(err, res) {
+    router.use("/api/*", function (req, res, next) {
+        onFinished(res, function (err, res) {
             const reqMethod = req.method;
             if (reqMethod === "PUT" || reqMethod === "DELETE" || reqMethod === "POST") {
-                if(res.statusCode === 200 || res.statusCode == 201) {
+                if (res.statusCode === 200 || res.statusCode === 201) {
                     emitChanges();
                 }
             }
         });
         next();
     });
-    
+
 
     function deleteTodo(id) {
         const todo = getTodo(id);
@@ -141,29 +141,29 @@ module.exports = function (port, middleware, callback) {
     io.on("connection", function (socket) {
         socket.emit("todos", todos);
         socket.on("create", function (todo) {
-            socketErrorHandler(socket, function() {
+            socketErrorHandler(socket, function () {
                 addNewTodo(todo);
             });
             emitChanges();
         });
         socket.on("deleteTodo", function (id) {
-            socketErrorHandler(socket, function() {
+            socketErrorHandler(socket, function () {
                 deleteTodoSocketIOWrapper(id);
             });
             emitChanges();
         });
         socket.on("completeTodo", function (id) {
-            socketErrorHandler(socket, function() {
+            socketErrorHandler(socket, function () {
                 completeTodo(id)
             });
-                emitChanges();
+            emitChanges();
         });
         socket.on("error", (error) => {
             socket.emit("serverError", generateErrorMessage(error));
         })
     });
 
-    function generateErrorMessage(error){
+    function generateErrorMessage(error) {
         return error.toString();
     }
 
