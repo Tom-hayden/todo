@@ -5,7 +5,10 @@ const helpers = require("./e2eHelpers");
 testing.describe("end to end", function() {
     this.timeout(20000);
     testing.before(helpers.setupDriver);
-    testing.beforeEach(helpers.setupServer);
+    testing.beforeEach(function() {
+        helpers.setupServer();
+        helpers.serverTimeout(5000);
+    });
     testing.afterEach(helpers.teardownServer);
     testing.after(function() {
         helpers.teardownDriver();

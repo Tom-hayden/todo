@@ -43,6 +43,10 @@ module.exports.teardownDriver = async function() {
     driver.quit();
 };
 
+module.exports.serverTimeout = function(waitTime) {
+    driver.manage().timeouts().implicitlyWait(5000);
+}
+
 module.exports.reportCoverage = function() {
     if (gatheringCoverage) {
         fs.writeFileSync(coverageFilename, JSON.stringify(collector.getFinalCoverage()), "utf8");
