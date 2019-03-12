@@ -26,12 +26,6 @@ testing.describe("end to end", function() {
             const elements = await helpers.getTodoList();
             assert.equal(elements.length, 0);
         });
-        testing.it("displays an error if the request fails", async function() {
-            helpers.setupErrorRoute("get", "/api/todo");
-            await helpers.navigateToSite();
-            const text = await helpers.getErrorText()
-            assert.equal(text, "Failed to get list. Server returned 500 - Internal Server Error");
-        });
     });
     testing.describe("on create todo item", function() {
         testing.it("clears the input field", async function() {
@@ -48,13 +42,6 @@ testing.describe("end to end", function() {
             const todoText = await helpers.getTodoText("todo_text_0");
             assert.equal(todoText, "New todo item");
         });
-        testing.it("displays an error if the request fails", async function() {
-            helpers.setupErrorRoute("post", "/api/todo");
-            await helpers.navigateToSite();
-            await helpers.addTodo("New todo item");
-            const text = await helpers.getErrorText();
-            assert.equal(text, "Failed to create item. Server returned 500 - Internal Server Error");
-        });
         testing.it("can be done multiple times", async function() {
             await helpers.navigateToSite();
             await Promise.all([
@@ -66,14 +53,6 @@ testing.describe("end to end", function() {
         });
     });
     testing.describe("on delete todo item", function() {
-        testing.it("displays an error if the request fails", async function() {
-            helpers.setupErrorRoute("delete", "/api/todo/0");
-            await helpers.navigateToSite();
-            await helpers.addTodo("New todo item");
-            await helpers.removeTodo(0);
-            const text = await helpers.getErrorText();
-            assert.equal(text, "Failed to delete item. Server returned 500 - Internal Server Error");
-        });
         testing.it("can an item be removed", async function() {
             await helpers.navigateToSite();
             await helpers.addTodo("New todo item");
