@@ -47,6 +47,7 @@ module.exports = function (port, middleware, callback) {
             res.sendStatus(404);
         }
     });
+
     router.use("/api/*", function (req, res, next) {
         onFinished(res, function (err, res) {
             const reqMethod = req.method;
@@ -114,16 +115,14 @@ module.exports = function (port, middleware, callback) {
 
     function completeTodo(id) {
         let todo = getTodo(id);
-        if (todo) {
-            if (todo.isComplete === false) {
-                todo.isComplete = true;
-                replaceTodo(id, todo);
-            } else {
-                throw "Todo item is already complete";
-            }
-        } else {
+        if (!todo) {
             throw "Todo ID does not refer to an existing todo item";
         }
+        if (todo.isComplete !== false) {
+            throw "Todo item is already complete";
+        }
+        todo.isComplete = true;
+        replaceTodo(id, todo);
     }
 
     function emitChanges() {

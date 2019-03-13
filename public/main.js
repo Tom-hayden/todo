@@ -158,10 +158,11 @@ function createDeleteAllButton(todos) {
 }
 
 function deleteAllCompleted(todos) {
-    todos.forEach(function(todo) {
-        if (todo.isComplete === true) {
-            deleteItem(todo);
-        }
+    let thingy = todos.filter(function(todo) {
+        return todo.isComplete === true;
+    });
+    thingy.forEach(function(todo) {
+        deleteItem(todo);
     });
 }
 
