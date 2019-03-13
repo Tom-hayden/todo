@@ -6,6 +6,7 @@ const error = document.getElementById("error");
 const todoUncompleteCount = document.getElementById("count-label");
 var todosLocal = [];
 var todoFilter = "all";
+/*global io */
 
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelector("select[name='filter']").onchange = filterChangeHandler;
