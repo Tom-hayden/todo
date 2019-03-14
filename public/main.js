@@ -4,107 +4,42 @@ const form = document.getElementById("todo-form");
 const todoTitle = document.getElementById("new-todo");
 const error = document.getElementById("error");
 const todoUncompleteCount = document.getElementById("count-label");
-var todosLocal;
+var todosLocal = [];
 var todoFilter = "all";
+/*global io */
 
-document.addEventListener("DOMContentLoaded", async function() {
-    document.querySelector("select[name='filter']").onchange = await filterChangeHandler;
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelector("select[name='filter']").onchange = filterChangeHandler;
 }, false);
 
-async function filterChangeHandler(event) {
+function filterChangeHandler(event) {
     todoFilter = event.target.value.toLowerCase();
-    const withGet = false
-    await reloadTodoList(withGet);
+    reloadTodoList();
 }
 
 form.onsubmit = function(event) {
     const title = todoTitle.value;
-    createTodoWrapper(title);
+    createTodo(title);
     todoTitle.value = "";
     event.preventDefault();
 };
 
-async function createTodoWrapper(title) {
-    if (await createTodo(title)) {
-        await reloadTodoList();
-    }
+function createTodo(todo) {
+    socket.emit("create", {title: todo});
 }
 
-async function createTodo(title) {
-    const response = await fetch("/api/todo", {
-        method: "post",
-        headers: {
-            "Content-type": "application/json"
-        },
-        body: JSON.stringify({
-            title: title
-        })
-    });
-    if (response.ok) {
-        return true;
-    } else {
-        error.textContent = "Failed to create item. Server returned " + response.status +
-            " - " + response.statusText;
-        return false;
-    }
+function completeItem(todo) {
+    socket.emit("completeTodo", todo.id);
 }
 
-async function getTodoList() {
-    const response = await fetch("/api/todo");
-    if (response.ok) {
-        const responseBody = await response.json();
-        return responseBody;
-    } else {
-        error.textContent = "Failed to get list. Server returned " +
-            response.status + " - " + response.statusText;
-    }
+function deleteItem(todo) {
+    socket.emit("deleteTodo", todo.id);
 }
 
-async function completeItem(todo) {
-    const response = await fetch("/api/todo/" + todo.id, {
-        method: "put",
-        headers: {
-            "Content-type": "application/json"
-        },
-        body: JSON.stringify({
-            title: todo.title,
-            isComplete: true
-        })
-    });
-    if (response.ok) {
-        return true;
-    } else {
-        error.textContent = "Failed to update item. Server returned " +
-            response.status + " - " + response.statusText;
-        return false;
-    }
-}
-
-async function deleteItem(todo) {
-    const response = await fetch("/api/todo/" + todo.id, {
-        method: "delete"
-    });
-    if (response.ok) {
-        return true;
-    } else {
-        error.textContent = "Failed to delete item. Server returned " +
-            response.status + " - " + response.statusText;
-        return false;
-    }
-}
-
-async function reloadTodoList(withGet = true) {
+function reloadTodoList() {
     clearPage();
     displayLoadingScreen();
-    if (withGet) {
-        const newTodos = await getTodoList()
-        if (newTodos) {
-            todosLocal = newTodos;
-            populatePage(todosLocal);
-        }
-    } else {
-        populatePage(todosLocal);
-    }
+    populatePage(todosLocal);
 }
 
 function filterTodoList(todos) {
@@ -186,10 +121,8 @@ function createDeleteButton(todo) {
     const t = document.createTextNode("Delete");
     btn.appendChild(t);
     btn.id = "del_" + todo.id;
-    btn.onclick = async function() {
-        if (await deleteItem(todo)) {
-            await reloadTodoList();
-        }
+    btn.onclick = function() {
+        deleteItem(todo)
     }
     return btn;
 }
@@ -199,10 +132,8 @@ function createCompleteButton(todo) {
     const t = document.createTextNode("Complete");
     btn.appendChild(t);
     btn.id = "complete_" + todo.id;
-    btn.onclick = async function() {
-        if (await completeItem(todo)) {
-            await reloadTodoList();
-        }
+    btn.onclick = function() {
+        completeItem(todo);
     }
     return btn;
 }
@@ -220,25 +151,19 @@ function createDeleteAllButton(todos) {
     const t = document.createTextNode("Deleted Completed");
     btn.appendChild(t);
     btn.id = "del_completed";
-    btn.onclick = async function() {
-        await deleteAllCompleted(todos);
+    btn.onclick = function() {
+        deleteAllCompleted(todos);
     }
     return btn;
 }
 
-async function deleteAllCompleted(todos) {
-    const todoPromises = todos.reduce(function(todoPromises, todo) {
-        if (todo.isComplete === true) {
-            todoPromises.push(deleteItem(todo));
-        }
-        return todoPromises;
-    },[]);
-    await Promise.all(todoPromises)
-    if (todoPromises.every(function(currentValue) {
-        return currentValue;
-    })) {
-        await reloadTodoList();
-    }
+function deleteAllCompleted(todos) {
+    let thingy = todos.filter(function(todo) {
+        return todo.isComplete === true;
+    });
+    thingy.forEach(function(todo) {
+        deleteItem(todo);
+    });
 }
 
 function createButtonElement(buttonType) {
@@ -248,15 +173,13 @@ function createButtonElement(buttonType) {
     return btn;
 }
 
-async function poll() {
-    const newTodos = await getTodoList()
-    if (newTodos !== todosLocal) {
-        todosLocal = newTodos;
-        var withGet = false;
-        await reloadTodoList(withGet);
-    }
-    window.setTimeout(poll,5000);
+var socket = io();
 
-}
+socket.on("todos", function(serverTodos) {
+    todosLocal = serverTodos;
+    reloadTodoList();
+})
 
-poll();
+socket.on("serverError", function(errorMessage) {
+    error.textContent = "Server Error: " + errorMessage;
+})

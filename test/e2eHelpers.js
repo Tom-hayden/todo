@@ -43,6 +43,10 @@ module.exports.teardownDriver = async function() {
     driver.quit();
 };
 
+module.exports.serverTimeout = function(waitTime) {
+    driver.manage().timeouts().implicitlyWait(waitTime);
+}
+
 module.exports.reportCoverage = function() {
     if (gatheringCoverage) {
         fs.writeFileSync(coverageFilename, JSON.stringify(collector.getFinalCoverage()), "utf8");
@@ -76,6 +80,17 @@ module.exports.getTodoList = function() {
     driver.wait(webdriver.until.elementIsNotVisible(todoListLoading), 5000);
     return driver.findElements(webdriver.By.css("#todo-list li"));
 };
+
+module.exports.getTodoText = async function(id) {
+    const todoElement = await driver.findElement(webdriver.By.id(id));
+    return await getFirstElementText(todoElement);
+}
+
+async function getFirstElementText(element) {
+    const elementText = await element.getText();
+    return elementText.split("\n")[0];
+
+}
 
 module.exports.addTodo = async function(text) {
     await driver.findElement(webdriver.By.id("new-todo")).sendKeys(text);
@@ -132,23 +147,6 @@ async function elementHasClass(element, classToFind) {
 
 module.exports.selectFilter = function(filter) {
     return driver.findElement(webdriver.By.id("dropdown-" + filter)).click();
-}
-
-module.exports.simulateChange = function() {
-    router.use(function (req, res, next) {
-        const oldSend = res.send;
-        res.send = function() {
-            arguments[0] = JSON.stringify([
-                {
-                    "id": "0",
-                    "isComplete": false,
-                    "title": "New Item"
-                }
-            ]);
-            oldSend.apply(res, arguments);
-        }
-        next();
-    });
 }
 
 module.exports.sleep = function(ms) {

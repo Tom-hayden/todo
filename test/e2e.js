@@ -5,7 +5,10 @@ const helpers = require("./e2eHelpers");
 testing.describe("end to end", function() {
     this.timeout(20000);
     testing.before(helpers.setupDriver);
-    testing.beforeEach(helpers.setupServer);
+    testing.beforeEach(function() {
+        helpers.setupServer();
+        helpers.serverTimeout(200);
+    });
     testing.afterEach(helpers.teardownServer);
     testing.after(function() {
         helpers.teardownDriver();
@@ -23,12 +26,6 @@ testing.describe("end to end", function() {
             const elements = await helpers.getTodoList();
             assert.equal(elements.length, 0);
         });
-        testing.it("displays an error if the request fails", async function() {
-            helpers.setupErrorRoute("get", "/api/todo");
-            await helpers.navigateToSite();
-            const text = await helpers.getErrorText()
-            assert.equal(text, "Failed to get list. Server returned 500 - Internal Server Error");
-        });
     });
     testing.describe("on create todo item", function() {
         testing.it("clears the input field", async function() {
@@ -40,15 +37,10 @@ testing.describe("end to end", function() {
         testing.it("adds the todo item to the list", async function() {
             await helpers.navigateToSite();
             await helpers.addTodo("New todo item");
-            const elements = await helpers.getTodoList();
-            assert.equal(elements.length, 1);
-        });
-        testing.it("displays an error if the request fails", async function() {
-            helpers.setupErrorRoute("post", "/api/todo");
-            await helpers.navigateToSite();
-            await helpers.addTodo("New todo item");
-            const text = await helpers.getErrorText();
-            assert.equal(text, "Failed to create item. Server returned 500 - Internal Server Error");
+            const todoExists = await helpers.containsId("todo_text_0");
+            assert.equal(todoExists, true);
+            const todoText = await helpers.getTodoText("todo_text_0");
+            assert.equal(todoText, "New todo item");
         });
         testing.it("can be done multiple times", async function() {
             await helpers.navigateToSite();
@@ -61,14 +53,6 @@ testing.describe("end to end", function() {
         });
     });
     testing.describe("on delete todo item", function() {
-        testing.it("displays an error if the request fails", async function() {
-            helpers.setupErrorRoute("delete", "/api/todo/0");
-            await helpers.navigateToSite();
-            await helpers.addTodo("New todo item");
-            await helpers.removeTodo(0);
-            const text = await helpers.getErrorText();
-            assert.equal(text, "Failed to delete item. Server returned 500 - Internal Server Error");
-        });
         testing.it("can an item be removed", async function() {
             await helpers.navigateToSite();
             await helpers.addTodo("New todo item");
@@ -239,18 +223,6 @@ testing.describe("end to end", function() {
             assert.equal(todo0Exists, true);
             todo1Exists = await helpers.containsId("todo_text_1");
             assert.equal(todo1Exists, false);
-        });
-    });
-    testing.describe("can the page poll for changes", function() {
-        testing.it("does the page refresh to reflect server side changes", async function() {
-            helpers.navigateToSite();
-            await helpers.waitUntilLoaded();
-            helpers.simulateChange();
-            let pollingRate = 6000;
-            await helpers.sleep(pollingRate);
-            helpers.containsId("todo_text_0").then(function(res) {
-                assert.equal(res, true, "Expected 'New item'");
-            });
         });
     });
 });

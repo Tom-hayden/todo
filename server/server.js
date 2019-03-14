@@ -1,9 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const _ = require("underscore");
+const socketio = require("socket.io");
+const onFinished = require("on-finished");
 
-module.exports = function(port, middleware, callback) {
+module.exports = function (port, middleware, callback) {
     const app = express();
+    const router = express.Router();
+    app.use(router)
 
     if (middleware) {
         app.use(middleware);
@@ -15,19 +19,19 @@ module.exports = function(port, middleware, callback) {
     let todos = [];
 
     // Create
-    app.post("/api/todo", function(req, res) {
+    app.post("/api/todo", function (req, res) {
         const id = addNewTodo(req.body);
         res.set("Location", "/api/todo/" + id);
         res.sendStatus(201);
     });
 
     // Read
-    app.get("/api/todo", function(req, res) {
+    app.get("/api/todo", function (req, res) {
         res.json(todos);
     });
 
     // Delete
-    app.delete("/api/todo/:id", function(req, res) {
+    app.delete("/api/todo/:id", function (req, res) {
         if (deleteTodo(req.params.id)) {
             res.sendStatus(200);
         } else {
@@ -36,7 +40,7 @@ module.exports = function(port, middleware, callback) {
     });
 
     //Update
-    app.put("/api/todo/:id", function(req, res) {
+    app.put("/api/todo/:id", function (req, res) {
         if (updateTodo(req.params.id, req.body)) {
             res.sendStatus(200);
         } else {
@@ -44,15 +48,33 @@ module.exports = function(port, middleware, callback) {
         }
     });
 
+    router.use("/api/*", function (req, res, next) {
+        onFinished(res, function (err, res) {
+            const reqMethod = req.method;
+            if (reqMethod === "PUT" || reqMethod === "DELETE" || reqMethod === "POST") {
+                if (res.statusCode === 200 || res.statusCode === 201) {
+                    emitChanges();
+                }
+            }
+        });
+        next();
+    });
+
+
     function deleteTodo(id) {
         const todo = getTodo(id);
-        if (todo) {
-            todos = todos.filter(function(otherTodo) {
-                return otherTodo !== todo;
-            });
-            return true;
-        } else {
+        if (!todo) {
             return false;
+        }
+        todos = todos.filter(function (todoToDelete) {
+            return todoToDelete !== todo;
+        });
+        return true;
+    }
+
+    function deleteTodoSocketIOWrapper(id) {
+        if (!deleteTodo(id)) {
+            throw "Todo ID does not refer to an existing todo item";
         }
     }
 
@@ -66,17 +88,17 @@ module.exports = function(port, middleware, callback) {
     }
 
     function createTodo(todoBody, id) {
-        return Object.assign({}, { id: id, isComplete: false}, todoBody);
+        return Object.assign({}, { id: id, isComplete: false }, todoBody);
     }
 
     function getTodo(id) {
-        return _.find(todos, function(todo) {
+        return _.find(todos, function (todo) {
             return todo.id === id;
         });
     }
 
     function replaceTodo(id, todoBody) {
-        todos.forEach(function(todo, index, todosArray) {
+        todos.forEach(function (todo, index, todosArray) {
             if (todo.id === id) {
                 todosArray[index] = createTodo(todoBody, id);
             }
@@ -91,17 +113,70 @@ module.exports = function(port, middleware, callback) {
         return id;
     }
 
-    const server = app.listen(port, callback);
+    function completeTodo(id) {
+        let todo = getTodo(id);
+        if (!todo) {
+            throw "Todo ID does not refer to an existing todo item";
+        }
+        if (todo.isComplete !== false) {
+            throw "Todo item is already complete";
+        }
+        todo.isComplete = true;
+        replaceTodo(id, todo);
+    }
 
+    function emitChanges() {
+        io.emit("todos", todos);
+    }
+
+    const server = app.listen(port, callback);
+    const io = socketio.listen(server);
     // We manually manage the connections to ensure that they're closed when calling close().
     let connections = [];
-    server.on("connection", function(connection) {
+    server.on("connection", function (connection) {
         connections.push(connection);
     });
 
+    io.on("connection", function (socket) {
+        socket.emit("todos", todos);
+        socket.on("create", function (todo) {
+            socketErrorHandler(socket, function () {
+                addNewTodo(todo);
+            });
+            emitChanges();
+        });
+        socket.on("deleteTodo", function (id) {
+            socketErrorHandler(socket, function () {
+                deleteTodoSocketIOWrapper(id);
+            });
+            emitChanges();
+        });
+        socket.on("completeTodo", function (id) {
+            socketErrorHandler(socket, function () {
+                completeTodo(id)
+            });
+            emitChanges();
+        });
+        socket.on("error", (error) => {
+            socket.emit("serverError", generateErrorMessage(error));
+        })
+    });
+
+    function generateErrorMessage(error) {
+        return error.toString();
+    }
+
+    function socketErrorHandler(socket, fn) {
+        try {
+            fn();
+        } catch (e) {
+            socket.emit("error", e);
+        }
+    }
+
     return {
-        close: function(callback) {
-            connections.forEach(function(connection) {
+        close: function (callback) {
+            connections.forEach(function (connection) {
                 connection.destroy();
             });
             server.close(callback);
