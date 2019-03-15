@@ -48,7 +48,7 @@ function filterTodoList(todos) {
     } else if (todoFilter === "complete") {
         return todos.filter(function(todo) {
             return todo.isComplete;
-        });
+        }); 
     } else if (todoFilter === "active") {
         return todos.filter(function(todo) {
             return !todo.isComplete;
@@ -181,5 +181,5 @@ socket.on("todos", function(serverTodos) {
 })
 
 socket.on("serverError", function(errorMessage) {
-    error.textContent = "Server Error: " + errorMessage;
+    error.textContent = "Failed - Server Error: " + errorMessage;
 })
