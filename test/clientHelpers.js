@@ -16,7 +16,7 @@ module.exports.setupDriver = function() {
     driver = new webdriver.Builder().forBrowser("chrome").build();
 };
 
-module.exports.tearDownDriver = async function() {
+module.exports.tearDownDriver = function() {
     driver.quit();
 };
 
@@ -42,7 +42,7 @@ module.exports.getErrorText = function() {
 };
 
 module.exports.setupServerError = function() {
-    const responses = [function(socket){
+    const responses = [function(socket) {
         socket.emit("serverError", "Test Error")
     }];
     setupServerResponse(responses);

@@ -14,13 +14,13 @@ testing.describe("client", function() {
     });
     testing.after(helpers.tearDownDriver);
 
-        testing.describe("On recieve error", function() {
-            testing.it("Displays error message", async function() {
-                helpers.setupServerError();
-                helpers.navigateToSite();
-                const text = await helpers.getErrorText()
-                assert.equal(typeof text, "string");
-                assert.equal(text, "Failed - Server Error: Test Error");
-            });
+    testing.describe("On recieve error", function() {
+        testing.it("Displays error message", async function() {
+            helpers.setupServerError();
+            helpers.navigateToSite();
+            const text = await helpers.getErrorText()
+            assert.equal(typeof text, "string");
+            assert.equal(text, "Failed - Server Error: Test Error");
         });
+    });
 });

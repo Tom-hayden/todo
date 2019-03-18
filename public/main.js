@@ -48,7 +48,7 @@ function filterTodoList(todos) {
     } else if (todoFilter === "complete") {
         return todos.filter(function(todo) {
             return todo.isComplete;
-        }); 
+        });
     } else if (todoFilter === "active") {
         return todos.filter(function(todo) {
             return !todo.isComplete;
