@@ -8,8 +8,10 @@
     },
     "scripts": {
         "lint": "eslint . --format codeframe",
-        "test": "nyc mocha --recursive",
-        "test:debug": "nyc mocha"
+        "test": "nyc mocha",
+        "test:debug": "nyc mocha",
+        "start": "node scripts/start.js",
+        "watch": "nodemon scripts/start.js"
     },
     "repository": {
         "type": "git",

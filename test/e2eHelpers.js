@@ -28,7 +28,7 @@ module.exports.setupServer = function(done) {
             res.send(instrumenter.instrumentSync(fs.readFileSync("public/main.js", "utf8"), absPath));
         });
     }
-    server = createServer(testPort, router, done);
+    server = createServer(testPort, router, done, "public");
 };
 
 module.exports.teardownServer = function(done) {
