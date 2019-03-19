@@ -17,6 +17,15 @@ class TodoPage extends Component {
                     Todo List
                 </h1>
                 {this.filterSelector()}
+                {this.todoCounter()}
+            </div>
+        )
+    }
+
+    todoCounter() {
+        return (
+            <div>
+                Number of Todos: {this.state.todos.length}
             </div>
         )
     }
