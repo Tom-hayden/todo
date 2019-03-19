@@ -4,7 +4,7 @@ const _ = require("underscore");
 const socketio = require("socket.io");
 const onFinished = require("on-finished");
 
-module.exports = function (port, middleware, callback) {
+module.exports = function (port, middleware, callback, publicPath) {
     const app = express();
     const router = express.Router();
     app.use(router)
@@ -12,7 +12,12 @@ module.exports = function (port, middleware, callback) {
     if (middleware) {
         app.use(middleware);
     }
-    app.use(express.static("public"));
+    if (publicPath) {
+        app.use(express.static(publicPath));
+    } else {
+        app.use(express.static("../public"));
+    }
+
     app.use(bodyParser.json());
 
     let latestId = 0;
