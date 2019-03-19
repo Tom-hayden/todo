@@ -1,26 +1,30 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import TodoPage from "./TodoPage";
+
 
 class App extends Component {
+
   render() {
+    const todoTest = [
+      {
+        "id": "0",
+        "isComplete": false,
+        "title": "hello"
+      },
+      {
+        "id": "1",
+        "isComplete": false,
+        "title": "I want to "
+      },
+      {
+        "id": "2",
+        "isComplete": true,
+        "title": "Win the prize "
+      }
+    ];
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <TodoPage todos={todoTest} />
     );
   }
 }
