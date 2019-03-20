@@ -1,0 +1,106 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 9
+    },
+    "env": {
+        "node": true,
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "require-await": 2,
+        "eqeqeq": 2,
+        "wrap-iife": [
+            2,
+            "any"
+        ],
+        "no-undef": 2,
+        "no-mixed-spaces-and-tabs": 2,
+        "indent": [
+            2,
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "max-len": [
+            2,
+            120
+        ],
+        "quotes": [
+            2,
+            "double"
+        ],
+        "consistent-this": [
+            2,
+            "self"
+        ],
+        "key-spacing": [
+            2,
+            {
+                "afterColon": true
+            }
+        ],
+        "space-before-blocks": [
+            2,
+            "always"
+        ],
+        "space-infix-ops": 2,
+        "curly": [
+            2,
+            "all"
+        ],
+        "operator-linebreak": [
+            2,
+            "after"
+        ],
+        "no-multi-str": 2,
+        "no-trailing-spaces": 2,
+        "space-unary-ops": [
+            2,
+            {
+                "nonwords": false,
+                "overrides": {}
+            }
+        ],
+        "one-var": [
+            2,
+            "never"
+        ],
+        "keyword-spacing": [
+            2,
+            {}
+        ],
+        "eol-last": 2,
+        "array-bracket-spacing": [
+            2,
+            "never"
+        ],
+        "space-in-parens": [
+            2,
+            "never"
+        ],
+        "no-multiple-empty-lines": 2
+    },
+    "overrides": [
+        {
+            "files": "scripts/**/*.js",
+            "rules": {
+                "no-console": "off"
+            }
+        },
+        {
+            "files": "public/**/*.js",
+            "env": {
+                "browser": true
+            }
+        },
+        {
+            "files": "test/**/*.js",
+            "env": {
+                "node": true,
+                "mocha": true
+            }
+        }
+    ]
+}

@@ -24,11 +24,11 @@ module.exports.setupServer = function(done) {
     router = express.Router();
     if (gatheringCoverage) {
         router.get("/main.js", function(req, res) {
-            const absPath = path.join(__dirname, "..", "public", "main.js");
-            res.send(instrumenter.instrumentSync(fs.readFileSync("public/main.js", "utf8"), absPath));
+            const absPath = path.join(__dirname, "..", "client", "public", "main.js");
+            res.send(instrumenter.instrumentSync(fs.readFileSync("client/public/main.js", "utf8"), absPath));
         });
     }
-    server = createServer(testPort, router, done, "public");
+    server = createServer(testPort, router, done, "client/public");
 };
 
 module.exports.teardownServer = function(done) {
