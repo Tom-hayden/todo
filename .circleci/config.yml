@@ -14,11 +14,17 @@ jobs:
               name: Run e2e Tests
               command: npm test
           - run:
+              name: Setup server Dependencies
+              command: npm ci --prefix server
+          - run:
               name: Lint server
               command: npm run lint --prefix server
           - run:
               name: Test server
               command: npm test --prefix server
+          - run:
+              name: Setup client Dependencies
+              command: npm ci --prefix client
           - run:
               name: Run client Tests
               command: npm test --prefix client
