@@ -9,9 +9,7 @@
     "scripts": {
         "lint": "eslint . --format codeframe",
         "test": "nyc mocha",
-        "test:debug": "nyc mocha",
-        "start": "node scripts/start.js",
-        "watch": "nodemon scripts/start.js"
+        "test:debug": "nyc mocha"
     },
     "repository": {
         "type": "git",
@@ -32,7 +30,6 @@
         "eslint": "^5.12.1",
         "istanbul": "^0.4.5",
         "mocha": "^5.2.0",
-        "nodemon": "^1.18.10",
         "nyc": "^13.3.0",
         "request": "^2.88.0",
         "selenium-webdriver": "^3.6.0"
@@ -41,7 +38,6 @@
         "body-parser": "^1.18.3",
         "express": "^4.16.4",
         "socket.io": "^2.2.0",
-        "underscore": "^1.9.1",
-        "whatwg-fetch": "^3.0.0"
+        "underscore": "^1.9.1"
     }
 }
