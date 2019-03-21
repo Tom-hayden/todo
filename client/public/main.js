@@ -181,5 +181,5 @@ socket.on("todos", function(serverTodos) {
 })
 
 socket.on("serverError", function(errorMessage) {
-    error.textContent = "Server Error: " + errorMessage;
+    error.textContent = "Failed - Server Error: " + errorMessage;
 })
