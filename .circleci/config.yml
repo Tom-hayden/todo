@@ -41,6 +41,9 @@ jobs:
               name: Setup e2e Dependencies
               command: npm ci --prefix e2eTests
           - run:
+              name: Setup server Dependencies
+              command: npm ci --prefix server
+          - run:
               name: Run e2e Linter
               command: npm run lint --prefix e2eTests
           - run:
