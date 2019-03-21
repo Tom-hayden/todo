@@ -41,6 +41,10 @@
                 "afterColon": true
             }
         ],
+        "semi": [
+            "error",
+             "always"
+        ],
         "space-before-blocks": [
             2,
             "always"

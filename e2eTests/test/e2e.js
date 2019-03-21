@@ -18,7 +18,7 @@ testing.describe("end to end", function() {
     testing.describe("on page load", function() {
         testing.it("displays TODO title", async function() {
             await helpers.navigateToSite();
-            const text = await  helpers.getTitleText()
+            const text = await  helpers.getTitleText();
             assert.equal(text, "TODO List");
         });
         testing.it("displays empty TODO list", async function() {
@@ -90,7 +90,7 @@ testing.describe("end to end", function() {
             await helpers.addTodo("New todo item");
             await helpers.completeTodo(0);
             await helpers.getTodoList();
-            const res = await helpers.containsId("complete_0")
+            const res = await helpers.containsId("complete_0");
             assert.equal(res, false);
         });
     });
@@ -208,17 +208,17 @@ testing.describe("end to end", function() {
                 helpers.addTodo("Second todo item")
             ]);
             await helpers.completeTodo(1);
-            await helpers.selectFilter("complete")
+            await helpers.selectFilter("complete");
             let todo0Exists = await helpers.containsId("todo_text_0");
             assert.equal(todo0Exists, false);
             let todo1Exists = await helpers.containsId("todo_text_1");
             assert.equal(todo1Exists, true);
-            await helpers.selectFilter("all")
+            await helpers.selectFilter("all");
             todo0Exists = await helpers.containsId("todo_text_0");
             assert.equal(todo0Exists, true);
             todo1Exists = await helpers.containsId("todo_text_1");
             assert.equal(todo1Exists, true);
-            await helpers.selectFilter("active")
+            await helpers.selectFilter("active");
             todo0Exists = await helpers.containsId("todo_text_0");
             assert.equal(todo0Exists, true);
             todo1Exists = await helpers.containsId("todo_text_1");
