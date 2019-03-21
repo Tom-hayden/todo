@@ -2,28 +2,68 @@ version: 2.1
 orbs:
     heroku: circleci/heroku@0.0.4
 jobs:
-    test:
+    client tests:
         docker:
           - image: circleci/node:10-browsers
         steps:
           - checkout
           - run:
-              name: Setup Dependencies
-              command: npm ci
+              name: Setup client Dependencies
+              command: npm ci --prefix client
           - run:
-              name: Lint
-              command: npm run lint
+              name: Run client Tests
+              command: npm run lint --prefix client
           - run:
-              name: Run Tests
-              command: npm test
+              name: Run client Tests
+              command: npm test --prefix client
+
+    server tests:
+        docker:
+          - image: circleci/node:10-browsers
+        steps:
+          - checkout
+          - run:
+              name: Setup server Dependencies
+              command: npm ci --prefix server
+          - run:
+              name: Lint server
+              command: npm run lint --prefix server
+          - run:
+              name: Test server
+              command: npm test --prefix server
+
+    e2e tests:
+        docker:
+          - image: circleci/node:10-browsers
+        steps:
+          - checkout
+          - run:
+              name: Setup e2e Dependencies
+              command: npm ci --prefix e2eTests
+          - run:
+              name: Setup server Dependencies
+              command: npm ci --prefix server
+          - run:
+              name: Run e2e Linter
+              command: npm run lint --prefix e2eTests
+          - run:
+              name: Run e2e Tests
+              command: npm test --prefix e2eTests
+
 workflows:
     version: 2
     test-deploy:
         jobs:
-          - test
+          - client tests
+          - server tests
+          - e2e tests:
+              requires:
+                - server tests
           - heroku/deploy-via-git:
               requires:
-                - test
+                - client tests
+                - server tests
+                - e2e tests
               filters:
                 branches:
                     only: master

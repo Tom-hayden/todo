@@ -1,6 +1,7 @@
-const server = require("../server/server");
+const server = require("../server");
 const request = require("request");
 const assert = require("chai").assert;
+const io = require("socket.io-client");
 
 const testPort = 52684;
 const baseUrl = "http://localhost:" + testPort;
@@ -187,4 +188,47 @@ describe("server", function() {
             });
         });
     });
+    describe("Socket functionality", function() {
+        let socket = io(baseUrl);
+
+        beforeEach(function() {
+            socket.open();
+        });
+        afterEach(function() {
+            socket.close();
+        });
+        it("Can add todo", function(done) {
+            let todo = {
+                "id": "0",
+                "isComplete": false,
+                "title": "Test item"
+            }
+            socket.on("todos", function(data) {
+                if (data.length > 0) {
+                    assert.deepEqual(data[0], todo);
+                    socket.off();
+                    done();
+                }
+            });
+            socket.emit("create", {title: todo.title});
+        });
+
+        it("Can update todo", function(done) {
+            let todo = {
+                "id": "0",
+                "isComplete": false,
+                "title": "Test item"
+            }
+            socket.once("todos", function() {
+                socket.once("todos", function() {
+                    socket.once("todos", function(data) {
+                        assert.equal(data[0].isComplete, true);
+                        done();
+                    });
+                    socket.emit("completeTodo", todo.id);
+                });
+                socket.emit("create", {title: todo.title});
+            });
+        });
+    })
 });
