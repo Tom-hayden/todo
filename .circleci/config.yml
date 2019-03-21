@@ -38,7 +38,7 @@ jobs:
         steps:
           - checkout
           - run:
-              name: Setup Dependencies
+              name: Setup e2e Dependencies
               command: npm ci --prefix e2eTests
           - run:
               name: Run e2e Linter
