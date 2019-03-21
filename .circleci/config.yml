@@ -58,7 +58,7 @@ workflows:
           - server tests
           - e2e tests:
               requires:
-                -server tests
+                - server tests
           - heroku/deploy-via-git:
               requires:
                 - client tests
