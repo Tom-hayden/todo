@@ -1,13 +1,31 @@
 import React, { Component } from 'react';
 import "./TodoPage.css";
+import socketIOClient from "socket.io-client";
 
-class TodoPage extends Component {
+
+const serverUrl = "http://localhost:8080";
+
+class TodoPage extends Component { 
     constructor(props) {
-        super(props);
+        super(props); 
         this.state = {
             filter: "all",
-            todos: [].concat(props.todos)
+            todos: []
         }
+    }
+
+    componentDidMount() {
+        this.socket = socketIOClient(serverUrl);
+
+        this.socket.on("todos", (todos) => {
+            this.setState({
+                todos: todos
+            })
+        })   
+    }
+
+    componentWillUnmount() {
+        this.socket.disconnect(true);
     }
 
     todoHeader() {
@@ -19,7 +37,7 @@ class TodoPage extends Component {
                 {this.filterSelector()}
                 {this.todoCounter()}
             </div>
-        )
+        );
     }
 
     todoCounter() {
@@ -27,7 +45,7 @@ class TodoPage extends Component {
             <div>
                 Number of Todos: {this.state.todos.length}
             </div>
-        )
+        );
     }
 
     todoList() {
