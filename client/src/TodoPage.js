@@ -5,7 +5,6 @@ import TodoHeader from "./TodoHeader";
 import DeleteAllCompletedButton from './DeleteAllCompletedButton';
 import TodoList from "./TodoList";
 import TodoSubmit from "./TodoSubmit";
-import onFilterChange from "./FilterSelector";
 
 
 const serverUrl = "http://localhost:8080";
