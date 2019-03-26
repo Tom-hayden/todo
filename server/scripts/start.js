@@ -1,4 +1,4 @@
-var server = require("../server/server");
+var server = require("../server");
 
 var port = process.env.PORT || 8080;
 
