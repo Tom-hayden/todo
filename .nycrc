@@ -1,5 +1,0 @@
-{
-    "temp-dir": "./build_artifacts/nyc",
-    "report-dir": "./build_artifacts",
-    "reporter": ["lcov", "text", "text-summary"]
-}
