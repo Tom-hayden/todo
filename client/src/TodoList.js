@@ -6,13 +6,13 @@ function TodoList({todos, socket, filter}) {
         if (filter === "all") {
             return <TodoListItem socket={socket} todo={todo} key={todo.id} />
         } else if (filter === "complete") {
-            if (!todo.isComplete) {
+            if (todo.isComplete) {
                 return <TodoListItem socket={socket} todo={todo} key={todo.id} />
             } else {
                 return null;
             }
         } else if (filter === "active") {
-            if (todo.isComplete) {
+            if (!todo.isComplete) {
                 return <TodoListItem socket={socket} todo={todo} key={todo.id} />
             } else {
                 return null;
