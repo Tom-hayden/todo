@@ -4,6 +4,8 @@ import socketIOClient from "socket.io-client";
 import TodoHeader from "./TodoHeader";
 import DeleteAllCompletedButton from './DeleteAllCompletedButton';
 import TodoList from "./TodoList";
+import TodoSubmit from "./TodoSubmit";
+import onFilterChange from "./FilterSelector";
 
 
 const serverUrl = "http://localhost:8080";
@@ -31,11 +33,18 @@ class TodoPage extends Component {
         this.socket.disconnect(true);
     }
 
+    onFilterChange = (filter) => {
+        this.setState({
+            filter: filter
+        })
+    }
+
     render() {
         return (
             <div className="TodoPage">
-                <TodoHeader nTodos={this.state.todos.length} />
-                <TodoList todos={this.state.todos} socket={this.socket} filter={this.filter}/>
+                <TodoHeader nTodos={this.state.todos.length} onFilterChange={this.onFilterChange}/>
+                <TodoSubmit socket={this.socket}/>
+                <TodoList todos={this.state.todos} socket={this.socket} filter={this.state.filter}/>
                 <DeleteAllCompletedButton todos={this.state.todos} socket={this.socket} />
             </div>
         )

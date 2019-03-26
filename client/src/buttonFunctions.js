@@ -6,4 +6,8 @@ function deleteTodo(socket, todo) {
     socket.emit("deleteTodo", todo.id);
 }
 
-export {completeTodo, deleteTodo};
+function createTodo(socket,todoText) {
+    socket.emit("create",{title: todoText});
+}
+
+export {completeTodo, deleteTodo, createTodo};

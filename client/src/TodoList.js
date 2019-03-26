@@ -5,7 +5,7 @@ function TodoList({todos, socket, filter}) {
     const listItems = todos.map((todo) => {
         if (filter === "all") {
             return <TodoListItem socket={socket} todo={todo} key={todo.id} />
-        } else if (filter === "completed") {
+        } else if (filter === "complete") {
             if (!todo.isComplete) {
                 return <TodoListItem socket={socket} todo={todo} key={todo.id} />
             } else {
@@ -18,6 +18,7 @@ function TodoList({todos, socket, filter}) {
                 return null;
             }
         } else {
+            console.log("This should not happen");
             return null;
         }
     })
