@@ -1,9 +1,9 @@
 import React from "react";
 
-const TodoCounter = ({nTodos}) => {
+const TodoCounter = ({numberOfTodos}) => {
     return (
         <div>
-            Number of Todos: {nTodos}
+            Number of Todos: {numberOfTodos}
         </div>
     );
 }

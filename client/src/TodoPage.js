@@ -41,7 +41,7 @@ class TodoPage extends Component {
     render = () => {
         return (
             <div className="TodoPage">
-                <TodoHeader nTodos={this.state.todos.length} onFilterChange={this.onFilterChange}/>
+                <TodoHeader numberOfTodos={this.state.todos.length} onFilterChange={this.onFilterChange}/>
                 <TodoSubmit socket={this.socket}/>
                 <TodoList todos={this.state.todos} socket={this.socket} filter={this.state.filter}/>
                 <DeleteAllCompletedButton todos={this.state.todos} socket={this.socket} />
