@@ -7,7 +7,7 @@ testing.describe("end to end", function() {
     testing.before(helpers.setupDriver);
     testing.beforeEach(function() {
         helpers.setupServer();
-        helpers.serverTimeout(200);
+        helpers.serverTimeout(1000);
     });
     testing.afterEach(helpers.teardownServer);
     testing.after(function() {

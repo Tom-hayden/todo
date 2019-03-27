@@ -1,12 +1,12 @@
 const express = require("express");
-const createServer = require("../../server/server");
+const createServer = require("../../server/server/server");
 const webdriver = require("selenium-webdriver");
 const istanbul = require("istanbul");
 const path = require("path");
 const fs = require("fs");
 
-const testPort = 52684;
-const baseUrl = "http://localhost:" + testPort;
+const serverPort = 8080;
+const baseUrl = "http://localhost:" + serverPort;
 const instrumenter = new istanbul.Instrumenter();
 const collector = new istanbul.Collector();
 const gatheringCoverage = process.env.running_under_istanbul;
@@ -29,7 +29,7 @@ module.exports.setupServer = function(done) {
             res.send(instrumenter.instrumentSync(fs.readFileSync(clientPath + "/main.js", "utf8"), absPath));
         });
     }
-    server = createServer(testPort, router, done, clientPath);
+    server = createServer(serverPort, router, done);
 };
 
 module.exports.teardownServer = function(done) {
