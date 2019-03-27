@@ -10,4 +10,8 @@ const createTodo = (socket,todoText) => {
     socket.emit("create",{title: todoText});
 }
 
-export {completeTodo, deleteTodo, createTodo};
+const deleteCompletedTodos = (socket) => {
+    socket.emit("deleteCompleted",);
+}
+
+export {completeTodo, deleteTodo, createTodo, deleteCompletedTodos};
