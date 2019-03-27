@@ -1,12 +1,12 @@
-function completeTodo(socket, todo) {
+const completeTodo = (socket, todo) => {
     socket.emit("completeTodo", todo.id);
 }
 
-function deleteTodo(socket, todo) {
+const deleteTodo = (socket, todo) => {
     socket.emit("deleteTodo", todo.id);
 }
 
-function createTodo(socket,todoText) {
+const createTodo = (socket,todoText) => {
     socket.emit("create",{title: todoText});
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import TodoListItem from "./TodoListItem";
 
-function TodoList({todos, socket, filter}) {
+const TodoList = ({todos, socket, filter}) => {
     const listItems = todos.map((todo) => {
         if (filter === "all") {
             return <TodoListItem socket={socket} todo={todo} key={todo.id} />

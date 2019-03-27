@@ -1,6 +1,6 @@
 import React from "react";
 
-function TodoCounter({nTodos}) {
+const TodoCounter = ({nTodos}) => {
     return (
         <div>
             Number of Todos: {nTodos}

@@ -1,6 +1,6 @@
 import React from "react";
 
-function CreateButton(props) {
+const CreateButton = (props) => {
     return (
         <button onClick={props.callback}>
             {props.text}

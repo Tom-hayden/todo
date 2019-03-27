@@ -3,7 +3,7 @@ import CreateButton from "./CreateButton";
 import {completeTodo} from "./buttonFunctions";
 
 
-function CompleteButton({todo, socket}) {
+const CompleteButton = ({todo, socket}) => {
     return (
         <CreateButton text="Complete" callback={()=>{
             completeTodo(socket, todo)

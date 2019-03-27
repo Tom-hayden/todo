@@ -2,7 +2,7 @@ import React from "react";
 import TodoCounter from "./TodoCounter";
 import FilterSelector from "./FilterSelector";
 
-function TodoHeader({nTodos, onFilterChange}) {
+const TodoHeader = ({nTodos, onFilterChange}) => {
     return (
         <div>
             <h1>

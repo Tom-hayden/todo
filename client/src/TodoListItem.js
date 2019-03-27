@@ -2,7 +2,7 @@ import React from "react";
 import CompleteButton from './CompleteButton';
 import DeleteButton from './DeleteButton';
 
-function TodoListItem({todo, socket}) {
+const TodoListItem = ({todo, socket}) => {
     return (
         <li id={"TodoListItem_" + todo.id}>
             <div>

@@ -3,7 +3,7 @@ import CreateButton from "./CreateButton";
 import {deleteTodo} from "./buttonFunctions";
 
 
-function DeleteButton({todo, socket}) {
+const DeleteButton = ({todo, socket}) => {
     return (
         <CreateButton text="Delete" callback={()=>{
             deleteTodo(socket, todo)

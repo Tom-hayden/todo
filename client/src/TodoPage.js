@@ -18,7 +18,7 @@ class TodoPage extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         this.socket = socketIOClient(serverUrl);
 
         this.socket.on("todos", (todos) => {
@@ -28,7 +28,7 @@ class TodoPage extends Component {
         })   
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.socket.disconnect(true);
     }
 
@@ -38,7 +38,7 @@ class TodoPage extends Component {
         })
     }
 
-    render() {
+    render = () => {
         return (
             <div className="TodoPage">
                 <TodoHeader nTodos={this.state.todos.length} onFilterChange={this.onFilterChange}/>
