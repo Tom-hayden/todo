@@ -18,7 +18,7 @@ class TodoPage extends Component {
     }
 
     componentDidMount() {
-        this.socket = socketIOClient();
+        this.socket = socketIOClient("localhost:8080");
 
         this.socket.on("todos", (todos) => {
             this.setState({
