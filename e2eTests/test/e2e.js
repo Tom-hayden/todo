@@ -19,7 +19,7 @@ testing.describe("end to end", function() {
         testing.it("displays TODO title", async function() {
             await helpers.navigateToSite();
             const text = await  helpers.getTitleText();
-            assert.equal(text, "TODO List");
+            assert.equal(text, "Todo List");
         });
         testing.it("displays empty TODO list", async function() {
             await helpers.navigateToSite();
