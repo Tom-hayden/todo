@@ -43,7 +43,7 @@ class TodoPage extends Component {
         let todoList;
         if (this.state.hasRecievedData) {
             todoList = (
-                <div>
+                <div id="todo-list-container">
                     <TodoList todos={this.state.todos} socket={this.socket} filter={this.state.filter}/>
                     <DeleteAllCompletedButton todos={this.state.todos} socket={this.socket} />
                 </div>
@@ -58,7 +58,7 @@ class TodoPage extends Component {
 
         return (
             <div className="TodoPage">
-                <TodoHeader nTodos={this.state.todos.length} onFilterChange={this.onFilterChange}/>
+                <TodoHeader todos={this.state.todos} onFilterChange={this.onFilterChange}/>
                 <TodoSubmit socket={this.socket}/>
                 {todoList}
             </div>

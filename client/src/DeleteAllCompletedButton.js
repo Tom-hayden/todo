@@ -8,7 +8,7 @@ function DeleteAllCompletedButton({todos, socket}) {
         return (
             <CreateButton text="Delete Completed Items" callback={()=>{
                 deleteCompletedTodos(socket, todos)
-            }}/>
+            }} id={"del_completed"}/>
         )
     } else {
         return null;

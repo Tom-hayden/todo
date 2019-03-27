@@ -7,7 +7,7 @@ function CompleteButton({todo, socket}) {
     return (
         <CreateButton text="Complete" callback={()=>{
             completeTodo(socket, todo)
-        }}/>
+        }} id={"complete_" + todo.id}/>
     )
 }
 

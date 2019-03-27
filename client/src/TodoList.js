@@ -22,7 +22,11 @@ function TodoList({todos, socket, filter}) {
             return null;
         }
     })
-    return listItems;
+    return (
+        <ul id="todo-list">
+            {listItems}
+        </ul>
+    )
 }
 
 export default TodoList;

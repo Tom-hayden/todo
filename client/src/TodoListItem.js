@@ -1,13 +1,26 @@
 import React from "react";
 import CompleteButton from './CompleteButton';
 import DeleteButton from './DeleteButton';
+import "./TodoListItem.css";
 
 function TodoListItem({todo, socket}) {
-    return (
-        <li id={"TodoListItem_" + todo.id}>
-            <div>
+    let todoTextelement;
+    if (todo.isComplete) {
+        todoTextelement = (
+            <div id={"todo_text_" + todo.id} className="completed">
                 {todo.title}
             </div>
+        )
+    } else {
+        todoTextelement = (
+            <div id={"todo_text_" + todo.id}>
+                {todo.title}
+            </div>
+        )
+    }
+    return (
+        <li id={"TodoListItem_" + todo.id}>
+            {todoTextelement}
             <div>
                 <DeleteButton todo={todo} socket={socket} />
             </div>

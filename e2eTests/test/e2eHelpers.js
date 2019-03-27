@@ -67,7 +67,7 @@ module.exports.getCount = function() {
 };
 
 module.exports.getInputText = function() {
-    return driver.findElement(webdriver.By.id("new-todo")).getAttribute("value");
+    return driver.findElement(webdriver.By.id("todo-input-box")).getAttribute("value");
 };
 
 module.exports.getErrorText = function() {
@@ -77,8 +77,6 @@ module.exports.getErrorText = function() {
 };
 
 module.exports.getTodoList = function() {
-    const todoListLoading = driver.findElement(webdriver.By.id("todo-list-Loading"));
-    driver.wait(webdriver.until.elementIsNotVisible(todoListLoading), 5000);
     return driver.findElements(webdriver.By.css("#todo-list li"));
 };
 
@@ -94,26 +92,8 @@ async function getFirstElementText(element) {
 }
 
 module.exports.addTodo = async function(text) {
-    await driver.findElement(webdriver.By.id("new-todo")).sendKeys(text);
+    await driver.findElement(webdriver.By.id("todo-input-box")).sendKeys(text);
     return driver.findElement(webdriver.By.id("submit-todo")).click();
-};
-
-module.exports.setupErrorRoute = function(action, route) {
-    if (action === "get") {
-        router.get(route, function(req, res) {
-            res.sendStatus(500);
-        });
-    }
-    if (action === "post") {
-        router.post(route, function(req, res) {
-            res.sendStatus(500);
-        });
-    }
-    if (action === "delete") {
-        router.delete(route, function(req, res) {
-            res.sendStatus(500);
-        });
-    }
 };
 
 module.exports.removeTodo = function(id) {
@@ -155,5 +135,5 @@ module.exports.sleep = function(ms) {
 };
 
 module.exports.waitUntilLoaded = function() {
-    return driver.wait(webdriver.until.elementLocated(webdriver.By.id("todo-form")), 5000);
+    return driver.wait(webdriver.until.elementLocated(webdriver.By.id("todo-list-container")), 5000);
 };
