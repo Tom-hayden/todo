@@ -9,8 +9,6 @@ import LoadingPage from "./LoadingPage";
 import todoFilters from "./todoListFilters";
 
 
-const serverUrl = "http://localhost:8080";
-
 class TodoPage extends Component {
     constructor(props) {
         super(props);
@@ -22,7 +20,7 @@ class TodoPage extends Component {
     }
 
     componentDidMount() {
-        this.socket = socketIOClient(serverUrl);
+        this.socket = socketIOClient();
 
         this.socket.on("todos", (todos) => {
             this.setState({
