@@ -5,7 +5,7 @@ import {deleteCompletedTodos} from "./buttonFunctions";
 const DeleteAllCompletedButton = ({todos, socket}) => {
     if(containsCompleted(todos)) {
         return (
-            <button callback={() => { deleteCompletedTodos(socket)}}>
+            <button onClick={() => deleteCompletedTodos(socket)}>
                 Delete completed items
             </button>
         )
