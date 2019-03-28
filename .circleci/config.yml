@@ -47,6 +47,12 @@ jobs:
               name: Setup server Dependencies
               command: npm ci --prefix server
           - run:
+              name: Setup React Dependencies
+              command: npm ci --prefix client
+          - run:
+              name: build react app
+              command: npm run build --prefix client
+          - run:
               name: Run e2e Linter
               command: npm run lint --prefix e2eTests
           - run:
