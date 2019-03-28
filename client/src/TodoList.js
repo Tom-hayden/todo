@@ -15,7 +15,7 @@ const TodoList = ({todos, socket, filter}) => {
 }
 
 TodoList.propTypes = {
-    todos: PropTypes.object,
+    todos: PropTypes.array,
     socket: PropTypes.object,
     filter: PropTypes.func
 }

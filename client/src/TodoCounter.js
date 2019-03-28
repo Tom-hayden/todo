@@ -12,7 +12,7 @@ function TodoCounter({todos}) {
 }
 
 TodoCounter.propTypes = {
-    todos: PropTypes.object
+    todos: PropTypes.array
 }
 
 export default TodoCounter;

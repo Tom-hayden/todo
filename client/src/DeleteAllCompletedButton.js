@@ -16,7 +16,7 @@ const DeleteAllCompletedButton = ({todos, socket}) => {
 }
 
 DeleteAllCompletedButton.propTypes = {
-    todo: PropTypes.object,
+    todo: PropTypes.array,
     socket: PropTypes.object
 }
 

@@ -16,7 +16,7 @@ const TodoHeader = ({todos, onFilterChange}) => {
 }
 
 TodoHeader.propTypes = {
-    todos: PropTypes.object,
+    todos: PropTypes.array,
     onFilterChange: PropTypes.func
 }
 
