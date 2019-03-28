@@ -5,6 +5,7 @@ import TodoHeader from "./TodoHeader";
 import DeleteAllCompletedButton from './DeleteAllCompletedButton';
 import TodoList from "./TodoList";
 import TodoSubmit from "./TodoSubmit";
+import todoFilters from "./todoListFilters";
 
 
 const serverUrl = "http://localhost:8080";
@@ -13,7 +14,7 @@ class TodoPage extends Component {
     constructor(props) {
         super(props); 
         this.state = {
-            filter: "all",
+            filter: todoFilters.all,
             todos: []
         }
     }
@@ -34,7 +35,7 @@ class TodoPage extends Component {
 
     onFilterChange = (filter) => {
         this.setState({
-            filter: filter
+            filter: todoFilters[filter]
         })
     }
 
