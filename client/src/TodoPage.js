@@ -22,7 +22,7 @@ class TodoPage extends Component {
     }
 
     componentDidMount() {
-        this.socket = socketIOClient("localhost:8080");
+        this.socket = socketIOClient(serverUrl);
 
         this.socket.on("todos", (todos) => {
             this.setState({
@@ -62,7 +62,7 @@ class TodoPage extends Component {
 
         return (
             <div className="TodoPage">
-                <TodoHeader numberOfTodos={this.state.todos.length} onFilterChange={this.onFilterChange}/>
+                <TodoHeader todos={this.state.todos} onFilterChange={this.onFilterChange}/>
                 <TodoSubmit socket={this.socket}/>
                 {todoList}
             </div>
