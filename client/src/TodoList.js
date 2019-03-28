@@ -2,27 +2,17 @@ import React from "react";
 import TodoListItem from "./TodoListItem";
 
 const TodoList = ({todos, socket, filter}) => {
-    const listItems = todos.map((todo) => {
-        if (filter === "all") {
-            return <TodoListItem socket={socket} todo={todo} key={todo.id} />
-        } else if (filter === "complete") {
-            if (todo.isComplete) {
-                return <TodoListItem socket={socket} todo={todo} key={todo.id} />
-            } else {
-                return null;
-            }
-        } else if (filter === "active") {
-            if (!todo.isComplete) {
-                return <TodoListItem socket={socket} todo={todo} key={todo.id} />
-            } else {
-                return null;
-            }
-        } else {
-            console.log("This should not happen");
-            return null;
-        }
-    })
-    return listItems;
+
+    let listItems = todos;
+    if (filter === "all") {
+
+    } else if (filter === "complete") {
+        listItems = listItems.filter((todo) => todo.isComplete);
+    } else if (filter === "active") {
+        listItems = listItems.filter((todo) => !todo.isComplete);
+    }
+
+    return listItems.map((todo) => <TodoListItem socket={socket} todo={todo} key={todo.id}/>);
 }
 
 export default TodoList;
