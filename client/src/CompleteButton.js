@@ -1,5 +1,6 @@
 import React from "react";
 import {completeTodo} from "./buttonFunctions";
+import PropTypes from "prop-types";
 
 
 const CompleteButton = ({todo, socket}) => {
@@ -8,6 +9,11 @@ const CompleteButton = ({todo, socket}) => {
             Complete
         </button>
     )
+}
+
+CompleteButton.propTypes = {
+    todo: PropTypes.object,
+    socket: PropTypes.object
 }
 
 export default CompleteButton;

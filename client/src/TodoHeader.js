@@ -1,6 +1,7 @@
 import React from "react";
 import TodoCounter from "./TodoCounter";
 import FilterSelector from "./FilterSelector";
+import PropTypes from "prop-types";
 
 const TodoHeader = ({todos, onFilterChange}) => {
     return (
@@ -12,6 +13,11 @@ const TodoHeader = ({todos, onFilterChange}) => {
             <TodoCounter todos={todos} />
         </div>
     );
+}
+
+TodoHeader.propTypes = {
+    todos: PropTypes.object,
+    onFilterChange: PropTypes.func
 }
 
 export default TodoHeader;

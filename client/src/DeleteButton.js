@@ -1,5 +1,6 @@
 import React from "react";
 import {deleteTodo} from "./buttonFunctions";
+import PropTypes from "prop-types";
 
 
 const DeleteButton = ({todo, socket}) => {
@@ -8,6 +9,11 @@ const DeleteButton = ({todo, socket}) => {
             Delete
         </button>
     )
+}
+
+DeleteButton.propTypes = {
+    todo: PropTypes.object,
+    socket: PropTypes.object
 }
 
 export default DeleteButton;

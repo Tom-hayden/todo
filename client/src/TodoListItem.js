@@ -1,6 +1,7 @@
 import React from "react";
-import CompleteButton from './CompleteButton';
-import DeleteButton from './DeleteButton';
+import PropTypes from "prop-types";
+import CompleteButton from "./CompleteButton";
+import DeleteButton from "./DeleteButton";
 import "./TodoListItem.css";
 
 const TodoListItem = ({todo, socket}) => {
@@ -29,6 +30,11 @@ const TodoListItem = ({todo, socket}) => {
             }
         </li>
     );
+}
+
+TodoListItem.propTypes = {
+    todo: PropTypes.object,
+    socket: PropTypes.func
 }
 
 export default TodoListItem;

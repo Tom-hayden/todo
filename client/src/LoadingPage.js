@@ -1,6 +1,6 @@
 import React from "react";
 
-function LoadingPage({nTodos}) {
+function LoadingPage() {
     return (
         <div id="todo-list-Loading">
             Loading...

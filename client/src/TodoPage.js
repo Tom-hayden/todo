@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import "./TodoPage.css";
 import socketIOClient from "socket.io-client";
 import TodoHeader from "./TodoHeader";
-import DeleteAllCompletedButton from './DeleteAllCompletedButton';
+import DeleteAllCompletedButton from "./DeleteAllCompletedButton";
 import TodoList from "./TodoList";
 import TodoSubmit from "./TodoSubmit";
 import LoadingPage from "./LoadingPage";
@@ -11,9 +11,9 @@ import todoFilters from "./todoListFilters";
 
 const serverUrl = "http://localhost:8080";
 
-class TodoPage extends Component { 
+class TodoPage extends Component {
     constructor(props) {
-        super(props); 
+        super(props);
         this.state = {
             filter: todoFilters.all,
             todos: [],
@@ -29,20 +29,20 @@ class TodoPage extends Component {
                 todos: todos,
                 hasRecievedData: true
             })
-        })   
+        })
     }
 
-    componentWillUnmount = () => {
+    componentWillUnmount() {
         this.socket.disconnect(true);
     }
 
-    onFilterChange = (filter) => {
+    onFilterChange(filter) {
         this.setState({
             filter: todoFilters[filter]
         })
     }
 
-    render = () => {
+    render() {
 
         let todoList;
         if (this.state.hasRecievedData) {
@@ -53,7 +53,7 @@ class TodoPage extends Component {
                 </div>
             );
         } else {
-            todoList =(
+            todoList = (
                 <div>
                     <LoadingPage />
                 </div>

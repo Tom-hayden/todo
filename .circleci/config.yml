@@ -2,6 +2,13 @@ version: 2.1
 orbs:
     heroku: circleci/heroku@0.0.4
 jobs:
+    build react app:
+        steps: 
+          - checkout 
+          - run:
+              name: build react app
+              command: npm run build --prefix client
+
     client tests:
         docker:
           - image: circleci/node:10-browsers
