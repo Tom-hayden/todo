@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import { createTodo } from "./buttonFunctions";
 
 class TodoSubmit extends Component {
-    constructor ({socket}) {
-        super({socket});
+    constructor (props) {
+        super(props);
         this.state= {
             value: ""
         };
@@ -16,7 +16,7 @@ class TodoSubmit extends Component {
     }
 
     handleSubmit = (event) => {
-        createTodo(this.socket, this.state.value);
+        createTodo(this.props.socket, this.state.value);
         this.setState({
             value: ""
         });
