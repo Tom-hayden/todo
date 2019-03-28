@@ -3,7 +3,7 @@ import CompleteButton from './CompleteButton';
 import DeleteButton from './DeleteButton';
 import "./TodoListItem.css";
 
-function TodoListItem({todo, socket}) {
+const TodoListItem = ({todo, socket}) => {
     let todoTextelement;
     if (todo.isComplete) {
         todoTextelement = (

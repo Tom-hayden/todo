@@ -1,9 +1,8 @@
 import React from "react";
+import todoFilters from "./todoListFilters";
 
 function TodoCounter({todos}) {
-    const uncompleteTodos = todos.filter(function(todo) {
-        return todo.isComplete === false;
-    }).length;
+    const uncompleteTodos = todoFilters.active(todos).length;
     return (
         <div id="count-label">
             Number of Todos: {uncompleteTodos}

@@ -1,6 +1,6 @@
 import React from "react";
 
-function FilterSelector({onFilterChange}) {
+const FilterSelector = ({onFilterChange}) => {
     return (
         <select id="filter-dropdown" name="filter" 
             onChange={(event) => onFilterChange(event.target.value)}>

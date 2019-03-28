@@ -6,12 +6,16 @@ import DeleteAllCompletedButton from './DeleteAllCompletedButton';
 import TodoList from "./TodoList";
 import TodoSubmit from "./TodoSubmit";
 import LoadingPage from "./LoadingPage";
+import todoFilters from "./todoListFilters";
+
+
+const serverUrl = "http://localhost:8080";
 
 class TodoPage extends Component { 
     constructor(props) {
         super(props); 
         this.state = {
-            filter: "all",
+            filter: todoFilters.all,
             todos: [],
             recievedData: false
         }
@@ -28,17 +32,17 @@ class TodoPage extends Component {
         })   
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         this.socket.disconnect(true);
     }
 
     onFilterChange = (filter) => {
         this.setState({
-            filter: filter
+            filter: todoFilters[filter]
         })
     }
 
-    render() {
+    render = () => {
 
         let todoList;
         if (this.state.hasRecievedData) {
@@ -58,7 +62,7 @@ class TodoPage extends Component {
 
         return (
             <div className="TodoPage">
-                <TodoHeader todos={this.state.todos} onFilterChange={this.onFilterChange}/>
+                <TodoHeader numberOfTodos={this.state.todos.length} onFilterChange={this.onFilterChange}/>
                 <TodoSubmit socket={this.socket}/>
                 {todoList}
             </div>
