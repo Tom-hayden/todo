@@ -29,7 +29,8 @@ class TodoSubmit extends Component {
             <form onSubmit={this.handleSubmit.bind(this)}>
                 <label>
                     Todo:
-                    <input id="todo-input-box" type="text" value={this.state.value} onChange={this.handleChange.bind(this)} />
+                    <input id="todo-input-box" type="text" value={this.state.value}
+                        onChange={this.handleChange.bind(this)} />
                 </label>
                 <input id="submit-todo" type="submit" value= "Submit"></input>
             </form>
