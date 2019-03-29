@@ -4,10 +4,10 @@ import LoadingPage from "./LoadingPage";
 import TodoList from "./TodoList";
 import DeleteAllCompletedButton from "./DeleteAllCompletedButton";
 
-const TodoListContainer = ({todos, socket, filter}) =>{
+const TodoListContainer = ({todos, socket, filter, hasRecievedData}) =>{
 
     let todoList;
-    if (this.state.hasRecievedData) {
+    if (hasRecievedData) {
         todoList = (
             <div id="todo-list-container">
                 <TodoList todos={todos} socket={socket} filter={filter}/>
@@ -27,7 +27,8 @@ const TodoListContainer = ({todos, socket, filter}) =>{
 TodoList.propTypes = {
     todos: PropTypes.array,
     socket: PropTypes.object,
-    filter: PropTypes.func
+    filter: PropTypes.func,
+    hasRecievedData: PropTypes.bool
 }
 
 export default TodoListContainer;

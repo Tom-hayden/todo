@@ -13,13 +13,12 @@ class TodoPage extends Component {
         this.state = {
             filter: todoFilters.all,
             todos: [],
-            recievedData: false
+            hasRecievedData: false
         }
     }
 
     componentDidMount() {
         this.socket = socketIOClient();
-
         this.socket.on("todos", (todos) => {
             this.setState({
                 todos: todos,
@@ -44,7 +43,8 @@ class TodoPage extends Component {
             <div className="TodoPage">
                 <TodoHeader todos={this.state.todos} onFilterChange={this.onFilterChange.bind(this)}/>
                 <TodoSubmit socket={this.socket}/>
-                <TodoListContainer todos={this.state.todos} socket={this.socket} filter={this.state.filter.bind(this)}/>
+                <TodoListContainer todos={this.state.todos} socket={this.socket} filter={this.state.filter.bind(this)}
+                    hasRecievedData={this.state.hasRecievedData}/>
             </div>
         )
     }
