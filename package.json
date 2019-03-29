@@ -2,9 +2,10 @@
   "name": "todo-grad-project-tom",
   "version": "1.0.0",
   "description": "An awesome todo app",
-  "main": "server/server/server.js",
+  "main": "server/scripts/start.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "cd client && npm install && npm run build && cd .. && cd server && npm install && cd .."
   },
   "repository": {
     "type": "git",
