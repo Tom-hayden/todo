@@ -5,20 +5,15 @@ import DeleteButton from "./DeleteButton";
 import "./TodoListItem.css";
 
 const TodoListItem = ({todo, socket}) => {
-    let todoTextelement;
-    if (todo.isComplete) {
-        todoTextelement = (
-            <div id={"todo_text_" + todo.id} className="completed">
-                {todo.title}
-            </div>
-        )
-    } else {
-        todoTextelement = (
-            <div id={"todo_text_" + todo.id}>
-                {todo.title}
-            </div>
-        )
-    }
+
+    const todoElementClassName = todo.isComplete ? "completed" : "";
+
+    const todoTextelement = (
+        <div id={"todo_text_" + todo.id} className={todoElementClassName}>
+            {todo.title}
+        </div>
+    )
+
     return (
         <li id={"TodoListItem_" + todo.id}>
             {todoTextelement}
