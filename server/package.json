@@ -28,8 +28,9 @@
     },
     "homepage": "https://github.com/ScottLogic/todo-grad-project",
     "devDependencies": {
+        "babel-eslint": "^10.0.1",
         "chai": "^4.2.0",
-        "eslint": "^5.12.1",
+        "eslint": "^5.12.0",
         "istanbul": "^0.4.5",
         "mocha": "^5.2.0",
         "nodemon": "^1.18.10",

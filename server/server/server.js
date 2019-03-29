@@ -15,7 +15,7 @@ module.exports = function (port, middleware, callback, publicPath) {
     if (publicPath) {
         app.use(express.static(publicPath));
     } else {
-        app.use(express.static("../client/public"));
+        app.use(express.static("../client/build"));
     }
 
     app.use(bodyParser.json());
@@ -130,6 +130,21 @@ module.exports = function (port, middleware, callback, publicPath) {
         replaceTodo(id, todo);
     }
 
+    function deleteAllCompleted() {
+        const todosToDelete = returnCompletedTodos();
+        deleteTodos(todosToDelete);
+    }
+
+    function returnCompletedTodos() {
+        return todos.filter((todo) => todo.isComplete);
+    }
+
+    function deleteTodos(todos) {
+        todos.forEach((todo) => {
+            deleteTodo(todo.id);
+        })
+    }
+
     function emitChanges() {
         io.emit("todos", todos);
     }
@@ -162,6 +177,12 @@ module.exports = function (port, middleware, callback, publicPath) {
             });
             emitChanges();
         });
+        socket.on("deleteCompleted", function() {
+            socketErrorHandler(socket, function() {
+                deleteAllCompleted();
+            })
+            emitChanges();
+        })
         socket.on("error", (error) => {
             socket.emit("serverError", generateErrorMessage(error));
         })

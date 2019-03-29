@@ -1,12 +1,17 @@
 {
     "parserOptions": {
-        "ecmaVersion": 9
+        "ecmaVersion": 10,
+        "sourceType": "module"
     },
     "env": {
         "browser": true,
-        "es6": true
+        "es6": true,
+        "jest": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
     "rules": {
         "require-await": 2,
         "eqeqeq": 2,

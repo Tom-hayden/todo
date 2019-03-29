@@ -1,25 +1,25 @@
 const testing = require("selenium-webdriver/testing");
 const assert = require("chai").assert;
 const helpers = require("./e2eHelpers");
+const waitForResponse = 500;
 
 testing.describe("end to end", function() {
     this.timeout(20000);
     testing.before(helpers.setupDriver);
     testing.beforeEach(function() {
         helpers.setupServer();
-        helpers.serverTimeout(200);
+        helpers.serverTimeout(1000);
     });
     testing.afterEach(helpers.teardownServer);
     testing.after(function() {
         helpers.teardownDriver();
-        helpers.reportCoverage();
     });
 
     testing.describe("on page load", function() {
         testing.it("displays TODO title", async function() {
             await helpers.navigateToSite();
             const text = await  helpers.getTitleText();
-            assert.equal(text, "TODO List");
+            assert.equal(text, "Todo List");
         });
         testing.it("displays empty TODO list", async function() {
             await helpers.navigateToSite();
@@ -48,6 +48,7 @@ testing.describe("end to end", function() {
                 helpers.addTodo("New todo item"),
                 helpers.addTodo("Another new todo item")
             ]);
+            await helpers.sleep(waitForResponse);
             const elements = await helpers.getTodoList();
             assert.equal(elements.length, 2);
         });
@@ -57,6 +58,7 @@ testing.describe("end to end", function() {
             await helpers.navigateToSite();
             await helpers.addTodo("New todo item");
             await helpers.removeTodo(0);
+            await helpers.sleep(waitForResponse);
             const elements = await helpers.getTodoList();
             assert.equal(elements.length, 0);
         });
@@ -68,6 +70,7 @@ testing.describe("end to end", function() {
                 helpers.addTodo("A third todo item")
             ]);
             await helpers.removeTodo(1);
+            await helpers.sleep(waitForResponse);
             await helpers.getTodoList();
             const res = await helpers.containsId("del_1");
             assert.equal(res, false);
@@ -82,6 +85,7 @@ testing.describe("end to end", function() {
                 helpers.addTodo("Third todo item")
             ]);
             await helpers.completeTodo(1);
+            await helpers.sleep(waitForResponse);
             const res = await helpers.isCompleted(1);
             assert.equal(res, true);
         });
@@ -90,6 +94,7 @@ testing.describe("end to end", function() {
             await helpers.addTodo("New todo item");
             await helpers.completeTodo(0);
             await helpers.getTodoList();
+            await helpers.sleep(waitForResponse);
             const res = await helpers.containsId("complete_0");
             assert.equal(res, false);
         });
@@ -106,8 +111,9 @@ testing.describe("end to end", function() {
                 helpers.completeTodo(1),
                 helpers.removeTodo(0),
             ]);
+            await helpers.sleep(waitForResponse);
             const count = await helpers.getCount();
-            assert.equal(count, "1");
+            assert.equal(count, "Number of Todos: 1");
         });
         testing.it("does it work for a different number of items", async function() {
             await helpers.navigateToSite();
@@ -122,8 +128,9 @@ testing.describe("end to end", function() {
                 helpers.completeTodo(1),
                 helpers.removeTodo(0)
             ]);
+            await helpers.sleep(waitForResponse);
             const count = await helpers.getCount();
-            assert.equal(count, "3");
+            assert.equal(count, "Number of Todos: 3");
         });
     });
     testing.describe("on delete all completed items", function() {
@@ -149,6 +156,7 @@ testing.describe("end to end", function() {
                 helpers.completeTodo(3)
             ]);
             await helpers.removeCompleted();
+            await helpers.sleep(waitForResponse);
             const todo0Exists = await helpers.containsId("todo_text_0");
             assert.equal(todo0Exists, false);
             const todo1Exists = await helpers.containsId("todo_text_1");
@@ -176,6 +184,7 @@ testing.describe("end to end", function() {
                 helpers.completeTodo(0),
                 helpers.completeTodo(3)
             ]);
+            await helpers.sleep(waitForResponse);
             await helpers.selectFilter("active");
             const todo0Exists = await helpers.containsId("todo_text_0");
             assert.equal(todo0Exists, false);
@@ -196,6 +205,7 @@ testing.describe("end to end", function() {
             ]);
             await helpers.completeTodo(1);
             await helpers.selectFilter("complete");
+            await helpers.sleep(waitForResponse);
             const todo0Exists = await helpers.containsId("todo_text_0");
             assert.equal(todo0Exists, false, "Expected unaltered todo to be removed");
             const todo1Exists = await helpers.containsId("todo_text_1");
@@ -208,6 +218,7 @@ testing.describe("end to end", function() {
                 helpers.addTodo("Second todo item")
             ]);
             await helpers.completeTodo(1);
+            await helpers.sleep(waitForResponse);
             await helpers.selectFilter("complete");
             let todo0Exists = await helpers.containsId("todo_text_0");
             assert.equal(todo0Exists, false);
