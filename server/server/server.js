@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const _ = require("underscore");
 const socketio = require("socket.io");
 const onFinished = require("on-finished");
+const path = require("path");
 
 module.exports = function (port, middleware, callback, publicPath) {
     const app = express();
@@ -15,7 +16,7 @@ module.exports = function (port, middleware, callback, publicPath) {
     if (publicPath) {
         app.use(express.static(publicPath));
     } else {
-        app.use(express.static("../client/build"));
+        app.use(express.static(path.resolve(__dirname, "../../client/build")));
     }
 
     app.use(bodyParser.json());
