@@ -2,16 +2,19 @@ version: 2.1
 orbs:
     heroku: circleci/heroku@0.0.4
 jobs:
-    client tests:
+    build and test react app:
         docker:
           - image: circleci/node:10-browsers
-        steps:
+        steps: 
           - checkout
           - run:
-              name: Setup client Dependencies
+              name: Setup React Dependencies
               command: npm ci --prefix client
           - run:
-              name: Run client Tests
+              name: build react app
+              command: npm run build --prefix client
+          - run:
+              name: Run client Linting
               command: npm run lint --prefix client
           - run:
               name: Run client Tests
@@ -44,6 +47,12 @@ jobs:
               name: Setup server Dependencies
               command: npm ci --prefix server
           - run:
+              name: Setup React Dependencies
+              command: npm ci --prefix client
+          - run:
+              name: build react app
+              command: npm run build --prefix client
+          - run:
               name: Run e2e Linter
               command: npm run lint --prefix e2eTests
           - run:
@@ -54,14 +63,15 @@ workflows:
     version: 2
     test-deploy:
         jobs:
-          - client tests
-          - server tests
+          - build and test react app
+          - server tests:
+              requires:
+              - build and test react app
           - e2e tests:
               requires:
                 - server tests
           - heroku/deploy-via-git:
               requires:
-                - client tests
                 - server tests
                 - e2e tests
               filters:

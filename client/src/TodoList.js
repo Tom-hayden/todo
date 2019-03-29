@@ -1,12 +1,23 @@
 import React from "react";
 import TodoListItem from "./TodoListItem";
+import PropTypes from "prop-types";
 
 
 const TodoList = ({todos, socket, filter}) => {
 
-    let listItems = filter(todos);
-    
-    return listItems.map((todo) => <TodoListItem socket={socket} todo={todo} key={todo.id}/>);
+    const filteredTodoList = filter(todos);
+    const listItems = filteredTodoList.map((todo) => <TodoListItem socket={socket} todo={todo} key={todo.id}/>);
+    return (
+        <ul id="todo-list">
+            {listItems}
+        </ul>
+    )
+}
+
+TodoList.propTypes = {
+    todos: PropTypes.array,
+    socket: PropTypes.object,
+    filter: PropTypes.func
 }
 
 export default TodoList;

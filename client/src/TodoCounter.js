@@ -1,11 +1,18 @@
 import React from "react";
+import PropTypes from "prop-types";
+import todoFilters from "./todoListFilters";
 
-const TodoCounter = ({numberOfTodos}) => {
+function TodoCounter({todos}) {
+    const uncompleteTodos = todoFilters.active(todos).length;
     return (
-        <div>
-            Number of Todos: {numberOfTodos}
+        <div id="count-label">
+            Number of Todos: {uncompleteTodos}
         </div>
     );
+}
+
+TodoCounter.propTypes = {
+    todos: PropTypes.array
 }
 
 export default TodoCounter;

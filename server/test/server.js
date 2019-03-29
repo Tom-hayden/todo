@@ -1,4 +1,4 @@
-const server = require("../server");
+const server = require("../server/server");
 const request = require("request");
 const assert = require("chai").assert;
 const io = require("socket.io-client");

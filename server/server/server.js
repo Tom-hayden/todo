@@ -15,7 +15,7 @@ module.exports = function (port, middleware, callback, publicPath) {
     if (publicPath) {
         app.use(express.static(publicPath));
     } else {
-        app.use(express.static("../client/public"));
+        app.use(express.static("../client/build"));
     }
 
     app.use(bodyParser.json());

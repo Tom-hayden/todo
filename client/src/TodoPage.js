@@ -1,51 +1,50 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import "./TodoPage.css";
 import socketIOClient from "socket.io-client";
 import TodoHeader from "./TodoHeader";
-import DeleteAllCompletedButton from './DeleteAllCompletedButton';
-import TodoList from "./TodoList";
 import TodoSubmit from "./TodoSubmit";
 import todoFilters from "./todoListFilters";
+import TodoListContainer from "./TodoListContainer";
 
 
-const serverUrl = "http://localhost:8080";
-
-class TodoPage extends Component { 
+class TodoPage extends Component {
     constructor(props) {
-        super(props); 
+        super(props);
         this.state = {
             filter: todoFilters.all,
-            todos: []
+            todos: [],
+            hasRecievedData: false
         }
     }
 
-    componentDidMount = () => {
-        this.socket = socketIOClient(serverUrl);
-
+    componentDidMount() {
+        this.socket = socketIOClient();
         this.socket.on("todos", (todos) => {
             this.setState({
-                todos: todos
+                todos: todos,
+                hasRecievedData: true
             })
-        })   
+        })
     }
 
-    componentWillUnmount = () => {
+    componentWillUnmount() {
         this.socket.disconnect(true);
     }
 
-    onFilterChange = (filter) => {
+    onFilterChange(filter) {
         this.setState({
             filter: todoFilters[filter]
         })
     }
 
-    render = () => {
+    render() {
+
         return (
             <div className="TodoPage">
-                <TodoHeader numberOfTodos={this.state.todos.length} onFilterChange={this.onFilterChange}/>
+                <TodoHeader todos={this.state.todos} onFilterChange={this.onFilterChange.bind(this)}/>
                 <TodoSubmit socket={this.socket}/>
-                <TodoList todos={this.state.todos} socket={this.socket} filter={this.state.filter}/>
-                <DeleteAllCompletedButton todos={this.state.todos} socket={this.socket} />
+                <TodoListContainer todos={this.state.todos} socket={this.socket} filter={this.state.filter.bind(this)}
+                    hasRecievedData={this.state.hasRecievedData}/>
             </div>
         )
     }
