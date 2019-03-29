@@ -1,0 +1,19 @@
+{
+  "name": "todo-grad-project-tom",
+  "version": "1.0.0",
+  "description": "An awesome todo app",
+  "main": "server/server/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tom-hayden/todo-grad-project-tom.git"
+  },
+  "author": "Thomas Hayden",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tom-hayden/todo-grad-project-tom/issues"
+  },
+  "homepage": "https://github.com/Tom-hayden/todo-grad-project-tom#readme"
+}
