@@ -38,7 +38,7 @@ class TodoPage extends Component {
     }
 
     render() {
-
+        
         return (
             <div className="TodoPage" style={{"overflow":"hidden"}}>
                 <TodoHeader todos={this.state.todos} onFilterChange={this.onFilterChange.bind(this)}/>
