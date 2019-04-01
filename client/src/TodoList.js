@@ -11,10 +11,10 @@ const TodoList = ({todos, socket, filter}) => {
         return (
             <div key={todo.id}>
                 <TodoListItem socket={socket} todo={todo}/>
-                {index !== filteredTodoList.length -1 && <Divider />}
+                {index !== filteredTodoList.length - 1 && <Divider />}
             </div>
         );
-        });
+    });
     return (
         <ul id="todo-list">
             {listItems}

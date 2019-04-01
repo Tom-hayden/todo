@@ -23,7 +23,7 @@ class TodoSubmit extends Component {
         this.setState({
             value: ""
         });
-        if (event){
+        if (event) {
             event.preventDefault();
         }
     }
@@ -32,11 +32,11 @@ class TodoSubmit extends Component {
         return (
             <Form onSubmit={this.handleSubmit.bind(this)} >
                 <Form.Field inline>
-                    <label style={{"marginLeft":"30px"}}>
+                    <label style={{"marginLeft": "30px"}}>
                         Todo:
                     </label>
-                        <input id="todo-input-box" type="text" value={this.state.value}
-                            onChange={this.handleChange.bind(this)} />
+                    <input id="todo-input-box" type="text" value={this.state.value}
+                        onChange={this.handleChange.bind(this)} />
 
                     <Button attached="right" id="submit-todo" onClick={this.handleSubmit} >Submit</Button>
                 </Form.Field>

@@ -7,7 +7,8 @@ import {Button} from "semantic-ui-react";
 const DeleteAllCompletedButton = ({todos, socket}) => {
     if (containsCompleted(todos)) {
         return (
-            <Button negative onClick={() => deleteCompletedTodos(socket)} id={"del_completed"} floated="right" style={{"marginBottom":"5px","marginRight":"5px"}}>
+            <Button negative onClick={() => deleteCompletedTodos(socket)} id={"del_completed"} floated="right"
+                style={{"marginBottom": "5px","marginRight": "5px"}}>
                 Delete completed items
             </Button>
         )
