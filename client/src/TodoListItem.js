@@ -3,13 +3,14 @@ import PropTypes from "prop-types";
 import CompleteButton from "./CompleteButton";
 import DeleteButton from "./DeleteButton";
 import "./TodoListItem.css";
+import {Button} from "semantic-ui-react";
 
 const TodoListItem = ({todo, socket}) => {
 
     const todoElementClassName = todo.isComplete ? "completed" : "";
 
     const todoTextelement = (
-        <div id={"todo_text_" + todo.id} className={todoElementClassName}>
+        <div id={"todo_text_" + todo.id} className={todoElementClassName} style={{display: "inline"}}>
             {todo.title}
         </div>
     )
@@ -17,12 +18,13 @@ const TodoListItem = ({todo, socket}) => {
     return (
         <li id={"TodoListItem_" + todo.id}>
             {todoTextelement}
-            <div>
+            <Button.Group style={{display: "inline", float: "right"}} >
+                {!todo.isComplete &&
+                    <CompleteButton todo={todo} socket={socket} />
+                }
                 <DeleteButton todo={todo} socket={socket} />
-            </div>
-            {!todo.isComplete &&
-                <CompleteButton todo={todo} socket={socket} />
-            }
+            </Button.Group>
+          
         </li>
     );
 }

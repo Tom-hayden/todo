@@ -1,13 +1,14 @@
 import React from "react";
 import {completeTodo} from "./buttonFunctions";
 import PropTypes from "prop-types";
+import {Button} from "semantic-ui-react";
 
 
 const CompleteButton = ({todo, socket}) => {
     return (
-        <button onClick={() => completeTodo(socket, todo)} id={"complete_" + todo.id}>
+        <Button onClick={() => completeTodo(socket, todo)} id={"complete_" + todo.id}>
             Complete
-        </button>
+        </Button>
     )
 }
 

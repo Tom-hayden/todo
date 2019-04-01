@@ -1,13 +1,14 @@
 import React from "react";
 import {deleteTodo} from "./buttonFunctions";
 import PropTypes from "prop-types";
+import {Button} from "semantic-ui-react";
 
 
 const DeleteButton = ({todo, socket}) => {
     return (
-        <button onClick={() => deleteTodo(socket, todo)} id={"del_" + todo.id}>
+        <Button onClick={() => deleteTodo(socket, todo)} id={"del_" + todo.id}>
             Delete
-        </button>
+        </Button>
     )
 }
 
