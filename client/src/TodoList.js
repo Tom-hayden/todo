@@ -9,8 +9,8 @@ const TodoList = ({todos, socket, filter}) => {
     const filteredTodoList = filter(todos);
     const listItems = filteredTodoList.map((todo, index) => {
         return (
-            <div>
-                <TodoListItem socket={socket} todo={todo} key={todo.id}/>
+            <div key={todo.id}>
+                <TodoListItem socket={socket} todo={todo}/>
                 {index !== filteredTodoList.length -1 && <Divider />}
             </div>
         );

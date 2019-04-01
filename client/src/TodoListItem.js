@@ -31,7 +31,7 @@ const TodoListItem = ({todo, socket}) => {
 
 TodoListItem.propTypes = {
     todo: PropTypes.object,
-    socket: PropTypes.func
+    socket: PropTypes.object
 }
 
 export default TodoListItem;
