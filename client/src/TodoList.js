@@ -1,12 +1,20 @@
 import React from "react";
 import TodoListItem from "./TodoListItem";
 import PropTypes from "prop-types";
+import { Divider } from "semantic-ui-react";
 
 
 const TodoList = ({todos, socket, filter}) => {
 
     const filteredTodoList = filter(todos);
-    const listItems = filteredTodoList.map((todo) => <TodoListItem socket={socket} todo={todo} key={todo.id}/>);
+    const listItems = filteredTodoList.map((todo, index) => {
+        return (
+            <div>
+                <TodoListItem socket={socket} todo={todo} key={todo.id}/>
+                {index !== filteredTodoList.length -1 && <Divider />}
+            </div>
+        );
+        });
     return (
         <ul id="todo-list">
             {listItems}

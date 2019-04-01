@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import { createTodo } from "./buttonFunctions";
 import PropTypes from "prop-types";
+import {Button, Form} from "semantic-ui-react";
 
 class TodoSubmit extends Component {
     constructor (props) {
@@ -26,14 +27,17 @@ class TodoSubmit extends Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit.bind(this)}>
-                <label>
-                    Todo:
-                    <input id="todo-input-box" type="text" value={this.state.value}
-                        onChange={this.handleChange.bind(this)} />
-                </label>
-                <input id="submit-todo" type="submit" value= "Submit"></input>
-            </form>
+            <Form onSubmit={this.handleSubmit.bind(this)} >
+                <Form.Field inline>
+                    <label style={{"marginLeft":"30px"}}>
+                        Todo:
+                    </label>
+                        <input id="todo-input-box" type="text" value={this.state.value}
+                            onChange={this.handleChange.bind(this)} />
+
+                    <Button attached="right" id="submit-todo" type="submit" value= "Submit" >Submit</Button>
+                </Form.Field>
+            </Form>
         )
     }
 }

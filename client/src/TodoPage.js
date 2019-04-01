@@ -40,7 +40,7 @@ class TodoPage extends Component {
     render() {
 
         return (
-            <div className="TodoPage">
+            <div className="TodoPage" style={{"overflow":"hidden"}}>
                 <TodoHeader todos={this.state.todos} onFilterChange={this.onFilterChange.bind(this)}/>
                 <TodoSubmit socket={this.socket}/>
                 <TodoListContainer todos={this.state.todos} socket={this.socket} filter={this.state.filter.bind(this)}

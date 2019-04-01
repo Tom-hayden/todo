@@ -6,7 +6,7 @@ import {Button} from "semantic-ui-react";
 
 const CompleteButton = ({todo, socket}) => {
     return (
-        <Button onClick={() => completeTodo(socket, todo)} id={"complete_" + todo.id}>
+        <Button compact onClick={() => completeTodo(socket, todo)} id={"complete_" + todo.id}>
             Complete
         </Button>
     )

@@ -6,7 +6,7 @@ import {Button} from "semantic-ui-react";
 
 const DeleteButton = ({todo, socket}) => {
     return (
-        <Button onClick={() => deleteTodo(socket, todo)} id={"del_" + todo.id}>
+        <Button compact onClick={() => deleteTodo(socket, todo)} id={"del_" + todo.id}>
             Delete
         </Button>
     )

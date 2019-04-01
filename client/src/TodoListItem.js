@@ -10,15 +10,15 @@ const TodoListItem = ({todo, socket}) => {
     const todoElementClassName = todo.isComplete ? "completed" : "";
 
     const todoTextelement = (
-        <div id={"todo_text_" + todo.id} className={todoElementClassName} style={{display: "inline"}}>
+        <div id={"todo_text_" + todo.id} className={todoElementClassName} style={{display: "inline",flexGrow:"1"}}>
             {todo.title}
         </div>
     )
 
     return (
-        <li id={"TodoListItem_" + todo.id}>
+        <li id={"TodoListItem_" + todo.id} style={{"display":"flex","flexDirection":"row"}}>
             {todoTextelement}
-            <Button.Group style={{display: "inline", float: "right"}} >
+            <Button.Group style={{"marginRight":"5px", "marginLeft":"5px",}}>
                 {!todo.isComplete &&
                     <CompleteButton todo={todo} socket={socket} />
                 }
