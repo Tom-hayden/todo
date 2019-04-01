@@ -10,6 +10,7 @@ class TodoSubmit extends Component {
             value: ""
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     handleChange(event) {
@@ -30,13 +31,13 @@ class TodoSubmit extends Component {
 
     render() {
         return (
-            <Form onSubmit={this.handleSubmit.bind(this)} >
+            <Form onSubmit={this.handleSubmit} >
                 <Form.Field inline>
                     <label style={{"marginLeft": "30px"}}>
                         Todo:
                     </label>
                     <input id="todo-input-box" type="text" value={this.state.value}
-                        onChange={this.handleChange.bind(this)} />
+                        onChange={this.handleChange} />
 
                     <Button attached="right" id="submit-todo" onClick={this.handleSubmit} >Submit</Button>
                 </Form.Field>
