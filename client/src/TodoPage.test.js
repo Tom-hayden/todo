@@ -1,5 +1,5 @@
 import TodoPage from "./TodoPage";
-import todoFilters from "./TodoListFilters"
+import todoFilters from "./todoListFilters"
 import {shallow} from "enzyme";
 import React from "react";
 
