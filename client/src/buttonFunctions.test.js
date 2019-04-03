@@ -1,7 +1,7 @@
 import {completeTodo} from "./buttonFunctions.js";
 
 
-it("Calls emit on socket", () =>{
+it("Calls emit on socket", () => {
     let socket = {};
     let todo = {};
     const todoID = "3"
