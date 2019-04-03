@@ -8,7 +8,7 @@ it("renders correctly", () => {
     };
     const socket = {};
     const component = renderer.create(
-        CompleteButton({todo, socket}) 
+        CompleteButton({todo, socket})
     ).toJSON();
 
     expect(component).toMatchSnapshot();
