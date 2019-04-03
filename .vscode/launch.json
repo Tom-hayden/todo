@@ -5,6 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug CRA Tests",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "${workspaceRoot}/client/node_modules/.bin/react-scripts",
+            "args": [
+              "test",
+              "--runInBand",
+              "--no-cache",
+              "--no-watch"
+            ],
+            "cwd": "${workspaceRoot}/client",
+            "protocol": "inspector",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
             "type": "node",
             "request": "launch",
             "name": "Mocha Tests",
